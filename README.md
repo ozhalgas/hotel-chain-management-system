@@ -1,1 +1,0 @@
-# hotel-chain-management-system
