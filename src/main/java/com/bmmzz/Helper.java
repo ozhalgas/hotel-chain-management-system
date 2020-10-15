@@ -15,7 +15,6 @@ public class Helper{
 	
 	public static InputStream getPage(ServletContext servletContext, String pageName) {
 		File f = new File(servletContext.getRealPath("/WEB-INF") + "/" + pageName);
-		System.out.println("Opening file " + pageName);
 		
 		try {
 			return new FileInputStream(f);
