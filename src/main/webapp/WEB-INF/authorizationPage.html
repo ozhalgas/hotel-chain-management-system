@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Authorization</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+	function authorization() {
+		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
+			if(r == null) 
+				alert("Incorrect login and/or password. Please try again!");
+			else {
+				window.location.href = r;
+			}
+		})
+	}
+	
+	
+
+	$(document).ready(function() {
+		$('#log-in-button').on("click", function() {
+			authorization();
+		});
+	})
+</script>
+</head>
+<body>
+<h2>Hotel Chain Management System</h2>
+<h3>Please enter your login and password</h3>
+	Username: <input type="text" id="username" name="username"><br><br>
+	Password: <input type="text" id="password" name="password"><br><br>
+<button id="log-in-button" type="button">Log-in</button>
+<button id="cancel-button" type="button">Cancel</button>
+<p>
+There are following pre-registered users:<br> <br>
+Role <strong>ADMIN</strong> <br>
+	Username: <strong>admin</strong> <br>
+	Password: <strong>password</strong> <br><br>
+Role <strong>GUEST</strong> <br>
+	Username: <strong>madik</strong> <br>
+	Password: <strong>passwordOfMadik</strong> <br><br>
+Role <strong>MANAGER</strong> <br>
+	Username: <strong>paul</strong> <br>
+	Password: <strong>passwordOfPaul</strong> <br><br>
+Role <strong>DESK-CLERK</strong> <br>
+	Username: <strong>alice</strong> <br>
+	Password: <strong>passwordOfAlice</strong> <br><br>
+</p>
+</body>
+</html>
