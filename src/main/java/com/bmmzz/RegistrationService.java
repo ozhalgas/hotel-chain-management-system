@@ -30,9 +30,8 @@ public class RegistrationService {
 	@POST
 	public String registration(@FormParam("username") String username, 
 							  @FormParam("password") String password) {
-		if(UserDAO.userExists(username)) {
-			return "UserAlreadyExists";
-		}
+		if(UserDAO.userExists(username)) {return "UserAlreadyExists";}
+		if(username.isEmpty() || password.isEmpty()) {return "invalidInput";}
 		
 		String auth = UserDAO.getEncodedAuth(username, password);
 		UserDAO.addUser(username, password, "guest");

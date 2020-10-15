@@ -9,27 +9,30 @@ function registration() {
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
 			alert("The user with this username already exists! Please try again!");
-		else
+		else if (r == "invalidInput") 
+			alert("Invalid input")
+		else {
 			alert("The user was successfully created!\nNow you can login using information you entered");
 			window.location.href = "http://localhost:8080/HotelChainManagementSystem";
 		}
-	)}
+	})
+}
 
 
 
 $(document).ready(function() {
-	$('#log-in-button').on("click", function() {
+	$('#Register').on("click", function() {
 		registration();
 	});
 })
-</script>
+</script>	
 </head>
 <body>
 <h2>Hotel Chain Management System</h2>
 <h3>Please, fill in the following forms to register</h3>
 	Username: <input type="text" id="username" name="username"><br><br>
 	Password: <input type="text" id="password" name="password"><br><br>
-<button id="log-in-button" type="button">Log-in</button>
-<button id="cancel-button" type="button">Cancel</button>
+<button id="Register" type="button">Register</button>
+<button onclick="window.location.href = 'http://localhost:8080/HotelChainManagementSystem'">Cancel</button>
 </body>
 </html>
