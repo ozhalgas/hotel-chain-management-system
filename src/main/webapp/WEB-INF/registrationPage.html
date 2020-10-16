@@ -8,19 +8,18 @@
 function authorization() {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 			if(r == null) 
-				alert("Incorrect login and/or password. Please try again!");
+				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
 			else {
-				alert($("#username").val())
-				window.location.href = r;
+				window.location.href =r;
 			}
 		})
 }
 function registration() {
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
-			alert("The user with this username already exists! Please try again!");
+			document.getElementById("warning").innerHTML = "Such username already exists";
 		else if (r == "invalidInput") 
-			alert("Invalid input")
+			document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
 		else {
 			authorization();
 		}
@@ -41,6 +40,7 @@ $(document).ready(function() {
 <h3>Please, fill in the following forms to register</h3>
 	Username: <input type="text" id="username" name="username"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
+	<h4 id="warning"></h4>
 <button id="Register" type="button">Register</button>
 <button onclick="window.location.href = 'http://localhost:8080/HotelChainManagementSystem'">Cancel</button>
 </body>
