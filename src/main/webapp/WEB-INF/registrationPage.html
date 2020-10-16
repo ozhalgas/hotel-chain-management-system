@@ -5,6 +5,16 @@
 <title>Authorization</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
+function authorization() {
+		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
+			if(r == null) 
+				alert("Incorrect login and/or password. Please try again!");
+			else {
+				alert($("#username").val())
+				window.location.href = r;
+			}
+		})
+}
 function registration() {
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
@@ -12,8 +22,7 @@ function registration() {
 		else if (r == "invalidInput") 
 			alert("Invalid input")
 		else {
-			alert("The user was successfully created!\nNow you can login using information you entered");
-			window.location.href = "http://localhost:8080/HotelChainManagementSystem";
+			authorization();
 		}
 	})
 }
