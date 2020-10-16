@@ -14,6 +14,7 @@ function authorization() {
 			}
 		})
 }
+
 function registration() {
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
@@ -26,22 +27,39 @@ function registration() {
 	})
 }
 
-
-
 $(document).ready(function() {
 	$('#Register').on("click", function() {
 		registration();
 	});
 })
+
 </script>	
 </head>
 <body>
-<h2>Hotel Chain Management System</h2>
+<h2>
+<a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
+</h2>
 <h3>Please, fill in the following forms to register</h3>
 	Username: <input type="text" id="username" name="username"><br><br>
+	First Name: <input type="text" id="firstname" name="firstname"><br><br>
+	Last Name: <input type="text" id="lastname" name="lastname"><br><br>
+	Identification Type: &nbsp;
+		<input type="radio" id="passport" name="idtype" value="passport">
+		<label for="passport">Passport</label>&nbsp;
+		<input type="radio" id="id" name="idtype" value="id">
+		<label for="id">National ID</label><br><br>
+	Identification Number:
+		<input type="text" id="idnumber" name="idnumber"><br><br>
+	Address:
+		<input type="text" id="address" name="address"><br><br>
+	Home phone number:
+		<input type="text" id="homephonenumber" name="homephonenumber"><br><br>
+	Mobile phone number:
+		<input type="text" id="mobilephonenumber" name="mobilephonenumber"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
 	<h4 id="warning"></h4>
+	Confirm password: <input type="password" id="password2" name="password2"><br><br>
 <button id="Register" type="button">Register</button>
-<button onclick="window.location.href = 'http://localhost:8080/HotelChainManagementSystem'">Cancel</button>
 </body>
 </html>
+
