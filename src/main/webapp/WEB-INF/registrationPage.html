@@ -7,10 +7,11 @@
 <script>
 function authorization() {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
-			if(r == null) 
+			if(r == null) {
 				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
+			}
 			else {
-				window.location.href =r;
+				 window.location.href = r;
 			}
 		})
 }
@@ -19,8 +20,9 @@ function registration() {
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
 			document.getElementById("warning").innerHTML = "Such username already exists";
-		else if (r == "invalidInput") 
+		else if (r == "invalidInput") {
 			document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
+		}
 		else {
 			authorization();
 		}
@@ -59,7 +61,7 @@ $(document).ready(function() {
 	Password: <input type="password" id="password" name="password"><br><br>
 	<h4 id="warning"></h4>
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
-<button id="Register" type="button">Register</button>
+	<button id="Register" type="button">Register</button>
 </body>
 </html>
 

@@ -3,15 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- <script type="text/javascript">
+	function getListItems() {
+    $.ajax({
+        url : 'services/items',
+        dataType : 'json',
+        success : function(r) {
+            console.log(r);
+        }
+    });
+}
+
+$(document).ready(function () {
+	console.log("getting")
+  	getListItems();
+});
+</script> -->
 </head>
 <body>
-<h2>
-	<a href="http://localhost:8080/HotelChainManagementSystem/" id="home">Hotel Chain Management System</a>
-</h2>
-<h3>Welcome, guest!</h3> <br>
-<form action="http://localhost:8080/HotelChainManagementSystem/">
+	<h2>
+		<a href="http://localhost:8080/HotelChainManagementSystem/" id="home">Hotel Chain Management System</a>
+	</h2>
+	<h3>Welcome, guest!</h3> <br>
+<form action="http://localhost:8080/HotelChainManagementSystem/" method="POST">
 	<input type="submit" value="Log Out">
 </form>
-<button id="book" value="Book">
+<button id="book" value="Book">Book</button>
 </body>
 </html>
