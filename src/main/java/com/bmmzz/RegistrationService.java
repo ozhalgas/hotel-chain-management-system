@@ -6,7 +6,6 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
@@ -33,8 +32,9 @@ public class RegistrationService {
 		if(UserDAO.userExists(username)) {return "UserAlreadyExists";}
 		if(username.isEmpty() || password.isEmpty()) {return "invalidInput";}
 		
-		String auth = UserDAO.getEncodedAuth(username, password);
-		UserDAO.addUser(username, password, "guest");
+		UserDAO.addGuest("", "", "",
+				"", "", "", "",
+				username, password);
 		return "UserWasCreated";
 	}
 }
