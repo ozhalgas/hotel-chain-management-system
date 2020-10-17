@@ -21,10 +21,10 @@ public class EmployeeInfo {
 	public void setGender(String gender) {
 		Gender = gender;
 	}
-	public Date getDateOfBirth() {
+	public String getDateOfBirth() {
 		return DateOfBirth;
 	}
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		DateOfBirth = dateOfBirth;
 	}
 	public String getIdentificationType() {
@@ -99,16 +99,16 @@ public class EmployeeInfo {
 	public void setPayrate(String payrate) {
 		Payrate = payrate;
 	}
-	public Date getStartDate() {
+	public String getStartDate() {
 		return StartDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		StartDate = startDate;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return EndDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		EndDate = endDate;
 	}
 	
@@ -131,7 +131,7 @@ public class EmployeeInfo {
 	private String EmployeeID;
 	private String FullName;
 	private String Gender;
-	private Date DateOfBirth;
+	private String DateOfBirth;
 	private String IdentificationType;
 	private String IdentificationNumber;
 	private String CitizenShip;
@@ -144,8 +144,8 @@ public class EmployeeInfo {
 	private String Position;
 	private String Status;
 	private String Payrate;
-	private Date StartDate;
-	private Date EndDate;
+	private String StartDate;
+	private String EndDate;
 	private String HotelID;
 	private String HotelName;
 }

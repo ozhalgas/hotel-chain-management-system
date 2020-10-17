@@ -39,15 +39,6 @@ public class UserDAO {
 		}
 	}
 	
-	private static boolean execute(String query) {
-		try {
-			return connection.prepareStatement(query).execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
 	private static int executeQueryINT(String query) {
 		try {
 			ResultSet resultSet = connection.prepareStatement(query).executeQuery();
@@ -94,7 +85,6 @@ public class UserDAO {
 			resultSet.next();
 			return resultSet.getInt(1) != 0;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -104,10 +94,16 @@ public class UserDAO {
 		return userExists(login, "guest") || userExists(login, "employee");
 	}
 	
+	
 	private static boolean checkAuth(String login, String password) {
-		return execute("SELECT EXISTS(SELECT * from mydb.guest WHERE Login='" + login + "' AND Password='" + password + "')") ||
-			   execute("SELECT EXISTS(SELECT * from mydb.employee WHERE Login='" + login + "' AND Password='" + password + "')") ||
-			   (login.equals("admin") && password.equals("password"));
+
+			if(login.equals("admin") && password.equals("password") )
+				return true;
+			
+			if(executeQueryINT("SELECT EXISTS(SELECT * from mydb.guest WHERE Login='" + login + "' AND Password='" + password + "')") != 0) 
+				return true;
+
+			return executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login='" + login + "' AND Password='" + password + "')") != 0;
 	}
 	
 	public static boolean checkAuth(String auth) {
@@ -239,7 +235,7 @@ public class UserDAO {
 			employeeInfo.setEmployeeID( resultSet.getString(1) );
 			employeeInfo.setFullName( resultSet.getString(2) );
 			employeeInfo.setGender( resultSet.getString(3) );
-			employeeInfo.setDateOfBirth( resultSet.getDate(4) );
+			employeeInfo.setDateOfBirth( resultSet.getDate(4).toString() );
 			employeeInfo.setIdentificationType( resultSet.getString(5) );
 			employeeInfo.setIdentificationNumber( resultSet.getString(6) );
 			employeeInfo.setCitizenShip( resultSet.getString(7) );
@@ -256,8 +252,8 @@ public class UserDAO {
 			employeeInfo.setPosition( resultSet.getString(3) );
 			employeeInfo.setStatus( resultSet.getString(4) );
 			employeeInfo.setPayrate( resultSet.getString(5) );
-			employeeInfo.setStartDate( resultSet.getDate(6) );
-			employeeInfo.setEndDate( resultSet.getDate(7) );
+			employeeInfo.setStartDate( resultSet.getDate(6).toString() );
+			employeeInfo.setEndDate( resultSet.getDate(7).toString() );
 			
 			resultSet = executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID='" + employeeInfo.getHotelID() + "'" );
 			resultSet.next();
