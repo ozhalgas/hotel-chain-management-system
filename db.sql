@@ -21,19 +21,19 @@ USE `mydb` ;
 DROP TABLE IF EXISTS `mydb`.`Employee` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Employee` (
-  `EmployeeID` INT NOT NULL,
+  `EmployeeID` VARCHAR(45) NOT NULL,
   `FullName` VARCHAR(45) NOT NULL,
   `Gender` VARCHAR(45) NULL,
   `DateOfBirth` DATE NOT NULL,
   `IdentificationType` VARCHAR(45) NOT NULL,
-  `IdentificationNumber` INT NOT NULL,
+  `IdentificationNumber` VARCHAR(45) NOT NULL,
   `Citizenship` VARCHAR(45) NOT NULL,
   `Visa` VARCHAR(45) NOT NULL,
   `Address` VARCHAR(45) NOT NULL,
-  `BankCardNumber` INT NOT NULL,
+  `BankCardNumber` VARCHAR(45) NOT NULL,
   `EmailAddress` VARCHAR(45) NOT NULL,
-  `HomePhoneNumber` INT NULL,
-  `MobilePhoneNumber` INT NOT NULL,
+  `HomePhoneNumber` VARCHAR(45) NULL,
+  `MobilePhoneNumber` VARCHAR(45) NOT NULL,
   `Login` VARCHAR(45) NOT NULL,
   `Password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`EmployeeID`))
@@ -46,14 +46,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Guest` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Guest` (
-  `GuestID` INT NOT NULL,
+  `GuestID` VARCHAR(45) NOT NULL,
   `FullName` VARCHAR(45) NOT NULL,
   `IdentificationType` VARCHAR(45) NOT NULL,
-  `IdentificationNumber` INT NOT NULL,
+  `IdentificationNumber` VARCHAR(45) NOT NULL,
   `Category` VARCHAR(45) NOT NULL,
   `Address` VARCHAR(45) NOT NULL,
-  `HomePhoneNumber` INT NULL,
-  `MobilePhoneNumber` INT NOT NULL,
+  `HomePhoneNumber` VARCHAR(45) NULL,
+  `MobilePhoneNumber` VARCHAR(45) NOT NULL,
   `Login` VARCHAR(45) NOT NULL,
   `Password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`GuestID`))
@@ -66,7 +66,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Hotel` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Hotel` (
-  `HotelID` INT NOT NULL,
+  `HotelID` VARCHAR(45) NOT NULL,
   `Name` VARCHAR(45) NOT NULL,
   `Country` VARCHAR(45) NOT NULL,
   `Region` VARCHAR(45) NOT NULL,
@@ -81,8 +81,8 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Employee_At_Hotel` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Employee_At_Hotel` (
-  `Employee_EmployeeID` INT NOT NULL,
-  `Hotel_HotelID` INT NOT NULL,
+  `Employee_EmployeeID` VARCHAR(45) NOT NULL,
+  `Hotel_HotelID` VARCHAR(45) NOT NULL,
   `Position` VARCHAR(45) NOT NULL,
   `Status` VARCHAR(45) NOT NULL,
   `PayRate` VARCHAR(45) NOT NULL,
