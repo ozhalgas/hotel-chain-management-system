@@ -3,7 +3,7 @@ package com.bmmzz;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -27,14 +27,14 @@ public class RegistrationService {
 	}
 	
 	@POST
-	public String registration(@FormParam("username") String username, 
-							  @FormParam("password") String password) {
-		if(UserDAO.userExists(username)) {return "UserAlreadyExists";}
-		if(username.isEmpty() || password.isEmpty()) {return "invalidInput";}
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String registration(GuestRegistrationInfo guestRegistrationInfo) {
+		if(UserDAO.userExists(guestRegistrationInfo.getLogin())) 
+			{return "UserAlreadyExists";}
+		if(guestRegistrationInfo.getLogin().isEmpty() || guestRegistrationInfo.getPassword().isEmpty()) 
+			{return "invalidInput";}
 		
-		UserDAO.addGuest("", "", "",
-				"", "", "", "",
-				username, password);
+		UserDAO.addGuest(guestRegistrationInfo);
 		return "UserWasCreated";
 	}
 }

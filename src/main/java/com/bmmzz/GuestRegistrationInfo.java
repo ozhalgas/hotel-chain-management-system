@@ -1,7 +1,6 @@
 package com.bmmzz;
 
-public class GuestInfo {
-	String guestID;
+public class GuestRegistrationInfo {
 	String fullName;
 	String identificationType;
 	String identificationNumber;
@@ -9,10 +8,9 @@ public class GuestInfo {
 	String address;
 	String homePhoneNumber;
 	String mobilePhoneNumber;
+	String login;
+	String password;
     
-	public void setGuestID(String str) {
-        guestID = str;
-    }
     public void setFullName(String str) {
         fullName = str;
     }
@@ -35,12 +33,8 @@ public class GuestInfo {
     public void setMobilePhoneNumber(String str) {
         mobilePhoneNumber = str;
     } 
-	
+
     
-    
-    public String getGuestID() {
-        return guestID;
-    }
     public String getFullName() {
         return fullName;
     }
@@ -62,6 +56,21 @@ public class GuestInfo {
     
     public String getMobilePhoneNumber() {
         return mobilePhoneNumber;
-    } 
+    }
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getHomePhoneNumber() {
+		return homePhoneNumber;
+	} 
 }
 

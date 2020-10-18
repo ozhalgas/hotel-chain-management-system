@@ -51,11 +51,11 @@ public class EmployeeInfo {
 	public void setVise(String vise) {
 		Vise = vise;
 	}
-	public String getAdress() {
-		return Adress;
+	public String getAddress() {
+		return Address;
 	}
-	public void setAdress(String adress) {
-		Adress = adress;
+	public void setAddress(String address) {
+		Address = address;
 	}
 	public String getBankCardNumber() {
 		return BankCardNumber;
@@ -136,7 +136,7 @@ public class EmployeeInfo {
 	private String IdentificationNumber;
 	private String CitizenShip;
 	private String Vise;
-	private String Adress;
+	private String Address;
 	private String BankCardNumber;
 	private String EmailAdress;
 	private String HomePhoneNumber;

@@ -62,12 +62,11 @@ public class UserDAO {
 	}
 	
 	public static void addEmployee(String login, String password, String role) {
+		
 	}
 	
-	public static void addGuest(String fullName, String identificationType, String identificationNumber,
-			String category, String address, String homePhoneNumber, String mobilePhoneNumber,
-			String login, String password) {
-			if(userExists(login, "guest"))
+	public static void addGuest(GuestRegistrationInfo guest) {
+			if(userExists(guest.login, "guest"))
 					return;
 
 				String guestID = Integer.toString(executeQueryINT("SELECT COUNT(*) FROM mydb.guest"));
@@ -75,8 +74,8 @@ public class UserDAO {
 					executeUpdate("insert into mydb.guest "
 								+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "
 								+ "values "
-								+ "('" + guestID + "', '" + fullName +"', '" + identificationType + "', '" + identificationNumber + "', "
-								+ "'" + category + "', '" + address +"', '" + homePhoneNumber + "', '" + mobilePhoneNumber + "', '" + login +"', '" + password +"')");
+								+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
+								+ "'" + guest.category + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
 	}
 	
 	public static boolean userExists(String login, String table) {
@@ -190,19 +189,12 @@ public class UserDAO {
 		try {
 			resultSet.next();
 			guestInfo.setGuestID( resultSet.getString(1) );
-			
 			guestInfo.setFullName( resultSet.getString(2) );
-			
 			guestInfo.setIdentificationType( resultSet.getString(3) );
-			
 			guestInfo.setIdentificationNumber( resultSet.getString(4) );
-			
 			guestInfo.setCategory( resultSet.getString(5) );
-			
-			guestInfo.setAdress( resultSet.getString(6) );
-			
+			guestInfo.setAddress( resultSet.getString(6) );
 			guestInfo.setHomePhoneNumber( resultSet.getString(7) );
-			
 			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );
 			
 			json = gson.toJson(guestInfo, GuestInfo.class);
@@ -240,7 +232,7 @@ public class UserDAO {
 			employeeInfo.setIdentificationNumber( resultSet.getString(6) );
 			employeeInfo.setCitizenShip( resultSet.getString(7) );
 			employeeInfo.setVise( resultSet.getString(8) );
-			employeeInfo.setAdress( resultSet.getString(9) );
+			employeeInfo.setAddress( resultSet.getString(9) );
 			employeeInfo.setBankCardNumber( resultSet.getString(10) );
 			employeeInfo.setEmailAdress( resultSet.getString(11) );
 			employeeInfo.setHomePhoneNumber( resultSet.getString(12) );
