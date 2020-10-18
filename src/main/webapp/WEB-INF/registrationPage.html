@@ -17,6 +17,15 @@ function authorization() {
 }
 
 function registration() {
+	var userData = {
+		"full_name"	:	$("#firstname").val() + " " + $("#lastname").val(),
+		"id_type"	:	$("input[name='idtype']:checked").val(),
+		"id_number"	:	$("#idnumber").val(),
+		"category"	:	$("input[name='category']:checked").val(),
+		"address"	:	$("#address").val(),
+		"home_phone_number"	:	$("#homephonenumber").val(),
+		"mobile_phone_number"	:	$("#mobilephonenumber").val(),
+	};
 	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 		if(r == "UserAlreadyExists") 
 			document.getElementById("warning").innerHTML = "Such username already exists";
@@ -27,6 +36,23 @@ function registration() {
 			authorization();
 		}
 	})
+	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
+	var passwordRegexp = /{4,}/
+	var usernameIsValid = regexp.test($("#username").val());
+	var passwordIsValid = passwordRegexp.test($("#password").val());
+	if (usernameIsValid && passwordIsValid) {
+		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
+			if(r == "UserAlreadyExists") 
+				document.getElementById("warning").innerHTML = "Such username already exists";
+			else if (r == "invalidInput") 
+				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
+			else {
+				authorization();
+			}
+		})
+	} else {
+		document.getElementById("warning").innerHTML = "Username or Passowrd does not match the requirements";
+	}
 }
 
 $(document).ready(function() {
@@ -48,10 +74,15 @@ $(document).ready(function() {
 	Identification Type: &nbsp;
 		<input type="radio" id="passport" name="idtype" value="passport">
 		<label for="passport">Passport</label>&nbsp;
-		<input type="radio" id="id" name="idtype" value="id">
+		<input type="radio" id="id" name="idtype" value="nationalid">
 		<label for="id">National ID</label><br><br>
 	Identification Number:
 		<input type="text" id="idnumber" name="idnumber"><br><br>
+	Category: &nbsp;
+		<input type="radio" id="veteran" name="category" value="veteran">
+		<label for="veteran">Veteran</label>&nbsp;
+		<input type="radio" id="disabled" name="category" value="disabled">
+		<label for="disabled">Disabled</label><br><br>
 	Address:
 		<input type="text" id="address" name="address"><br><br>
 	Home phone number:
@@ -59,7 +90,7 @@ $(document).ready(function() {
 	Mobile phone number:
 		<input type="text" id="mobilephonenumber" name="mobilephonenumber"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
-	<h4 id="warning"></h4>
+	<h4 id="warning" style="color:red"></h4>
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
 	<button id="Register" type="button">Register</button>
 </body>
