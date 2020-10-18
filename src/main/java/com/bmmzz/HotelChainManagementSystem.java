@@ -6,6 +6,13 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import com.bmmzz.service.AuthorizationService;
+import com.bmmzz.service.BookManagementService;
+import com.bmmzz.service.EmployeeRegistrationService;
+import com.bmmzz.service.ProfileService;
+import com.bmmzz.service.RegistrationService;
+import com.bmmzz.service.RoomBookingService;
+
 @ApplicationPath("/services")
 public class HotelChainManagementSystem extends Application {
 	private Set<Object> singletons = new HashSet<Object>();

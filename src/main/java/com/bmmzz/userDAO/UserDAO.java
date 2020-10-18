@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.userDAO;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -69,7 +69,7 @@ public class UserDAO {
 			if(userExists(guest.login, "guest"))
 					return;
 
-				String guestID = Integer.toString(executeQueryINT("SELECT COUNT(*) FROM mydb.guest"));
+				String guestID = Integer.toString(executeQueryINT("SELECT COUNT(*) FROM mydb.guest")  + 1);
 
 					executeUpdate("insert into mydb.guest "
 								+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "

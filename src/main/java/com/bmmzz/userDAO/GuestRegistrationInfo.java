@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.userDAO;
 
 public class GuestRegistrationInfo {
 	String fullName;

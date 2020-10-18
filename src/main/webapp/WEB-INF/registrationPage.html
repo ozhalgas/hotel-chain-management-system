@@ -18,30 +18,22 @@ function authorization() {
 
 function registration() {
 	var userData = {
-		"full_name"	:	$("#firstname").val() + " " + $("#lastname").val(),
-		"id_type"	:	$("input[name='idtype']:checked").val(),
-		"id_number"	:	$("#idnumber").val(),
+		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
+		"identificationType"	:	$("input[name='idtype']:checked").val(),
+		"identificationNumber"	:	$("#idnumber").val(),
 		"category"	:	$("input[name='category']:checked").val(),
 		"address"	:	$("#address").val(),
-		"home_phone_number"	:	$("#homephonenumber").val(),
-		"mobile_phone_number"	:	$("#mobilephonenumber").val(),
+		"homePhoneNumber"	:	$("#homephonenumber").val(),
+		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
+		"login"  :  $("#username").val(),
+		"password"  :  $("#password").val(),
 	};
-	$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
-		if(r == "UserAlreadyExists") 
-			document.getElementById("warning").innerHTML = "Such username already exists";
-		else if (r == "invalidInput") {
-			document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
-		}
-		else {
-			authorization();
-		}
-	})
+	var userDataJSON = JSON.stringify(userData);
+	
 	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
-	var passwordRegexp = /{4,}/
 	var usernameIsValid = regexp.test($("#username").val());
-	var passwordIsValid = passwordRegexp.test($("#password").val());
-	if (usernameIsValid && passwordIsValid) {
-		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration', {username: $("#username").val(), password: $("#password").val()}, function(r) {
+	if (usernameIsValid) {
+		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration/user-data', {guestInJson : userDataJSON}, function(r) {
 			if(r == "UserAlreadyExists") 
 				document.getElementById("warning").innerHTML = "Such username already exists";
 			else if (r == "invalidInput") 

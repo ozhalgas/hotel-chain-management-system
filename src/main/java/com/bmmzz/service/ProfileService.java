@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.service;
 
 import java.io.InputStream;
 
@@ -11,6 +11,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.bmmzz.userDAO.UserDAO;
 
 @Path("/profile")
 public class ProfileService {

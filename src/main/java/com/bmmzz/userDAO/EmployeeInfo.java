@@ -1,6 +1,4 @@
-package com.bmmzz;
-
-import java.sql.Date;
+package com.bmmzz.userDAO;
 
 public class EmployeeInfo {
 	public String getEmployeeID() {

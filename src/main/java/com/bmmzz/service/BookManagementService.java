@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.service;
 
 import java.io.InputStream;
 
@@ -10,6 +10,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import com.bmmzz.userDAO.UserDAO;
 
 @Path("/book-management")
 public class BookManagementService {

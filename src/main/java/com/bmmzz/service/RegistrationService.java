@@ -1,15 +1,20 @@
-package com.bmmzz;
+package com.bmmzz.service;
+
+import com.bmmzz.userDAO.*;
 
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import com.bmmzz.userDAO.UserDAO;
+import com.google.gson.Gson;
 
 @Path("/registration")
 public class RegistrationService {
@@ -27,14 +32,17 @@ public class RegistrationService {
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String registration(GuestRegistrationInfo guestRegistrationInfo) {
-		if(UserDAO.userExists(guestRegistrationInfo.getLogin())) 
+	@Path("user-data")
+	public String registration(@FormParam("guestInJson") String guestInJson) {
+		Gson gson = new Gson();
+		GuestRegistrationInfo guest = gson.fromJson(guestInJson, GuestRegistrationInfo.class);
+		
+		if(UserDAO.userExists(guest.getLogin())) 
 			{return "UserAlreadyExists";}
-		if(guestRegistrationInfo.getLogin().isEmpty() || guestRegistrationInfo.getPassword().isEmpty()) 
+		if(guest.getLogin().isEmpty() || guest.getPassword().isEmpty()) 
 			{return "invalidInput";}
 		
-		UserDAO.addGuest(guestRegistrationInfo);
+		UserDAO.addGuest(guest);
 		return "UserWasCreated";
 	}
 }

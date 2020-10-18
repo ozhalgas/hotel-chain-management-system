@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.service;
 
 import java.io.File;
 import java.io.FileInputStream;

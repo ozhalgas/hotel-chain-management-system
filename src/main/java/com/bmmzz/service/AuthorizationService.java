@@ -1,4 +1,4 @@
-package com.bmmzz;
+package com.bmmzz.service;
 
 import java.io.InputStream;
 
@@ -11,6 +11,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+
+import com.bmmzz.userDAO.UserDAO;
 
 @Path("/authorization")
 public class AuthorizationService {
@@ -31,6 +33,9 @@ public class AuthorizationService {
 	@POST
 	public String authorization(@FormParam("username") String username, 
 							    @FormParam("password") String password) {
+		if(username.isEmpty() || password.isEmpty())
+			return null;
+		
 		String auth = UserDAO.getEncodedAuth(username, password);
 		if(UserDAO.checkAuth(auth)) {
 			return uri.getBaseUri().toString() + "profile" + "?auth=" + auth;
