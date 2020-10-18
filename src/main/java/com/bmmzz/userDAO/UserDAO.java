@@ -68,8 +68,19 @@ public class UserDAO {
 	public static void addGuest(GuestRegistrationInfo guest) {
 			if(userExists(guest.login, "guest"))
 					return;
-
-				String guestID = Integer.toString(executeQueryINT("SELECT COUNT(*) FROM mydb.guest")  + 1);
+				
+				String guestID = "1"; 
+				if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
+					ResultSet resultSet = executeQuery("SELECT guestID FROM mydb.guest ORDER BY guestID DESC LIMIT 1;");
+					try {
+						resultSet.next();
+						guestID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+					
+				
 
 					executeUpdate("insert into mydb.guest "
 								+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "
