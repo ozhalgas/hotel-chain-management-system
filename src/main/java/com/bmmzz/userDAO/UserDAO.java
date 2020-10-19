@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 
 public class UserDAO {
 	private static Connection connection = null;
-	private static String url = "jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false";
+	private static String url = "jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
 	
 	private static String username = "admin";
 	private static String password = "admin";
@@ -74,8 +74,30 @@ public class UserDAO {
 		return null;
 	}
 	
-	public static void addEmployee(String login, String password, String role) {
-		
+	public static void addEmployee(EmployeeRegistrationInfo employee) {
+		if(userExists(employee.login, "employee"))
+			return;
+
+		getConnection();
+		String employeeID = "1"; 
+		if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
+			try {
+				ResultSet resultSet = executeQuery("SELECT guestID FROM mydb.employee ORDER BY guestID DESC LIMIT 1;");
+				resultSet.next();
+				employeeID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}	
+
+		executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
+				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
+				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
+				+ "'" + employee.emailAdress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
+				+ "'" + employee.password + "')");
+		executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
+				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', '" + employee.endDate + "')");
+		closeConnection();
 	}
 	
 	public static void addGuest(GuestRegistrationInfo guest) {

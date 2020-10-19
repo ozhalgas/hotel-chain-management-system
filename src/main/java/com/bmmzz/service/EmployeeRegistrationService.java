@@ -4,15 +4,19 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.EmployeeRegistrationInfo;
 import com.bmmzz.userDAO.UserDAO;
+import com.google.gson.Gson;
 
 @Path("/employee-registration")
 public class EmployeeRegistrationService {
@@ -42,5 +46,20 @@ public class EmployeeRegistrationService {
 	public Response getAllHotels() {
 		String json = UserDAO.getAllHotels();
 		return Response.ok(json).build();
+	}
+	
+	@POST
+	@Path("user-data")
+	public String employeeRegistration(@FormParam("employeeInJson") String employeeInJson) {
+		Gson gson = new Gson();
+		EmployeeRegistrationInfo employee = gson.fromJson(employeeInJson, EmployeeRegistrationInfo.class);
+		
+		if(UserDAO.userExists(employee.getLogin())) 
+			{return "UserAlreadyExists";}
+		if(employee.getLogin().isEmpty() || employee.getPassword().isEmpty()) 
+			{return "invalidInput";}
+		
+		UserDAO.addEmployee(employee);
+		return "UserWasCreated";
 	}
 }
