@@ -24,6 +24,7 @@ public class EmployeeRegistrationService {
 	@Context ServletContext servletContext;
 	
 	public EmployeeRegistrationService() {
+		UserDAO.connectToUserDAO();
 	}
 	
 	@GET

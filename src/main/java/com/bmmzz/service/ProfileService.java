@@ -20,6 +20,7 @@ public class ProfileService {
 	@Context ServletContext servletContext;
 	
 	public ProfileService() {
+		UserDAO.connectToUserDAO();
 	}
 	
 	@GET

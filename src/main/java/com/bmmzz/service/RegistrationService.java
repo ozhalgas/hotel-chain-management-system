@@ -22,6 +22,7 @@ public class RegistrationService {
 	@Context ServletContext servletContext;
 	
 	public RegistrationService() {
+		UserDAO.connectToUserDAO();
 	}
 	
 	@GET

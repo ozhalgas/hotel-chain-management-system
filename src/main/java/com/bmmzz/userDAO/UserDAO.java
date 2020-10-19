@@ -17,28 +17,15 @@ public class UserDAO {
 	private static String username = "admin";
 	private static String password = "admin";
 	
-	private static boolean driverInstanceCreated = false;
-	
 	private UserDAO() {	}
 	
-	public static void getConnection() {
+	public static void connectToUserDAO() {
 		try {
-			if(!driverInstanceCreated) {
 				Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
-				driverInstanceCreated = true;
-			}
-			connection = DriverManager.getConnection(url, username, password);
+				connection = DriverManager.getConnection(url, username, password);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private static void closeConnection() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -104,7 +91,6 @@ public class UserDAO {
 		if(userExists(guest.login, "guest"))
 					return;
 		
-		getConnection();
 		String guestID = "1"; 
 		if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
 			try {
@@ -121,16 +107,13 @@ public class UserDAO {
 		+ "values "
 		+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
 		+ "'" + guest.category + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
-		closeConnection();
 	}
 	
 	public static boolean userExists(String login, String table) {
 		try {
-			getConnection();
 			ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login= BINARY '" + login + "')");
 			resultSet.next();
 			boolean userExist = resultSet.getInt(1) != 0;
-			closeConnection();
 			return userExist;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -144,7 +127,6 @@ public class UserDAO {
 	
 	
 	private static boolean checkAuth(String login, String password) {
-		getConnection();
 		if(login.equals("admin") && password.equals("password") )
 			return true;
 			
@@ -152,7 +134,6 @@ public class UserDAO {
 			return true;
 		
 		boolean result = executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login= BINARY '" + login + "' AND Password= BINARY '" + password + "')") != 0;
-		closeConnection();
 		return result;
 	}
 	
@@ -190,7 +171,6 @@ public class UserDAO {
 		}
 		
 		if(userExists(login, "employee")) {
-			getConnection();
 			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login= BINARY '" + login + "'");
 			String employeeID = "";
 			try {
@@ -208,7 +188,6 @@ public class UserDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			closeConnection();
 			
 			if(position.equalsIgnoreCase("Manager") || position.equalsIgnoreCase("Desk-clerk"))
 				return position.toLowerCase();
@@ -239,7 +218,6 @@ public class UserDAO {
 		
 		
 		try {
-			getConnection();
 			ResultSet resultSet = executeQuery("SELECT * FROM mydb.guest WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
 			guestInfo.setGuestID( resultSet.getString(1) );
@@ -252,7 +230,6 @@ public class UserDAO {
 			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );
 			
 			json = gson.toJson(guestInfo, GuestInfo.class);
-			closeConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -275,7 +252,6 @@ public class UserDAO {
 		String username = decodedAuth.split(":", 2)[0];
 		
 		try {
-			getConnection();
 			ResultSet resultSet = executeQuery("SELECT * FROM mydb.employee WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
 			employeeInfo.setEmployeeID( resultSet.getString(1) );
@@ -306,8 +282,6 @@ public class UserDAO {
 			employeeInfo.setHotelName( resultSet.getString(1) );
 			
 			json = gson.toJson(employeeInfo, EmployeeInfo.class);
-			closeConnection();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -321,13 +295,11 @@ public class UserDAO {
 		Hotels hotels = new Hotels();
 		
 		try {
-			getConnection();
 			ResultSet resultSet =  executeQuery("SELECT HotelID, Name FROM mydb.hotel;" );
 			while(resultSet.next()) {
 				hotels.addHotel(resultSet.getString(1), resultSet.getString(2));
 			}
 			json = gson.toJson(hotels, Hotels.class);
-			closeConnection();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
