@@ -105,7 +105,7 @@ public class UserDAO {
 	public static boolean userExists(String login, String table) {
 		try {
 			getConnection();
-			ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login='" + login + "')");
+			ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login= BINARY '" + login + "')");
 			resultSet.next();
 			boolean userExist = resultSet.getInt(1) != 0;
 			closeConnection();
@@ -126,10 +126,10 @@ public class UserDAO {
 		if(login.equals("admin") && password.equals("password") )
 			return true;
 			
-		if(executeQueryINT("SELECT EXISTS(SELECT * from mydb.guest WHERE Login='" + login + "' AND Password='" + password + "')") != 0) 
+		if(executeQueryINT("SELECT EXISTS(SELECT * from mydb.guest WHERE Login= BINARY '" + login + "' AND Password= BINARY '" + password + "')") != 0) 
 			return true;
 		
-		boolean result = executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login='" + login + "' AND Password='" + password + "')") != 0;
+		boolean result = executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login= BINARY '" + login + "' AND Password= BINARY '" + password + "')") != 0;
 		closeConnection();
 		return result;
 	}
@@ -169,7 +169,7 @@ public class UserDAO {
 		
 		if(userExists(login, "employee")) {
 			getConnection();
-			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login='" + login + "'");
+			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login= BINARY '" + login + "'");
 			String employeeID = "";
 			try {
 				resultSet.next();
@@ -178,7 +178,7 @@ public class UserDAO {
 				e.printStackTrace();
 			}
 			
-			resultSet = executeQuery("SELECT Position FROM mydb.employee_at_hotel WHERE Employee_EmployeeID='" + employeeID + "'" );
+			resultSet = executeQuery("SELECT Position FROM mydb.employee_at_hotel WHERE Employee_EmployeeID= BINARY '" + employeeID + "'" );
 			String position = "";
 			try {
 				resultSet.next();
@@ -218,7 +218,7 @@ public class UserDAO {
 		
 		try {
 			getConnection();
-			ResultSet resultSet = executeQuery("SELECT * FROM mydb.guest WHERE Login='" + username + "'" );
+			ResultSet resultSet = executeQuery("SELECT * FROM mydb.guest WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
 			guestInfo.setGuestID( resultSet.getString(1) );
 			guestInfo.setFullName( resultSet.getString(2) );
@@ -254,7 +254,7 @@ public class UserDAO {
 		
 		try {
 			getConnection();
-			ResultSet resultSet = executeQuery("SELECT * FROM mydb.employee WHERE Login='" + username + "'" );
+			ResultSet resultSet = executeQuery("SELECT * FROM mydb.employee WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
 			employeeInfo.setEmployeeID( resultSet.getString(1) );
 			employeeInfo.setFullName( resultSet.getString(2) );
@@ -270,7 +270,7 @@ public class UserDAO {
 			employeeInfo.setHomePhoneNumber( resultSet.getString(12) );
 			employeeInfo.setMobilePhoneNumber( resultSet.getString(13) );
 			
-			resultSet = executeQuery("SELECT * FROM mydb.employee_at_hotel WHERE Employee_EmployeeID='" + employeeInfo.getEmployeeID() + "'" );
+			resultSet = executeQuery("SELECT * FROM mydb.employee_at_hotel WHERE Employee_EmployeeID= BINARY '" + employeeInfo.getEmployeeID() + "'" );
 			resultSet.next();
 			employeeInfo.setHotelID( resultSet.getString(2) );
 			employeeInfo.setPosition( resultSet.getString(3) );
@@ -279,7 +279,7 @@ public class UserDAO {
 			employeeInfo.setStartDate( resultSet.getDate(6).toString() );
 			employeeInfo.setEndDate( resultSet.getDate(7).toString() );
 			
-			resultSet = executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID='" + employeeInfo.getHotelID() + "'" );
+			resultSet = executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID= BINARY '" + employeeInfo.getHotelID() + "'" );
 			resultSet.next();
 			employeeInfo.setHotelName( resultSet.getString(1) );
 			
