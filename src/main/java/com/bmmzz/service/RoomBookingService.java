@@ -19,6 +19,7 @@ public class RoomBookingService {
 	@Context ServletContext servletContext;
 	
 	public RoomBookingService() {
+		UserDAO.connectToUserDAO();
 	}
 	
 	@GET
