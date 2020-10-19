@@ -292,4 +292,25 @@ public class UserDAO {
 		
 		return json;
 	}
+	
+	public static String getAllHotels() {
+		Gson gson = new Gson();
+		String json = "";
+		Hotels hotels = new Hotels();
+		
+		try {
+			getConnection();
+			ResultSet resultSet =  executeQuery("SELECT HotelID, Name FROM mydb.hotel;" );
+			while(resultSet.next()) {
+				hotels.addHotel(resultSet.getString(1), resultSet.getString(2));
+			}
+			json = gson.toJson(hotels, Hotels.class);
+			closeConnection();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
 }

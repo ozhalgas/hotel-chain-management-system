@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.bmmzz.userDAO.UserDAO;
 
@@ -28,10 +29,18 @@ public class EmployeeRegistrationService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "admin":
+				return Helper.getPage(servletContext, "managerRegistrationPage.html");
 			case "manager":
-				return Helper.getPage(servletContext, "employeeRegistrationPage.html");
+				return Helper.getPage(servletContext, "clerkRegistrationPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
+	}
+	
+	@GET
+	@Path("hotels")
+	public Response getAllHotels() {
+		String json = UserDAO.getAllHotels();
+		return Response.ok(json).build();
 	}
 }
