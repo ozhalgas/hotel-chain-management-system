@@ -109,9 +109,9 @@ public class UserDAO {
 	
 	public static boolean userExists(String login, String table) {
 		try {
-			ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login= BINARY '" + login + "')");
+			ResultSet resultSet = connection.prepareStatement("select Login from mydb." + table + " where Login= binary '" + login + "'").executeQuery(); 
 			resultSet.next();
-			boolean userExist = resultSet.getInt(1) != 0;
+			boolean userExist = !resultSet.getString(1).isEmpty();
 			return userExist;
 		} catch (SQLException e) {
 			e.printStackTrace();
