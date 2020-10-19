@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Authorization</title>
+<meta charset="ISO-8859-1">
+<title>Clerk Registration</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
-function authorization() {
-		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
-			if(r == null) {
-				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
-			}
-			else {
-				 window.location.href = r;
-			}
-		})
-}
-
 function registration() {
+	var date = new Date($('#birthday').val());
+	var month = date.getMonth() + 1;
+	var emailRegex = /\S+@\S+\.\S+/;
+	var emailIsValid = emailRegex.test($("#email").val());
 	var userData = {
+		"position"	:	"Desk Clerk",
 		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
+		"gender"	:	$("input[name='gender']:checked").val(),
+		"birthday"	:	date.getDate().toString() + "/" + month.toString() + "/" + date.getFullYear().toString(),
 		"identificationType"	:	$("input[name='idtype']:checked").val(),
 		"identificationNumber"	:	$("#idnumber").val(),
+		"citizenship"	:	$("#citizenship").val(),
+		"visa"	:	$("#visa").val(),
 		"category"	:	$("input[name='category']:checked").val(),
 		"address"	:	$("#address").val(),
+		"bankCardNumber"	:	$("#bankcardnumber").val(),
+		"email"	:	$("#email").val(),
 		"homePhoneNumber"	:	$("#homephonenumber").val(),
 		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
 		"login"  :  $("#username").val(),
 		"password"  :  $("#password").val(),
 	};
 	var userDataJSON = JSON.stringify(userData);
-	
 	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
 	var usernameIsValid = regexp.test($("#username").val());
-	if (usernameIsValid) {
+	if (usernameIsValid && emailIsValid) {
+		//TODO for Madik:
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration/user-data', {guestInJson : userDataJSON}, function(r) {
 			if(r == "UserAlreadyExists") 
 				document.getElementById("warning").innerHTML = "Such username already exists";
@@ -42,8 +42,9 @@ function registration() {
 				authorization();
 			}
 		})
+		//END of TODO
 	} else {
-		document.getElementById("warning").innerHTML = "Username does not match the requirements";
+		document.getElementById("warning").innerHTML = "Username or Email does not match the requirements";
 	}
 }
 
@@ -53,7 +54,7 @@ $(document).ready(function() {
 	});
 })
 
-</script>	
+</script>
 </head>
 <body>
 <h2>
@@ -63,6 +64,13 @@ $(document).ready(function() {
 	Username: <input type="text" id="username" name="username"><br><br>
 	First Name: <input type="text" id="firstname" name="firstname"><br><br>
 	Last Name: <input type="text" id="lastname" name="lastname"><br><br>
+	Gender: &nbsp;
+		<input type="radio" id="male" name="gender" value="male">
+		<label for="gender">Male</label>&nbsp;
+		<input type="radio" id="female" name="gender" value="female">
+		<label for="gender">Female</label>&nbsp;
+	Date of Birth: 
+		<input type="date" id="birthday" name="birthday" max="2005-01-01">
 	Identification Type: &nbsp;
 		<input type="radio" id="passport" name="idtype" value="passport">
 		<label for="passport">Passport</label>&nbsp;
@@ -74,15 +82,16 @@ $(document).ready(function() {
 		<label for="id">Individual Indentification Number</label><br><br>
 	Identification Number:
 		<input type="text" id="idnumber" name="idnumber"><br><br>
-	Category: &nbsp;
-		<input type="radio" id="none" name="category" value="none">
-		<label for="none">None</label>&nbsp;
-		<input type="radio" id="veteran" name="category" value="veteran">
-		<label for="veteran">Veteran</label>&nbsp;
-		<input type="radio" id="disabled" name="category" value="disabled">
-		<label for="disabled">Disabled</label><br><br>
+	Citizenship:
+		<input type="text" id="citizenship" name="citizenship"><br><br>
+	VISA:
+		<input type="text" id="visa" name="visa"><br><br>
 	Address:
 		<input type="text" id="address" name="address"><br><br>
+	Bank Card Number:
+		<input type="text" id="bankcardnumber" name="bankcardnumber"><br><br>
+	Email:
+		<input type="text" id="email" name="email"><br><br>
 	Home phone number:
 		<input type="text" id="homephonenumber" name="homephonenumber"><br><br>
 	Mobile phone number:
@@ -93,4 +102,3 @@ $(document).ready(function() {
 	<button id="Register" type="button">Register</button>
 </body>
 </html>
-
