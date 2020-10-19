@@ -21,6 +21,7 @@ public class AuthorizationService {
 	@Context UriInfo uri;
 	
 	public AuthorizationService() {
+		UserDAO.connectToUserDAO();
 	}
 	
 	@GET
