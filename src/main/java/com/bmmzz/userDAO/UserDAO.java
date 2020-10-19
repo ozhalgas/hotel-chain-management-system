@@ -12,21 +12,33 @@ import com.google.gson.Gson;
 
 public class UserDAO {
 	private static Connection connection = null;
-	private static String databaseName = "";
-	private static String url = "jdbc:mysql://localhost:3306/" + databaseName;
+	private static String url = "jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false";
 	
 	private static String username = "admin";
 	private static String password = "admin";
 	
+	private static boolean driverInstanceCreated = false;
+	
 	private UserDAO() {	}
 	
-	public static void connectToUserDAO() {
+	public static void getConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
+			if(!driverInstanceCreated) {
+				Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
+				driverInstanceCreated = true;
+			}
 			connection = DriverManager.getConnection(url, username, password);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void closeConnection() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -43,9 +55,9 @@ public class UserDAO {
 		try {
 			ResultSet resultSet = connection.prepareStatement(query).executeQuery();
 			resultSet.next();
-			return resultSet.getInt(1);
+			int result = resultSet.getInt(1);
+			return result;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return -1;
@@ -53,7 +65,8 @@ public class UserDAO {
 	
 	private static ResultSet executeQuery(String query) {
 		try {
-			return connection.prepareStatement(query).executeQuery();
+			ResultSet resultSet = connection.prepareStatement(query).executeQuery();
+			return resultSet;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,34 +79,37 @@ public class UserDAO {
 	}
 	
 	public static void addGuest(GuestRegistrationInfo guest) {
-			if(userExists(guest.login, "guest"))
+		if(userExists(guest.login, "guest"))
 					return;
-				
-				String guestID = "1"; 
-				if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
-					ResultSet resultSet = executeQuery("SELECT guestID FROM mydb.guest ORDER BY guestID DESC LIMIT 1;");
-					try {
-						resultSet.next();
-						guestID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-					
-				
-
-					executeUpdate("insert into mydb.guest "
-								+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "
-								+ "values "
-								+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
-								+ "'" + guest.category + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
+		
+		getConnection();
+		String guestID = "1"; 
+		if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
+			try {
+				ResultSet resultSet = executeQuery("SELECT guestID FROM mydb.guest ORDER BY guestID DESC LIMIT 1;");
+				resultSet.next();
+				guestID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		executeUpdate("insert into mydb.guest "
+		+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "
+		+ "values "
+		+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
+		+ "'" + guest.category + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
+		closeConnection();
 	}
 	
 	public static boolean userExists(String login, String table) {
-		ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login='" + login + "')");
 		try {
+			getConnection();
+			ResultSet resultSet = executeQuery("SELECT EXISTS(SELECT * from mydb." + table +" WHERE Login='" + login + "')");
 			resultSet.next();
-			return resultSet.getInt(1) != 0;
+			boolean userExist = resultSet.getInt(1) != 0;
+			closeConnection();
+			return userExist;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -106,14 +122,16 @@ public class UserDAO {
 	
 	
 	private static boolean checkAuth(String login, String password) {
-
-			if(login.equals("admin") && password.equals("password") )
-				return true;
+		getConnection();
+		if(login.equals("admin") && password.equals("password") )
+			return true;
 			
-			if(executeQueryINT("SELECT EXISTS(SELECT * from mydb.guest WHERE Login='" + login + "' AND Password='" + password + "')") != 0) 
-				return true;
-
-			return executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login='" + login + "' AND Password='" + password + "')") != 0;
+		if(executeQueryINT("SELECT EXISTS(SELECT * from mydb.guest WHERE Login='" + login + "' AND Password='" + password + "')") != 0) 
+			return true;
+		
+		boolean result = executeQueryINT("SELECT EXISTS(SELECT * from mydb.employee WHERE Login='" + login + "' AND Password='" + password + "')") != 0;
+		closeConnection();
+		return result;
 	}
 	
 	public static boolean checkAuth(String auth) {
@@ -150,6 +168,7 @@ public class UserDAO {
 		}
 		
 		if(userExists(login, "employee")) {
+			getConnection();
 			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login='" + login + "'");
 			String employeeID = "";
 			try {
@@ -167,6 +186,7 @@ public class UserDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			closeConnection();
 			
 			if(position.equalsIgnoreCase("Manager") || position.equalsIgnoreCase("Desk-clerk"))
 				return position.toLowerCase();
@@ -195,9 +215,10 @@ public class UserDAO {
 		
 		String username = decodedAuth.split(":", 2)[0];
 		
-		ResultSet resultSet = executeQuery("SELECT * FROM mydb.guest WHERE Login='" + username + "'" );
 		
 		try {
+			getConnection();
+			ResultSet resultSet = executeQuery("SELECT * FROM mydb.guest WHERE Login='" + username + "'" );
 			resultSet.next();
 			guestInfo.setGuestID( resultSet.getString(1) );
 			guestInfo.setFullName( resultSet.getString(2) );
@@ -209,7 +230,7 @@ public class UserDAO {
 			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );
 			
 			json = gson.toJson(guestInfo, GuestInfo.class);
-			
+			closeConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -231,9 +252,9 @@ public class UserDAO {
 		
 		String username = decodedAuth.split(":", 2)[0];
 		
-		ResultSet resultSet = executeQuery("SELECT * FROM mydb.employee WHERE Login='" + username + "'" );
-		
 		try {
+			getConnection();
+			ResultSet resultSet = executeQuery("SELECT * FROM mydb.employee WHERE Login='" + username + "'" );
 			resultSet.next();
 			employeeInfo.setEmployeeID( resultSet.getString(1) );
 			employeeInfo.setFullName( resultSet.getString(2) );
@@ -263,9 +284,9 @@ public class UserDAO {
 			employeeInfo.setHotelName( resultSet.getString(1) );
 			
 			json = gson.toJson(employeeInfo, EmployeeInfo.class);
+			closeConnection();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

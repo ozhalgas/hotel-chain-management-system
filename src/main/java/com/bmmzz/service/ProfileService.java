@@ -20,13 +20,12 @@ public class ProfileService {
 	@Context ServletContext servletContext;
 	
 	public ProfileService() {
-		UserDAO.connectToUserDAO();
 	}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})
 	public InputStream get( @DefaultValue("") @QueryParam("auth") String auth ) {	
-		if(!UserDAO.checkAuth(auth))
+		if(!UserDAO.checkAuth(auth) || UserDAO.getRole(auth) == null)
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "admin":

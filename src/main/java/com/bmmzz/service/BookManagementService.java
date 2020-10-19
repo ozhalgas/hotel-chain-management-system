@@ -19,7 +19,6 @@ public class BookManagementService {
 	@Context ServletContext servletContext;
 	
 	public BookManagementService() {
-		UserDAO.connectToUserDAO();
 	}
 	
 	@GET
