@@ -65,7 +65,6 @@ public class UserDAO {
 		if(userExists(employee.login, "employee"))
 			return;
 
-		getConnection();
 		String employeeID = "1"; 
 		if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
 			try {
@@ -84,7 +83,6 @@ public class UserDAO {
 				+ "'" + employee.password + "')");
 		executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
 				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', '" + employee.endDate + "')");
-		closeConnection();
 	}
 	
 	public static void addGuest(GuestRegistrationInfo guest) {
