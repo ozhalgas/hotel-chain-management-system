@@ -5,7 +5,11 @@
 <title>Clerk Registration</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
+var hotels, hotelIDs;
 function registration() {
+	var hotelName = document.querySelector("select").value;
+	var index = hotels.indexOf(hotelName);
+	var hotelID = hotelIDs[index];
 	var date = new Date($('#birthday').val());
 	var month = date.getMonth() + 1;
 	var startDate = new Date($('#start-date').val());
@@ -28,6 +32,7 @@ function registration() {
 		"email"	:	$("#email").val(),
 		"homePhoneNumber"	:	$("#homephonenumber").val(),
 		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
+		"hotelID"  :  hotelID,
 		"status"  :  $("input[name='status']:checked"),
 		"startDate"  :  startDate.getDate().toString() + "-" + startMonth.toString() + "-" + startDate.getFullYear().toString(),
 		"endDate"  :  endDate.getDate().toString() + "-" + endMonth.toString() + "-" + endDate.getFullYear().toString(),
@@ -54,10 +59,47 @@ function registration() {
 	}
 }
 
+function getHotels() {
+	queryParam = window.location.href.substring(85);
+	$.ajax({
+        url : 'http://localhost:8080/HotelChainManagementSystem/services/employee-registration/hotels?auth=' + queryParam,
+        dataType : 'json',
+        success : function(r) {
+            hotels = r.hotels;
+            hotelIDs = r.hotelIDs;
+            
+            $('#container')
+            .append(
+              $(document.createElement('label')).prop({
+                for: 'hotels'
+              }).html('Choose Hotel: ')
+            )
+            .append(
+              $(document.createElement('select')).prop({
+                id: 'hotels',
+                name: 'hotels'
+              })
+            )
+
+          var index = 0;
+          for (const val of r.hotels) {
+            $('#hotels').append($(document.createElement('option')).prop({
+              value: val,
+              text: val.charAt(0).toUpperCase() + val.slice(1),
+              id: hotelIDs[index]
+            }))
+          }
+          index = index + 1;
+        }
+    });
+}
+
 $(document).ready(function() {
 	$('#Register').on("click", function() {
 		registration();
 	});
+	
+	getHotels();
 })
 
 </script>
@@ -102,6 +144,7 @@ $(document).ready(function() {
 		<input type="text" id="homephonenumber" name="homephonenumber"><br><br>
 	Mobile phone number:
 		<input type="text" id="mobilephonenumber" name="mobilephonenumber"><br><br>
+	<div id="container"></div><br>
 	Status: &nbsp;
 		<input type="radio" id="full-time" name="status" value="full-time">
 		<label for="passport">Full-time</label>&nbsp;
