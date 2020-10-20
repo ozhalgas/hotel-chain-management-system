@@ -34,7 +34,7 @@ public class EmployeeRegistrationService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "admin":
-				return Helper.getPage(servletContext, "managerRegistrationPage.html");
+				return Helper.getPage(servletContext, "employeeRegistrationPage.html");
 			case "manager":
 				return Helper.getPage(servletContext, "clerkRegistrationPage.html");
 			default:

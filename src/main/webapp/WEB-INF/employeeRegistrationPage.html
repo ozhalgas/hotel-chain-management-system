@@ -11,7 +11,7 @@ function registration() {
 	var emailRegex = /\S+@\S+\.\S+/;
 	var emailIsValid = emailRegex.test($("#email").val());
 	var userData = {
-		"position"	:	"Manager",
+		"position"	:	$("#input[name='position']:checked").val(),
 		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
 		"gender"	:	$("input[name='gender']:checked").val(),
 		"birthday"	:	date.getDate().toString() + "/" + month.toString() + "/" + date.getFullYear().toString(),
@@ -60,6 +60,11 @@ $(document).ready(function() {
 <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
 </h2>
 <h3>Please, fill in the following forms to register</h3>
+	Position: &nbsp;
+		<input type="radio" id="Manager" name="position">
+		<label for="position">Manager</label>&nbsp;
+		<input type="radio" id="Desk-clerk" name="position">
+		<label for="position">Desk clerk</label><br><br>
 	Username: <input type="text" id="username" name="username"><br><br>
 	First Name: <input type="text" id="firstname" name="firstname"><br><br>
 	Last Name: <input type="text" id="lastname" name="lastname"><br><br>

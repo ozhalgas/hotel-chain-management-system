@@ -8,7 +8,22 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
 <!-- <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script> -->
 <script type="text/javascript">
+
+	var link = window.location.href.toString();
+
+	function getRegisterURL() {
+		let auth = link.substring(65, link.length)
+		$('#regnewempl').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem/services/employee-registration"+
+			auth
+		})
+	}
+
 	$(document).ready(function () {
+		getRegisterURL();
+		
 		$('#review').on('click', function() {
 			if($('#review-table').css('display') == 'none') 
 				$('#review-table').css('display', 'block');
@@ -49,7 +64,7 @@
 
 
 </table>
-<input type="submit" value="Register New Employee"><br><br>
+<input type="submit" id="regnewempl" value="Register New Employee"><br><br>
 <input type="submit" value="Booking Management"><br><br>
 <button id="review">Review Schedules<br><br>
 </body>
