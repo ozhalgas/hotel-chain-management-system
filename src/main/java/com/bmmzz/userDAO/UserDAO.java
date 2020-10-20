@@ -76,12 +76,15 @@ public class UserDAO {
 			}
 		}	
 		
+		String position = "";
+		if(employee.position == "Desk Clerk")
+			position = "desk-clerk";
 		executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
 				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
 				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
 				+ "'" + employee.emailAddress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
 				+ "'" + employee.password + "')");
-		executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
+		executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + position + "', "
 				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', " + employee.getEndDate() + ")");
 	}
 	
