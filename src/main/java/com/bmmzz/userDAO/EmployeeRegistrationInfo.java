@@ -10,7 +10,7 @@ public class EmployeeRegistrationInfo {
 	String visa;
 	String address;
 	String bankCardNumber;
-	String emailAdress;
+	String emailAddress;
 	String homePhoneNumber;
 	String mobilePhoneNumber;
 	String login;
@@ -21,6 +21,9 @@ public class EmployeeRegistrationInfo {
 	String payRate;
 	String startDate;
 	String endDate;
+	
+	
+	
 	public String getFullName() {
 		return fullName;
 	}
@@ -75,11 +78,11 @@ public class EmployeeRegistrationInfo {
 	public void setBankCardNumber(String bankCardNumber) {
 		this.bankCardNumber = bankCardNumber;
 	}
-	public String getEmailAdress() {
-		return emailAdress;
+	public String getEmailAddress() {
+		return emailAddress;
 	}
-	public void setEmailAdress(String emailAdress) {
-		this.emailAdress = emailAdress;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 	public String getHomePhoneNumber() {
 		return homePhoneNumber;
@@ -136,6 +139,8 @@ public class EmployeeRegistrationInfo {
 		this.startDate = startDate;
 	}
 	public String getEndDate() {
+		if(!endDate.equals("NULL"))
+			endDate = "'" + endDate + "'";
 		return endDate;
 	}
 	public void setEndDate(String endDate) {

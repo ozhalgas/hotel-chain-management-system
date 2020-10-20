@@ -68,21 +68,21 @@ public class UserDAO {
 		String employeeID = "1"; 
 		if( executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
 			try {
-				ResultSet resultSet = executeQuery("SELECT guestID FROM mydb.employee ORDER BY guestID DESC LIMIT 1;");
+				ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee ORDER BY EmployeeID DESC LIMIT 1;");
 				resultSet.next();
 				employeeID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}	
-
+		
 		executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
 				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
 				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
-				+ "'" + employee.emailAdress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
+				+ "'" + employee.emailAddress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
 				+ "'" + employee.password + "')");
 		executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
-				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', '" + employee.endDate + "')");
+				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', " + employee.getEndDate() + ")");
 	}
 	
 	public static void addGuest(GuestRegistrationInfo guest) {
@@ -110,11 +110,10 @@ public class UserDAO {
 	public static boolean userExists(String login, String table) {
 		try {
 			ResultSet resultSet = connection.prepareStatement("select Login from mydb." + table + " where Login= binary '" + login + "'").executeQuery(); 
-			resultSet.next();
-			boolean userExist = !resultSet.getString(1).isEmpty();
+			boolean userExist = resultSet.next();
 			return userExist;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();	
 		}
 		return false;
 	}
@@ -273,7 +272,10 @@ public class UserDAO {
 			employeeInfo.setStatus( resultSet.getString(4) );
 			employeeInfo.setPayrate( resultSet.getString(5) );
 			employeeInfo.setStartDate( resultSet.getDate(6).toString() );
-			employeeInfo.setEndDate( resultSet.getDate(7).toString() );
+			if(resultSet.getDate(7) == null)
+				employeeInfo.setEndDate("NULL");
+			else
+				employeeInfo.setEndDate( resultSet.getDate(7).toString() );
 			
 			resultSet = executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID= BINARY '" + employeeInfo.getHotelID() + "'" );
 			resultSet.next();

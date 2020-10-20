@@ -5,6 +5,7 @@
 <title>Clerk Registration</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
+
 var hotels, hotelIDs;
 function registration() {
 	var hotelName = document.querySelector("select").value;
@@ -14,43 +15,53 @@ function registration() {
 	var month = date.getMonth() + 1;
 	var startDate = new Date($('#start-date').val());
 	var startMonth = startDate.getMonth() + 1;
+	
 	var endDate = new Date($('#end-date').val());
 	var endMonth = endDate.getMonth() + 1;
-	var emailRegex = /\S+@\S+\.\S+/;
-	var emailIsValid = emailRegex.test($("#email").val());
+	
+	if(isNaN(endDate)) {
+		endDate = "NULL";
+	} else {
+		endDate = endDate.getFullYear().toString() + "-" +  endMonth.toString()  + "-" +  endDate.getDate().toString();
+	}
+	
 	var userData = {
 		"position"	:	"Desk Clerk",
 		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
 		"gender"	:	$("input[name='gender']:checked").val(),
-		"birthday"	:	date.getDate().toString() + "-" + month.toString() + "-" + date.getFullYear().toString(),
+		"dateOfBirth"	:	date.getFullYear().toString() + "-" +  month.toString()  + "-" +  date.getDate().toString(),
 		"identificationType"	:	$("input[name='idtype']:checked").val(),
 		"identificationNumber"	:	$("#idnumber").val(),
 		"citizenship"	:	$("#citizenship").val(),
 		"visa"	:	$("#visa").val(),
 		"address"	:	$("#address").val(),
 		"bankCardNumber"	:	$("#bankcardnumber").val(),
-		"email"	:	$("#email").val(),
+		"emailAddress"	:	$("#email").val(),
 		"homePhoneNumber"	:	$("#homephonenumber").val(),
 		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
 		"hotelID"  :  hotelID,
-		"status"  :  $("input[name='status']:checked"),
-		"startDate"  :  startDate.getDate().toString() + "-" + startMonth.toString() + "-" + startDate.getFullYear().toString(),
-		"endDate"  :  endDate.getDate().toString() + "-" + endMonth.toString() + "-" + endDate.getFullYear().toString(),
+		"status"  :  $("input[name='status']:checked").val(),
+		"startDate"  :  startDate.getFullYear().toString() + "-" +  startMonth.toString()  + "-" +  startDate.getDate().toString(),
+		"endDate"  :  endDate,
+		"payRate"  :  $("#payRate").val(),
 		"login"  :  $("#username").val(),
 		"password"  :  $("#password").val(),
 	};
 	var userDataJSON = JSON.stringify(userData);
 	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
 	var usernameIsValid = regexp.test($("#username").val());
+	var emailRegex = /\S+@\S+\.\S+/;
+	var emailIsValid = emailRegex.test($("#email").val());
 	if (usernameIsValid && emailIsValid) {
 		//TODO for Madik:
-		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration/user-data', {guestInJson : userDataJSON}, function(r) {
+		$.post('http://localhost:8080/HotelChainManagementSystem/services/employee-registration/user-data', {employeeInJson : userDataJSON}, function(r) {
 			if(r == "UserAlreadyExists") 
 				document.getElementById("warning").innerHTML = "Such username already exists";
 			else if (r == "invalidInput") 
 				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
 			else {
-				authorization();
+				document.getElementById("warning").innerHTML = "";
+				document.getElementById("confirmation").innerHTML = "Employee was registered successfully!";
 			}
 		})
 		//END of TODO
@@ -158,9 +169,12 @@ $(document).ready(function() {
 		<input type="date" id="start-date" name="start-date" max="2005-01-01"><br><br>
 	End Date:
 		<input type="date" id="end-date" name="end-date" max="2005-01-01"><br><br>
+	Pay rate $:
+		<input type="text" id="payRate" name="payRate"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
-	<h4 id="warning" style="color:red"></h4>
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
+	<h4 id="warning" style="display: inline;color:red;"></h4>
+	<h4 id="confirmation" style="color:green;"></h4>
 	<button id="Register" type="button">Register</button>
 </body>
 </html>
