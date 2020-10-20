@@ -1,34 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<!-- <script type="text/javascript">
-	function getListItems() {
-    $.ajax({
-        url : 'services/items',
-        dataType : 'json',
-        success : function(r) {
-            console.log(r);
-        }
-    });
-}
+  <head>
+    <meta charset="UTF-8" />
+	<title>Insert title here</title>
+	<style>
+		th {
+			width: 200px
+		}
+		td {
+			width: 60%;
+		}
+	</style>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript">
+      function getProfileName() {
+        let link = window.location.href.toString();
+        $.ajax({
+          url:
+            link.substring(0, 65) + "/info/" + link.substring(65, link.length),
+          dataType: "json",
+          success: function (r) {
+            $("#welcome").html(
+              "Welcome, " +
+                r["fullName"].substring(0, r["fullName"].indexOf(" ")) +
+                "!"
+            );
 
-$(document).ready(function () {
-	console.log("getting")
-  	getListItems();
-});
-</script> -->
-</head>
-<body>
-	<h2>
-		<a href="http://localhost:8080/HotelChainManagementSystem/" id="home">Hotel Chain Management System</a>
-	</h2>
-	<h3>Welcome, guest!</h3> <br>
-<form action="http://localhost:8080/HotelChainManagementSystem/" method="POST">
-	<input type="submit" value="Log Out">
-</form>
-<button id="book" value="Book">Book</button>
-</body>
+            $("#name").html(r["fullName"]);
+            $("#idnum").html(
+              r["identificationType"] + " number: " + r["identificationNumber"]
+            );
+            $("#category").html(r["category"]);
+            $("#address").html(r["address"]);
+            $("#phone").html(
+              "home: " +
+                r["homePhoneNumber"] +
+                "<br>" +
+                "mobile: " +
+                r["mobilePhoneNumber"]
+            );
+          },
+        });
+      }
+
+      $(document).ready(function () {
+		getProfileName();
+		$("#breakAfterTable").html("<br>".repeat(10))
+		//breakItem.innerHTML = "<br>".repeat(10)
+      });
+    </script>
+  </head>
+  <body>
+    <h2>
+      <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
+        >Hotel Chain Management System</a
+      >
+    </h2>
+    <h3 id="welcome">Welcome, guest!</h3>
+    <h4>Profile Information:</h4>
+
+    <table id="info" align="left" border="1">
+      <tr>
+        <th>Name</th>
+        <td id="name">null</td>
+      </tr>
+      <tr>
+        <th>Idenfication Number</th>
+        <td id="idnum">null</td>
+      </tr>
+      <tr>
+        <th>Category</th>
+        <td id="category">null</td>
+      </tr>
+      <tr>
+        <th>Address</th>
+        <td id="address">null</td>
+      </tr>
+      <tr>
+        <th>Phone Numbers</th>
+        <td id="phone">null</td>
+      </tr>
+    </table>
+    <div id="breakAfterTable"></div>
+    <form
+      action="http://localhost:8080/HotelChainManagementSystem/"
+      method="POST"
+      style="display: inline"
+    >
+      <input type="submit" value="Log Out" />
+    </form>
+    <button id="book" value="Book">Book</button>
+  </body>
 </html>

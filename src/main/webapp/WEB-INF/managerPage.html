@@ -1,19 +1,181 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h2>
-	<a href="http://localhost:8080/HotelChainManagementSystem/" id="home">Hotel Chain Management System</a>
-</h2>
-<h3>Welcome, manager!</h3> <br>
-<button id="regnewempl">Register new employees</button>
-<button id="review">Review schedules</button>
-<button id="review">Booking Management</button>
-<form action="http://localhost:8080/HotelChainManagementSystem/">
-	<input type="submit" value="Logout">
-</form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+    <style>
+      th {
+        width: 200px;
+      }
+      td {
+        width: 60%;
+      }
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+	<script type="text/javascript">
+	
+	  var link = window.location.href.toString();
+
+	  function getRegisterURL() {
+		let auth = link.substring(65, link.length)
+		$('#regnewempl').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem/services/employee-registration"+
+			auth
+		})
+	  }
+
+      function getProfileName() {
+        $.ajax({
+          url:
+            link.substring(0, 65) + "/info/" + link.substring(65, link.length),
+          dataType: "json",
+          success: function (r) {
+            $("#welcome").html(
+              "Welcome, " +
+                r["FullName"].substring(0, r["FullName"].indexOf(" ")) +
+                "!"
+            );
+
+            $("#name").html(r["FullName"]);
+            $("#idnum").html(
+              r.IdentificationType + " number: " + r.IdentificationNumber
+            );
+            $("#gender").html(r["Gender"]);
+            $("#address").html(r["Address"]);
+            $("#phone").html(
+              "home: " +
+                r["HomePhoneNumber"] +
+                "<br>" +
+                "mobile: " +
+                r["MobilePhoneNumber"]
+            );
+            $("#birth-date").html(r["DateOfBirth"]);
+            $("#visa").html(r["Vise"]);
+            $("#card-num").html(r["BankCardNumber"]);
+            $("#email").html(r["EmailAdress"]);
+            $("#position").html(r["Position"]);
+            $("#salary").html(r["Payrate"]);
+            $("#start-date").html(r.StartDate);
+            $("#hotel-name").html(r.HotelName);
+          },
+        });
+      }
+
+      $(document).ready(function () {
+        getProfileName();
+		$("#breakAfterTable").html("<br>".repeat(20));		
+		getRegisterURL();
+
+		$('#review').on('click', function() {
+			if($('#review-table').css('display') == 'none') 
+				$('#review-table').css('display', 'block');
+			else 
+			$('#review-table').css('display', 'none')
+		});
+
+		
+      });
+    </script>
+  </head>
+  <body>
+    <h2>
+      <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
+        >Hotel Chain Management System</a
+      >
+    </h2>
+    <h3 id="welcome">Welcome, manager!</h3>
+    <h4>Profile Information:</h4>
+
+    <table id="info" align="left" border="1">
+      <tr>
+        <th>Name</th>
+        <td id="name">null</td>
+      </tr>
+      <tr>
+        <th>Idenfication Number</th>
+        <td id="idnum">null</td>
+      </tr>
+      <tr>
+        <th>Gender</th>
+        <td id="gender">null</td>
+      </tr>
+      <tr>
+        <th>Address</th>
+        <td id="address">null</td>
+      </tr>
+      <tr>
+        <th>Phone Numbers</th>
+        <td id="phone">null</td>
+      </tr>
+      <tr>
+        <th>Date of Birth</th>
+        <td id="birth-date">null</td>
+      </tr>
+      <tr>
+        <th>Visa</th>
+        <td id="visa">null</td>
+      </tr>
+      <tr>
+        <th>Bank Card Number</th>
+        <td id="card-num">null</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td id="email">null</td>
+      </tr>
+      <tr>
+        <th>Position</th>
+        <td id="position">null</td>
+      </tr>
+      <tr>
+        <th>Salary</th>
+        <td id="salary">null</td>
+      </tr>
+      <tr>
+        <th>Start Date</th>
+        <td id="start-date">null</td>
+      </tr>
+      <tr>
+        <th>Hotel Name</th>
+        <td id="hotel-name">null</td>
+      </tr>
+	</table>
+     
+	<div id="breakAfterTable"></div>
+	
+	<table id="review-table" border="1" style="width: 40%; display: none;">
+		<thead>
+			<tr>
+			<th>Name</th>  
+			<th>Email</th>
+			<th>Working days</th>
+			<th>Position</th>
+		  </tr>
+		</thead>
+		<tbody>
+			<tr>
+			  <td>Paul Vanger</td>
+			  <td>PaulVanger@gmail.com</td>
+			  <td>M-F: 9am - 5pm</td>
+			  <td>Manager</td>
+			</tr>
+		</tbody>
+    <button id="regnewempl">Register new employees</button>
+    <button id="review">Review schedules</button>
+    <button id="booking-manage" style="display: inline">
+      Booking Management
+    </button>
+    <form
+      action="http://localhost:8080/HotelChainManagementSystem/"
+      style="display: inline"
+    >
+      <input type="submit" value="Logout" />
+    </form>
+  </body>
 </html>

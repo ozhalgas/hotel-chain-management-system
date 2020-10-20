@@ -8,7 +8,7 @@
 	function authorization() {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 			if(r == null) 
-				alert("Incorrect login and/or password. Please try again!");
+				$("#warning").html("Incorrect login and/or password. Please try again!");
 			else {
 				window.location.href = r;
 			}
@@ -29,6 +29,7 @@
 <h3>Please enter your login and password</h3>
 	Username: <input type="text" id="username" name="username"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
+	<h4 id="warning" style="color:red"></h4><br>
 <button id="log-in-button" type="button">Log-in</button>
 <p>
 There are following pre-registered users:<br> <br>

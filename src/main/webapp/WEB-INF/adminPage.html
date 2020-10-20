@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin Page</title>
+<!-- <style>
+</style> -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+<!-- <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script> -->
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#review').on('click', function() {
+			if($('#review-table').css('display') == 'none') 
+				$('#review-table').css('display', 'block');
+			else 
+			$('#review-table').css('display', 'none')
+		}
+		)
+	} )
+</script>
 </head>
 <body>
 <h2>
@@ -12,8 +27,30 @@
 <form action="http://localhost:8080/HotelChainManagementSystem/">
 	<input type="submit" value="Logout">
 </form><br>
+
+<table id="review-table" align="right" border="1" style="width: 40%; display: none;">
+	<thead>
+		<tr>
+		<th>Name</th>  
+		<th>Email</th>
+		<th>Working days</th>
+		<th>Position</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<tr>
+		  <td>Paul Vanger</td>
+		  <td>PaulVanger@gmail.com</td>
+		  <td>M-F: 9am - 5pm</td>
+		  <td>Manager</td>
+		</tr>
+	</tbody>
+	
+
+
+</table>
 <input type="submit" value="Register New Employee"><br><br>
 <input type="submit" value="Booking Management"><br><br>
-<input type="submit" value="Review Schedules"><br><br>
+<button id="review">Review Schedules<br><br>
 </body>
 </html>
