@@ -8,13 +8,17 @@
 function registration() {
 	var date = new Date($('#birthday').val());
 	var month = date.getMonth() + 1;
+	var startDate = new Date($('#start-date').val());
+	var startMonth = startDate.getMonth() + 1;
+	var endDate = new Date($('#end-date').val());
+	var endMonth = endDate.getMonth() + 1;
 	var emailRegex = /\S+@\S+\.\S+/;
 	var emailIsValid = emailRegex.test($("#email").val());
 	var userData = {
 		"position"	:	"Desk Clerk",
 		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
 		"gender"	:	$("input[name='gender']:checked").val(),
-		"birthday"	:	date.getDate().toString() + "/" + month.toString() + "/" + date.getFullYear().toString(),
+		"birthday"	:	date.getDate().toString() + "-" + month.toString() + "-" + date.getFullYear().toString(),
 		"identificationType"	:	$("input[name='idtype']:checked").val(),
 		"identificationNumber"	:	$("#idnumber").val(),
 		"citizenship"	:	$("#citizenship").val(),
@@ -24,6 +28,9 @@ function registration() {
 		"email"	:	$("#email").val(),
 		"homePhoneNumber"	:	$("#homephonenumber").val(),
 		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
+		"status"  :  $("input[name='status']:checked"),
+		"startDate"  :  startDate.getDate().toString() + "-" + startMonth.toString() + "-" + startDate.getFullYear().toString(),
+		"endDate"  :  endDate.getDate().toString() + "-" + endMonth.toString() + "-" + endDate.getFullYear().toString(),
 		"login"  :  $("#username").val(),
 		"password"  :  $("#password").val(),
 	};
@@ -95,6 +102,19 @@ $(document).ready(function() {
 		<input type="text" id="homephonenumber" name="homephonenumber"><br><br>
 	Mobile phone number:
 		<input type="text" id="mobilephonenumber" name="mobilephonenumber"><br><br>
+	Status: &nbsp;
+		<input type="radio" id="full-time" name="status" value="full-time">
+		<label for="passport">Full-time</label>&nbsp;
+		<input type="radio" id="part-time" name="status" value="part-time">
+		<label for="id">Part-time</label>&nbsp;
+		<input type="radio" id="intern" name="status" value="intern">
+		<label for="id">Intern</label>&nbsp;
+		<input type="radio" id="visiting" name="status" value="visiting">
+		<label for="id">Visiting</label><br><br>
+	Start Date: 
+		<input type="date" id="start-date" name="start-date" max="2005-01-01"><br><br>
+	End Date:
+		<input type="date" id="end-date" name="end-date" max="2005-01-01"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
 	<h4 id="warning" style="color:red"></h4>
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>

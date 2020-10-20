@@ -53,7 +53,6 @@ public class ProfileService {
 			String json = UserDAO.getEmployeeInfo(auth);
 			return Response.ok(json).build();
 		}
-		System.out.println("What?");
 		return null;
 	}
 }
