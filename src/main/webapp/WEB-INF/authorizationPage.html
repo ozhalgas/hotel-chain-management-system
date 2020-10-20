@@ -19,7 +19,13 @@
 		$('#log-in-button').on("click", function() {
 			authorization();
 		});
-	})
+
+		onkeypress = function (event) {  
+			if (event.keyCode == 13) {
+				authorization();
+			}
+		};
+	});
 </script>
 </head>
 <body>

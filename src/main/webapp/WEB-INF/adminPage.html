@@ -10,9 +10,9 @@
 <script type="text/javascript">
 
 	var link = window.location.href.toString();
+	var auth = link.substring(65, link.length)
 
 	function getRegisterURL() {
-		let auth = link.substring(65, link.length)
 		$('#regnewempl').on('click', function() {
 			console.log('clicked')
 			window.location.href = 
@@ -21,8 +21,18 @@
 		})
 	}
 
+	function gotoBook() {
+		$('#booking').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem/services/book-management"+
+			auth
+		})
+	}
+
 	$(document).ready(function () {
 		getRegisterURL();
+		gotoBook();
 		
 		$('#review').on('click', function() {
 			if($('#review-table').css('display') == 'none') 
@@ -60,12 +70,10 @@
 		  <td>Manager</td>
 		</tr>
 	</tbody>
-	
-
-
 </table>
-<input type="submit" id="regnewempl" value="Register New Employee"><br><br>
-<input type="submit" value="Booking Management"><br><br>
-<button id="review">Review Schedules<br><br>
+
+<button id="regnewempl">Register New Employee</button>
+<button id="booking">Booking Management</button>
+<button id="review">Review Schedules</button>
 </body>
 </html>

@@ -2,23 +2,25 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-	<title>Insert title here</title>
-	<style>
-		th {
-			width: 200px
-		}
-		td {
-			width: 60%;
-		}
-	</style>
+    <title>Insert title here</title>
+    <style>
+      th {
+        width: 200px;
+      }
+      td {
+        width: 60%;
+      }
+    </style>
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
     <script type="text/javascript">
+      var link = window.location.href.toString();
+      var auth = link.substring(65, link.length);
+
       function getProfileName() {
-        let link = window.location.href.toString();
         $.ajax({
           url:
             link.substring(0, 65) + "/info/" + link.substring(65, link.length),
@@ -48,9 +50,15 @@
       }
 
       $(document).ready(function () {
-		getProfileName();
-		$("#breakAfterTable").html("<br>".repeat(10))
-		//breakItem.innerHTML = "<br>".repeat(10)
+        getProfileName();
+        $("#breakAfterTable").html("<br>".repeat(10));
+
+        $('#book').on('click', function() {
+          console.log('clicked')
+          window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"+
+          auth;
+        }
+      );
       });
     </script>
   </head>
@@ -93,6 +101,6 @@
     >
       <input type="submit" value="Log Out" />
     </form>
-    <button id="book" value="Book">Book</button>
+    <button id="book">Book</button>
   </body>
 </html>

@@ -19,9 +19,9 @@
 	<script type="text/javascript">
 	
 	  var link = window.location.href.toString();
+    var auth = link.substring(65, link.length)
 
 	  function getRegisterURL() {
-		let auth = link.substring(65, link.length)
 		$('#regnewempl').on('click', function() {
 			console.log('clicked')
 			window.location.href = 
@@ -29,6 +29,15 @@
 			auth
 		})
 	  }
+
+    function gotoBook() {
+		$('#booking').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem/services/book-management"+
+			auth
+		})
+	}
 
       function getProfileName() {
         $.ajax({
@@ -69,18 +78,18 @@
 
       $(document).ready(function () {
         getProfileName();
-		$("#breakAfterTable").html("<br>".repeat(20));		
-		getRegisterURL();
+        gotoBook();
+        $("#breakAfterTable").html("<br>".repeat(20));		
+        getRegisterURL();
 
-		$('#review').on('click', function() {
-			if($('#review-table').css('display') == 'none') 
-				$('#review-table').css('display', 'block');
-			else 
-			$('#review-table').css('display', 'none')
-		});
-
-		
+        $('#review').on('click', function() {
+          if($('#review-table').css('display') == 'none') 
+            $('#review-table').css('display', 'block');
+          else 
+          $('#review-table').css('display', 'none')
+        });	
       });
+
     </script>
   </head>
   <body>
@@ -145,11 +154,9 @@
         <th>Hotel Name</th>
         <td id="hotel-name">null</td>
       </tr>
-	</table>
-     
-	<div id="breakAfterTable"></div>
-	
-	<table id="review-table" border="1" style="width: 40%; display: none;">
+  </table>
+  
+  <table id="review-table" border="1" style="width: 40%; display: none;">
 		<thead>
 			<tr>
 			<th>Name</th>  
@@ -166,6 +173,9 @@
 			  <td>Manager</td>
 			</tr>
 		</tbody>
+     
+	<div id="breakAfterTable"></div>
+	
     <button id="regnewempl">Register new desk clerk</button>
     <button id="review">Review schedules</button>
     <button id="booking-manage" style="display: inline">
@@ -176,6 +186,6 @@
       style="display: inline"
     >
       <input type="submit" value="Logout" />
-    </form>
+    </form><br><br><br>
   </body>
 </html>
