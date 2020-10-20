@@ -77,7 +77,7 @@ public class UserDAO {
 		}	
 		
 		String position = "";
-		if(employee.position == "Desk Clerk")
+		if(employee.position.equals("Desk Clerk"))
 			position = "desk-clerk";
 		executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
 				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
