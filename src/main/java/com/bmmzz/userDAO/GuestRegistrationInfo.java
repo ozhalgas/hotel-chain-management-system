@@ -4,7 +4,7 @@ public class GuestRegistrationInfo {
 	String fullName;
 	String identificationType;
 	String identificationNumber;
-	String category;
+	String categoryName;
 	String address;
 	String homePhoneNumber;
 	String mobilePhoneNumber;
@@ -21,7 +21,7 @@ public class GuestRegistrationInfo {
         identificationNumber = str;
     } 
     public void setCategory(String str) {
-        category = str;
+        categoryName = str;
     } 
     public void setAddress(String str) {
         address = str;
@@ -45,7 +45,7 @@ public class GuestRegistrationInfo {
         return identificationNumber;
     } 
     public String getCategory() {
-        return category;
+        return categoryName;
     } 
     public String getAddress() {
         return address;

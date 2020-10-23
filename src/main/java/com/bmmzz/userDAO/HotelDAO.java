@@ -17,7 +17,7 @@ public class HotelDAO {
 		try {
 			ResultSet resultSet =  UserDAO.executeQuery("SELECT HotelID, Name FROM mydb.hotel;" );
 			while(resultSet.next()) {
-				hotels.addHotel(resultSet.getString(1), resultSet.getString(2));
+				hotels.addHotel(resultSet.getInt(1), resultSet.getString(2));
 			}
 			json = gson.toJson(hotels, Hotels.class);
 			

@@ -1,16 +1,16 @@
 package com.bmmzz.userDAO;
 
 public class GuestInfo {
-	String guestID;
+	int guestID;
 	String fullName;
 	String identificationType;
 	String identificationNumber;
-	String category;
+	String categoryName;
 	String address;
 	String homePhoneNumber;
 	String mobilePhoneNumber;
     
-	public void setGuestID(String str) {
+	public void setGuestID(int str) {
         guestID = str;
     }
     public void setFullName(String str) {
@@ -23,7 +23,7 @@ public class GuestInfo {
         identificationNumber = str;
     } 
     public void setCategory(String str) {
-        category = str;
+        categoryName = str;
     } 
     public void setAddress(String str) {
         address = str;
@@ -38,7 +38,7 @@ public class GuestInfo {
 	
     
     
-    public String getGuestID() {
+    public int getGuestID() {
         return guestID;
     }
     public String getFullName() {
@@ -51,7 +51,7 @@ public class GuestInfo {
         return identificationNumber;
     } 
     public String getCategory() {
-        return category;
+        return categoryName;
     } 
     public String getAddress() {
         return address;

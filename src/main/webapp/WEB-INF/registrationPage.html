@@ -21,7 +21,7 @@ function registration() {
 		"fullName"	:	$("#firstname").val() + " " + $("#lastname").val(),
 		"identificationType"	:	$("input[name='idtype']:checked").val(),
 		"identificationNumber"	:	$("#idnumber").val(),
-		"category"	:	$("input[name='category']:checked").val(),
+		"categoryName"	:	$("input[name='category']:checked").val(),
 		"address"	:	$("#address").val(),
 		"homePhoneNumber"	:	$("#homephonenumber").val(),
 		"mobilePhoneNumber"	:	$("#mobilephonenumber").val(),
@@ -81,11 +81,11 @@ $(document).ready(function() {
 	Identification Number:
 		<input type="text" id="idnumber" name="idnumber"><br><br>
 	Category: &nbsp;
-		<input type="radio" id="none" name="category" value="none">
+		<input type="radio" id="none" name="category" value="None">
 		<label for="none">None</label>&nbsp;
-		<input type="radio" id="veteran" name="category" value="veteran">
+		<input type="radio" id="veteran" name="category" value="Veteran">
 		<label for="veteran">Veteran</label>&nbsp;
-		<input type="radio" id="disabled" name="category" value="disabled">
+		<input type="radio" id="disabled" name="category" value="Disabled">
 		<label for="disabled">Disabled</label><br><br>
 	Address:
 		<input type="text" id="address" name="address"><br><br>

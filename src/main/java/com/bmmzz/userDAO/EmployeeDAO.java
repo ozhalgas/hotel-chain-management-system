@@ -15,23 +15,23 @@ public class EmployeeDAO {
 		if(UserDAO.userExists(employee.login, "employee"))
 			return;
 
-		String employeeID = "1"; 
+		int employeeID = 1; 
 		if( UserDAO.executeQueryINT("SELECT COUNT(*) FROM mydb.employee") > 0 ) {
 			try {
 				ResultSet resultSet = UserDAO.executeQuery("SELECT EmployeeID FROM mydb.employee ORDER BY EmployeeID DESC LIMIT 1;");
 				resultSet.next();
-				employeeID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
+				employeeID = resultSet.getInt(1) + 1;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}	
 		
-		UserDAO.executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
+		UserDAO.executeUpdate("INSERT INTO mydb.employee VALUES (" + employeeID +", '" + employee.fullName + "', '" + employee.gender + "', "
 				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
 				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
 				+ "'" + employee.emailAddress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
 				+ "'" + employee.password + "')");
-		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
+		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES (" + employeeID + ", " + employee.hotelID + ", '" + employee.getPosition() + "', "
 				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', " + employee.getEndDate() + ")");
 	}
 	
@@ -51,7 +51,7 @@ public class EmployeeDAO {
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
-			employeeInfo.setEmployeeID( resultSet.getString(1) );
+			employeeInfo.setEmployeeID( resultSet.getInt(1) );
 			employeeInfo.setFullName( resultSet.getString(2) );
 			employeeInfo.setGender( resultSet.getString(3) );
 			employeeInfo.setDateOfBirth( resultSet.getDate(4).toString() );
@@ -65,9 +65,9 @@ public class EmployeeDAO {
 			employeeInfo.setHomePhoneNumber( resultSet.getString(12) );
 			employeeInfo.setMobilePhoneNumber( resultSet.getString(13) );
 			
-			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee_at_hotel WHERE Employee_EmployeeID= BINARY '" + employeeInfo.getEmployeeID() + "'" );
+			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee_at_hotel WHERE EmployeeID= BINARY " + employeeInfo.getEmployeeID());
 			resultSet.next();
-			employeeInfo.setHotelID( resultSet.getString(2) );
+			employeeInfo.setHotelID( resultSet.getInt(2) );
 			employeeInfo.setPosition( resultSet.getString(3) );
 			employeeInfo.setStatus( resultSet.getString(4) );
 			employeeInfo.setPayrate( resultSet.getString(5) );
@@ -77,7 +77,7 @@ public class EmployeeDAO {
 			else
 				employeeInfo.setEndDate( resultSet.getDate(7).toString() );
 			
-			resultSet = UserDAO.executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID= BINARY '" + employeeInfo.getHotelID() + "'" );
+			resultSet = UserDAO.executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID= BINARY " + employeeInfo.getHotelID() );
 			resultSet.next();
 			employeeInfo.setHotelName( resultSet.getString(1) );
 			

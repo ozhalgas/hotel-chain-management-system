@@ -1,10 +1,31 @@
 package com.bmmzz.userDAO;
 
 public class EmployeeInfo {
-	public String getEmployeeID() {
+	private int EmployeeID;
+	private String FullName;
+	private String Gender;
+	private String DateOfBirth;
+	private String IdentificationType;
+	private String IdentificationNumber;
+	private String CitizenShip;
+	private String Vise;
+	private String Address;
+	private String BankCardNumber;
+	private String EmailAdress;
+	private String HomePhoneNumber;
+	private String MobilePhoneNumber;
+	private String Position;
+	private String Status;
+	private String Payrate;
+	private String StartDate;
+	private String EndDate;
+	private int HotelID;
+	private String HotelName;
+	
+	public int getEmployeeID() {
 		return EmployeeID;
 	}
-	public void setEmployeeID(String employeeID) {
+	public void setEmployeeID(int employeeID) {
 		EmployeeID = employeeID;
 	}
 	public String getFullName() {
@@ -110,10 +131,10 @@ public class EmployeeInfo {
 		EndDate = endDate;
 	}
 	
-	public String getHotelID() {
+	public int getHotelID() {
 		return HotelID;
 	}
-	public void setHotelID(String hotelID) {
+	public void setHotelID(int hotelID) {
 		HotelID = hotelID;
 	}
 	
@@ -124,27 +145,5 @@ public class EmployeeInfo {
 	public void setHotelName(String hotelName) {
 		HotelName = hotelName;
 	}
-	
-	
-	private String EmployeeID;
-	private String FullName;
-	private String Gender;
-	private String DateOfBirth;
-	private String IdentificationType;
-	private String IdentificationNumber;
-	private String CitizenShip;
-	private String Vise;
-	private String Address;
-	private String BankCardNumber;
-	private String EmailAdress;
-	private String HomePhoneNumber;
-	private String MobilePhoneNumber;
-	private String Position;
-	private String Status;
-	private String Payrate;
-	private String StartDate;
-	private String EndDate;
-	private String HotelID;
-	private String HotelName;
 }
 

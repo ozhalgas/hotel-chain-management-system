@@ -15,22 +15,21 @@ public class GuestDAO {
 		if(UserDAO.userExists(guest.login, "guest"))
 					return;
 		
-		String guestID = "1"; 
+		int guestID = 1; 
 		if( UserDAO.executeQueryINT("SELECT COUNT(*) FROM mydb.guest") > 0 ) {
 			try {
 				ResultSet resultSet = UserDAO.executeQuery("SELECT guestID FROM mydb.guest ORDER BY guestID DESC LIMIT 1;");
 				resultSet.next();
-				guestID = Integer.toString(Integer.parseInt(resultSet.getString(1)) + 1);
+				guestID = resultSet.getInt(1) + 1;
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		UserDAO.executeUpdate("insert into mydb.guest "
-		+ "(GuestID, FullName, IdentificationType, IdentificationNumber, Category, Address, HomePhoneNumber, MobilePhoneNumber, Login, Password) "
 		+ "values "
 		+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
-		+ "'" + guest.category + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
+		+ "'" + guest.categoryName + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
 	}
 	
 	public static String getGuestInfo(String auth) {
@@ -50,7 +49,7 @@ public class GuestDAO {
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.guest WHERE Login= BINARY '" + username + "'" );
 			resultSet.next();
-			guestInfo.setGuestID( resultSet.getString(1) );
+			guestInfo.setGuestID( resultSet.getInt(1) );
 			guestInfo.setFullName( resultSet.getString(2) );
 			guestInfo.setIdentificationType( resultSet.getString(3) );
 			guestInfo.setIdentificationNumber( resultSet.getString(4) );

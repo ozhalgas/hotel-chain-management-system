@@ -15,7 +15,7 @@ public class EmployeeRegistrationInfo {
 	String mobilePhoneNumber;
 	String login;
 	String password;
-	String hotelID;
+	int hotelID;
 	String position;
 	String status;
 	String payRate;
@@ -108,14 +108,14 @@ public class EmployeeRegistrationInfo {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getHotelID() {
+	public int getHotelID() {
 		return hotelID;
 	}
-	public void setHotelID(String hotelID) {
+	public void setHotelID(int hotelID) {
 		this.hotelID = hotelID;
 	}
 	public String getPosition() {
-		return position;
+		return position.substring(0,1).toUpperCase() + position.substring(1).toLowerCase();
 	}
 	public void setPosition(String position) {
 		this.position = position;

@@ -120,15 +120,15 @@ public class UserDAO {
 		
 		if(userExists(login, "employee")) {
 			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login= BINARY '" + login + "'");
-			String employeeID = "";
+			int employeeID = 0;
 			try {
 				resultSet.next();
-				employeeID = resultSet.getString(1);
+				employeeID = resultSet.getInt(1);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			
-			resultSet = executeQuery("SELECT Position FROM mydb.employee_at_hotel WHERE Employee_EmployeeID= BINARY '" + employeeID + "'" );
+			resultSet = executeQuery("SELECT Position FROM mydb.employee_at_hotel WHERE EmployeeID= BINARY " + employeeID);
 			String position = "";
 			try {
 				resultSet.next();
