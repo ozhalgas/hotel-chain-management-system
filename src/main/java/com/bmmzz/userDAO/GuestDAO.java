@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.regex.Pattern;
 
+import com.bmmzz.userDAO.struct.GuestInfo;
+import com.bmmzz.userDAO.struct.GuestRegistrationInfo;
 import com.google.gson.Gson;
 
 public class GuestDAO {
@@ -12,7 +14,7 @@ public class GuestDAO {
 	private GuestDAO() {}
 	
 	public static void addGuest(GuestRegistrationInfo guest) {
-		if(UserDAO.userExists(guest.login, "guest"))
+		if(UserDAO.userExists(guest.getLogin(), "guest"))
 					return;
 		
 		int guestID = 1; 
@@ -28,8 +30,8 @@ public class GuestDAO {
 		
 		UserDAO.executeUpdate("insert into mydb.guest "
 		+ "values "
-		+ "('" + guestID + "', '" + guest.fullName +"', '" + guest.identificationType + "', '" + guest.identificationNumber + "', "
-		+ "'" + guest.categoryName + "', '" + guest.address +"', '" + guest.homePhoneNumber + "', '" + guest.mobilePhoneNumber + "', '" + guest.login +"', '" + guest.password +"')");
+		+ "('" + guestID + "', '" + guest.getFullName() +"', '" + guest.getIdentificationType() + "', '" + guest.getIdentificationNumber() + "', "
+		+ "'" + guest.getCategoryName() + "', '" + guest.getAddress() +"', '" + guest.getHomePhoneNumber() + "', '" + guest.getMobilePhoneNumber() + "', '" + guest.getLogin() +"', '" + guest.getPassword() +"')");
 	}
 	
 	public static String getGuestInfo(String auth) {
@@ -53,7 +55,7 @@ public class GuestDAO {
 			guestInfo.setFullName( resultSet.getString(2) );
 			guestInfo.setIdentificationType( resultSet.getString(3) );
 			guestInfo.setIdentificationNumber( resultSet.getString(4) );
-			guestInfo.setCategory( resultSet.getString(5) );
+			guestInfo.setCategoryName( resultSet.getString(5) );
 			guestInfo.setAddress( resultSet.getString(6) );
 			guestInfo.setHomePhoneNumber( resultSet.getString(7) );
 			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );

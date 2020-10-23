@@ -1,4 +1,4 @@
-package com.bmmzz.userDAO;
+package com.bmmzz.userDAO.struct;
 
 public class EmployeeInfo {
 	private int EmployeeID;

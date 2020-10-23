@@ -30,7 +30,7 @@ function registration() {
 	};
 	var userDataJSON = JSON.stringify(userData);
 	
-	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
+	var regexp = /^[a-zA-Z0-9_-]{2,25}$/;
 	var usernameIsValid = regexp.test($("#username").val());
 	if (usernameIsValid) {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration/user-data', {guestInJson : userDataJSON}, function(r) {

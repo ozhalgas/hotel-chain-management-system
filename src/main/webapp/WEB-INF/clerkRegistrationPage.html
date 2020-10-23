@@ -48,7 +48,7 @@ function registration() {
 		"password"  :  $("#password").val(),
 	};
 	var userDataJSON = JSON.stringify(userData);
-	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
+	var regexp = /^[a-zA-Z0-9_-]{2,25}$/;
 	var usernameIsValid = regexp.test($("#username").val());
 	var emailRegex = /\S+@\S+\.\S+/;
 	var emailIsValid = emailRegex.test($("#email").val());

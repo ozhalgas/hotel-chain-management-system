@@ -1,26 +1,26 @@
-package com.bmmzz.userDAO;
+package com.bmmzz.userDAO.struct;
 
 public class EmployeeRegistrationInfo {
-	String fullName;
-	String gender;
-	String dateOfBirth;
-	String identificationType;
-	String identificationNumber;
-	String citizenship;
-	String visa;
-	String address;
-	String bankCardNumber;
-	String emailAddress;
-	String homePhoneNumber;
-	String mobilePhoneNumber;
-	String login;
-	String password;
-	int hotelID;
-	String position;
-	String status;
-	String payRate;
-	String startDate;
-	String endDate;
+	private String fullName;
+	private String gender;
+	private String dateOfBirth;
+	private String identificationType;
+	private String identificationNumber;
+	private String citizenship;
+	private String visa;
+	private String address;
+	private String bankCardNumber;
+	private String emailAddress;
+	private String homePhoneNumber;
+	private String mobilePhoneNumber;
+	private String login;
+	private String password;
+	private int hotelID;
+	private String position;
+	private String status;
+	private String payRate;
+	private String startDate;
+	private String endDate;
 	
 	
 	

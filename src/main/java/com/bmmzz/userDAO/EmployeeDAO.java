@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.regex.Pattern;
 
+import com.bmmzz.userDAO.struct.EmployeeInfo;
+import com.bmmzz.userDAO.struct.EmployeeRegistrationInfo;
 import com.google.gson.Gson;
 
 public class EmployeeDAO {
@@ -12,7 +14,7 @@ public class EmployeeDAO {
 	private EmployeeDAO() {}
 
 	public static void addEmployee(EmployeeRegistrationInfo employee) {
-		if(UserDAO.userExists(employee.login, "employee"))
+		if(UserDAO.userExists(employee.getLogin(), "employee"))
 			return;
 
 		int employeeID = 1; 
@@ -26,13 +28,13 @@ public class EmployeeDAO {
 			}
 		}	
 		
-		UserDAO.executeUpdate("INSERT INTO mydb.employee VALUES (" + employeeID +", '" + employee.fullName + "', '" + employee.gender + "', "
-				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
-				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
-				+ "'" + employee.emailAddress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
-				+ "'" + employee.password + "')");
-		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES (" + employeeID + ", " + employee.hotelID + ", '" + employee.getPosition() + "', "
-				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', " + employee.getEndDate() + ")");
+		UserDAO.executeUpdate("INSERT INTO mydb.employee VALUES (" + employeeID +", '" + employee.getFullName() + "', '" + employee.getGender() + "', "
+				+ "'" + employee.getDateOfBirth() +"', '" + employee.getIdentificationType() + "', '" + employee.getIdentificationNumber() + "', "
+				+ "'" + employee.getCitizenship() + "', '" + employee.getVisa() + "', '" + employee.getAddress() + "', '" + employee.getBankCardNumber() + "', "
+				+ "'" + employee.getEmailAddress() + "', '" + employee.getHomePhoneNumber() + "', '" + employee.getMobilePhoneNumber() + "', '" + employee.getLogin() + "', "
+				+ "'" + employee.getPassword() + "')");
+		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES (" + employeeID + ", " + employee.getHotelID() + ", '" + employee.getPosition() + "', "
+				+ "'" + employee.getStatus() + "', '" + employee.getPayRate() + "', '" + employee.getStartDate() + "', " + employee.getEndDate() + ")");
 	}
 	
 	public static String getEmployeeInfo(String auth) {

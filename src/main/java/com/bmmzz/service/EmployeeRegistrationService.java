@@ -15,9 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.bmmzz.userDAO.EmployeeDAO;
-import com.bmmzz.userDAO.EmployeeRegistrationInfo;
 import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.UserDAO;
+import com.bmmzz.userDAO.struct.EmployeeRegistrationInfo;
 import com.google.gson.Gson;
 
 @Path("/employee-registration")

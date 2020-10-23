@@ -3,6 +3,7 @@ package com.bmmzz.userDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.bmmzz.userDAO.struct.Hotels;
 import com.google.gson.Gson;
 
 public class HotelDAO {

@@ -1,15 +1,15 @@
-package com.bmmzz.userDAO;
+package com.bmmzz.userDAO.struct;
 
 public class GuestRegistrationInfo {
-	String fullName;
-	String identificationType;
-	String identificationNumber;
-	String categoryName;
-	String address;
-	String homePhoneNumber;
-	String mobilePhoneNumber;
-	String login;
-	String password;
+	private String fullName;
+	private String identificationType;
+	private String identificationNumber;
+	private String categoryName;
+	private String address;
+	private String homePhoneNumber;
+	private String mobilePhoneNumber;
+	private String login;
+	private String password;
     
     public void setFullName(String str) {
         fullName = str;
@@ -20,7 +20,7 @@ public class GuestRegistrationInfo {
     public void setIdentificationNumber(String str) {
         identificationNumber = str;
     } 
-    public void setCategory(String str) {
+    public void setCategoryName(String str) {
         categoryName = str;
     } 
     public void setAddress(String str) {
@@ -44,7 +44,7 @@ public class GuestRegistrationInfo {
     public String getIdentificationNumber() {
         return identificationNumber;
     } 
-    public String getCategory() {
+    public String getCategoryName() {
         return categoryName;
     } 
     public String getAddress() {

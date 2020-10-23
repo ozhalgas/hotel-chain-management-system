@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.bmmzz.userDAO.UserDAO;
+import com.bmmzz.userDAO.struct.GuestRegistrationInfo;
 import com.google.gson.Gson;
 
 @Path("/registration")
