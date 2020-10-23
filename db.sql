@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Room` (
   `Occupied` TINYINT NOT NULL,
   `NumberOfOccupants` INT NOT NULL,
   `RoomTypeName` VARCHAR(45) NOT NULL,
-  `HotelID` VARCHAR(45) NOT NULL,
+  `HotelID` INT NOT NULL,
   PRIMARY KEY (`RoomNumber`, `Floor`, `RoomTypeName`, `HotelID`),
   INDEX `fk_Room_Room_Type1_idx` (`RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
   CONSTRAINT `fk_Room_Room_Type1`
