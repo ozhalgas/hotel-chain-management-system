@@ -12,6 +12,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.EmployeeDAO;
+import com.bmmzz.userDAO.GuestDAO;
 import com.bmmzz.userDAO.UserDAO;
 
 @Path("/profile")
@@ -46,11 +48,11 @@ public class ProfileService {
 	@Path("/info")
 	public Response getProfileInfo(@DefaultValue("") @QueryParam("auth") String auth) {
 		if(UserDAO.getRole(auth).equals("guest")) {
-			String json = UserDAO.getGuestInfo(auth);
+			String json = GuestDAO.getGuestInfo(auth);
 			return Response.ok(json).build();
 		}
 		if(UserDAO.getRole(auth).equals("desk-clerk") || UserDAO.getRole(auth).equals("manager")) {
-			String json = UserDAO.getEmployeeInfo(auth);
+			String json = EmployeeDAO.getEmployeeInfo(auth);
 			return Response.ok(json).build();
 		}
 		return null;

@@ -150,24 +150,4 @@ public class UserDAO {
 		String auth = username + ":" + password;
 		return Base64.getEncoder().encodeToString(auth.getBytes());
 	}
-	
-	public static void addEmployee(EmployeeRegistrationInfo employee) {
-		EmployeeDAO.addEmployee(employee);
-	}
-	
-	public static void addGuest(GuestRegistrationInfo guest) {
-		GuestDAO.addGuest(guest);
-	}
-	
-	public static String getGuestInfo(String auth) {
-		return GuestDAO.getGuestInfo(auth);
-	}
-	
-	public static String getEmployeeInfo(String auth) {
-		return EmployeeDAO.getEmployeeInfo(auth);
-	}
-	
-	public static String getAllHotels() {
-		return HotelDAO.getAllHotels();
-	}
 }

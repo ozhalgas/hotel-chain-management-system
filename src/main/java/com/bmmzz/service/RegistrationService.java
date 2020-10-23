@@ -42,7 +42,7 @@ public class RegistrationService {
 		if(guest.getLogin().isEmpty() || guest.getPassword().isEmpty()) 
 			{return "invalidInput";}
 		
-		UserDAO.addGuest(guest);
+		GuestDAO.addGuest(guest);
 		return "UserWasCreated";
 	}
 }

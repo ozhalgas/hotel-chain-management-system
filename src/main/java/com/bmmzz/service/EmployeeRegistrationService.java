@@ -14,7 +14,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.EmployeeDAO;
 import com.bmmzz.userDAO.EmployeeRegistrationInfo;
+import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.UserDAO;
 import com.google.gson.Gson;
 
@@ -45,7 +47,7 @@ public class EmployeeRegistrationService {
 	@GET
 	@Path("hotels")
 	public Response getAllHotels() {
-		String json = UserDAO.getAllHotels();
+		String json = HotelDAO.getAllHotels();
 		return Response.ok(json).build();
 	}
 	
@@ -60,7 +62,7 @@ public class EmployeeRegistrationService {
 		if(employee.getLogin().isEmpty() || employee.getPassword().isEmpty()) 
 			{return "invalidInput";}
 		
-		UserDAO.addEmployee(employee);
+		EmployeeDAO.addEmployee(employee);
 		return "UserWasCreated";
 	}
 }
