@@ -8,9 +8,8 @@
 function authorization() {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/authorization', {username: $("#username").val(), password: $("#password").val()}, function(r) {
 			if(r == null) {
-				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
-			}
-			else {
+				document.getElementById("warning").innerHTML = "Please fill in all required fields!";
+			} else {
 				 window.location.href = r;
 			}
 		})
@@ -31,19 +30,36 @@ function registration() {
 	var userDataJSON = JSON.stringify(userData);
 	
 	var regexp = /^[a-zA-Z0-9_-]{2,25}$/;
+	var regexName = /^[a-zA-Z ]{1,30}$/;
+	var regexnum = /^[0-9-+ ]{6,25}$/;
+	var regexAddress = /^[a-zA-Z0-9-/,.#№ ]{10,100}$/;
 	var usernameIsValid = regexp.test($("#username").val());
-	if (usernameIsValid) {
+	if ($('#password').val() != $('#password2').val()) 
+		document.getElementById("warning").innerHTML = "Passwords don't match.";
+	else if ($('#firstname').val() == '' || $('#lastname').val() == '' ||
+			 $('#idnumber').val().toString() == '' || $('#address').val() == '' ||
+			 $("#homephonenumber").val().toString() == '' || $("#mobilephonenumber").val().toString() == '') { 
+				 $('#warning').html('Please fill in all required fields.')
+	}
+	else if (!(regexAddress.test($('#address').val())))
+		$('#warning').html("Address must be longer than 10 characters and can only contain letters of English alphabet, numbers, and symbols: ,;.;/;-;#;№.")
+	else if (!(regexName.test($('#firstname').val())) || !(regexName.test($('#lastname').val())))
+		$('#warning').html("Name can only contain letters of English alphabet.")
+	else if (!(regexnum.test($('#homephonenumber').val()) || !(regexnum.test($('#mobilephonenumber').val()))))
+		$('#warning').html("Please provide an existing phone number. It must be between 6 and 25 characters.")
+
+	else if (usernameIsValid) {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/registration/user-data', {guestInJson : userDataJSON}, function(r) {
 			if(r == "UserAlreadyExists") 
 				document.getElementById("warning").innerHTML = "Such username already exists";
 			else if (r == "invalidInput") 
-				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
+				document.getElementById("warning").innerHTML = "Incorrect login/password. Please try again.";
 			else {
 				authorization();
 			}
 		})
 	} else {
-		document.getElementById("warning").innerHTML = "Username does not match the requirements";
+		document.getElementById("warning").innerHTML = "Username does not meet the requirements";
 	}
 }
 
