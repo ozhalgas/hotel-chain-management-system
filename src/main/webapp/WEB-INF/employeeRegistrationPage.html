@@ -48,6 +48,7 @@ function registration() {
 		"login"  :  $("#username").val(),
 		"password"  :  $("#password").val(),
 	};
+	alert(userData.position);
 	var userDataJSON = JSON.stringify(userData);
 	console.log(userDataJSON);
 	var regexp = /^[a-zA-Z0-9_-]{4,12}$/;
@@ -124,9 +125,9 @@ $(document).ready(function() {
 </h2>
 <h3>Please, fill in the following forms to register</h3>
 	Position: &nbsp;
-		<input type="radio" id="Manager" name="position" value="Manager">
+		<input type="radio" id="Manager" name="position" value="manager">
 		<label for="position">Manager</label>&nbsp;
-		<input type="radio" id="Desk-clerk" name="position" value="Desk-clerk">
+		<input type="radio" id="Desk-clerk" name="position" value="desk-clerk">
 		<label for="position">Desk clerk</label><br><br>
 	Username: <input type="text" id="username" name="username"><br><br>
 	First Name: <input type="text" id="firstname" name="firstname"><br><br>
