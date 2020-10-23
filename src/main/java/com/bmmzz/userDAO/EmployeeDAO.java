@@ -26,15 +26,12 @@ public class EmployeeDAO {
 			}
 		}	
 		
-		String position = "";
-		if(employee.position.toLowerCase().equals("desk clerk"))
-			position = "desk-clerk";
 		UserDAO.executeUpdate("INSERT INTO mydb.employee VALUES ('" + employeeID +"', '" + employee.fullName + "', '" + employee.gender + "', "
 				+ "'" + employee.dateOfBirth +"', '" + employee.identificationType + "', '" + employee.identificationNumber + "', "
 				+ "'" + employee.citizenship + "', '" + employee.visa + "', '" + employee.address + "', '" + employee.bankCardNumber + "', "
 				+ "'" + employee.emailAddress + "', '" + employee.homePhoneNumber + "', '" + employee.mobilePhoneNumber + "', '" + employee.login + "', "
 				+ "'" + employee.password + "')");
-		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + position + "', "
+		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES ('" + employeeID + "', '" + employee.hotelID + "', '" + employee.position + "', "
 				+ "'" + employee.status + "', '" + employee.payRate + "', '" + employee.startDate + "', " + employee.getEndDate() + ")");
 	}
 	
