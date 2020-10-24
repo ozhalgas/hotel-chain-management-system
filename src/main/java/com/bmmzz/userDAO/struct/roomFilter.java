@@ -5,7 +5,7 @@ public class roomFilter {
 	private String dateEnd;
 	private String country;
 	private String region;
-	//private String occupancy;
+	private int occupancy;
 	
 	public String getDateStart() {
 		return dateStart;
@@ -30,5 +30,11 @@ public class roomFilter {
 	}
 	public void setRegion(String region) {
 		this.region = region;
+	}
+	public int getOccupancy() {
+		return occupancy;
+	}
+	public void setOccupancy(int occupancy) {
+		this.occupancy = occupancy;
 	}
 }
