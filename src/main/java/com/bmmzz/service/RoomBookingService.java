@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.bmmzz.userDAO.UserDAO;
 
@@ -33,5 +34,13 @@ public class RoomBookingService {
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
+	}
+	
+	@GET
+	@Path("/available-rooms")
+	public Response getPageOfAvailableRooms(@DefaultValue("") @QueryParam("auth") String auth,
+											@DefaultValue("0") @QueryParam("page") int page,
+											@DefaultValue("") @QueryParam("filtersInJson") String filtersInJson) {
+		return null;
 	}
 }
