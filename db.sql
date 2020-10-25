@@ -149,7 +149,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Category` (
   `TypeName` VARCHAR(45) NOT NULL,
   `Discount` FLOAT NOT NULL,
   `HotelID` INT NOT NULL,
-  `Categorycol` VARCHAR(45) NULL,
   PRIMARY KEY (`TypeName`, `HotelID`),
   INDEX `fk_Category_Hotel1_idx` (`HotelID` ASC) VISIBLE,
   CONSTRAINT `fk_Category_Hotel1`
