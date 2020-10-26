@@ -54,7 +54,27 @@ function registration() {
 	var emailRegex = /\S+@\S+\.\S+/;
 	var emailIsValid = emailRegex.test($("#email").val());
 	var usernameIsValid = regexp.test($("#username").val());
-	if (usernameIsValid && emailIsValid) {
+	var regexName = /^[a-zA-Z ]{1,30}$/;
+	var regexnum = /^[0-9-+ ]{5,25}$/;
+	var regexAddress = /^[a-zA-Z0-9-/,.#? ]{3,100}$/;
+
+	if ($('#firstname').val().toString().replace(/ /g, "") == '' ||
+		$('#lastname').val().toString().replace(/ /g, "") == '' ||
+		userData.dateOfBirth == '' || $('#idnumber').val() == '' ||
+		userData.citizenship == '' || userData.visa == '' ||
+		userData.bankCardNumber.toString() == '' || userData.payRate.toString() == '') {
+			$('#warning').html("Please fill in all required fields!")
+		}
+	else if($('#password').val() != $('#password2').val())
+		$('#warning').html("Passwords do not match!");
+	else if (!(regexAddress.test($('#address').val())))
+		$('#warning').html("Address must be longer than 3 characters and can only contain letters of English alphabet, numbers, and symbols: ,;.;/;-;#;?.")
+	else if (!(regexName.test($('#firstname').val())) || !(regexName.test($('#lastname').val())))
+		$('#warning').html("Name can only contain letters of English alphabet.")
+	else if (!(regexnum.test($('#homephonenumber').val()) || !(regexnum.test($('#mobilephonenumber').val()))))
+		$('#warning').html("Please provide an existing phone number. It must be between 5 and 25 characters.")
+
+	else if (usernameIsValid && emailIsValid) {
 		$.post('http://localhost:8080/HotelChainManagementSystem/services/employee-registration/user-data', {employeeInJson : userDataJSON}, function(r) {
 			if(r == "UserAlreadyExists")  {
 				document.getElementById("warning").innerHTML = "Such username already exists";
@@ -63,8 +83,8 @@ function registration() {
 				document.getElementById("warning").innerHTML = "Incorrect login and/or password. Please try again!";
 			}	
 			else {
-				document.getElementById("warning").innerHTML = "";
-				document.getElementById("confirmation").innerHTML = "Employee was registered successfully!";
+				$('#warning').attr('style','color:green')
+				$('#warning').html("Employee was registered successfully!");
 			}
 		})
 	} else {
@@ -181,8 +201,7 @@ $(document).ready(function() {
 		<input type="text" id="payRate" name="payRate"><br><br>
 	Password: <input type="password" id="password" name="password"><br><br>
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
-	<h4 id="warning" style="display: inline;color:red;"></h4>
-	<h4 id="confirmation" style="color:green;"></h4>
+	<h4 id="warning" style="color:red;"></h4><br>
 	<button id="Register" type="button">Register</button>
 </body>
 </html>
