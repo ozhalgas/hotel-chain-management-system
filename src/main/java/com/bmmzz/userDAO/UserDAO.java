@@ -98,6 +98,25 @@ public class UserDAO {
 		return checkAuth(username, password);
 	}
 	
+	public static int getGuestID(String auth) {
+		byte[] decodedBytes = Base64.getDecoder().decode(auth);
+		String decodedAuth = new String(decodedBytes);
+		
+		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
+			return -1;
+		
+		String username = decodedAuth.split(":", 2)[0];
+		
+		ResultSet resultSet = executeQuery("SELECT GuestID FROM mydb.guest WHERE Login= BINARY '" + username + "';");
+		try {
+			resultSet.next();
+			return resultSet.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public static boolean checkRoleAndAuth(String auth, String role) {
 		return checkAuth(auth) && getRole(auth).equals(role);
 	}
