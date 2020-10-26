@@ -10,24 +10,86 @@
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet" type="text/css" />
 
 <script>
-$(document).ready(function() {
-    $("#startDate").datepicker({ 
-    	dateFormat: "yy-mm-dd",
-    	minDate: 0,
-    	onClose:function(selected){
-    		var newDate = selected;
-    		$("#endDate").datepicker("option", "minDate", selected);
-    	}
-    });
+	var link = window.location.href.toString();
+	
+	function destinationInfo(){
+		$.ajax({
+			url: link.substring(0, 70) + "/hotel-choosing-info" + link.substring(70, link.length),
+	        dataType: "json",
+	        success: function (r) {
+	        	//making country options
+	        	var cId = 0;
+	        	r["country"].forEach(function(option){
+	        		$("#country").append("<option value=c" + cId.toString + " id=c" + cId.toString() + ">" + option + "</option>");
+	        		++cId;
+	        	});
+	        	
+	        	//selecting region options from selected country
+	        	var selectedCountry;
+	        	$("#country").change(function(){
+	        		$("#region").empty();
+	        		$("#region").append('<option value="" disabled selected>' + "Choose Region" + '</option>');
+	        		
+	        		$("#hotel").empty();
+	        		$("#hotel").append('<option value="" disabled selected>' + "Choose Hotel" + '</option>');
+	        		
+	        		selectedCountry = $("#country").find(":selected").text();
+	        		//console.log(selectedCountry);
+	        		
+	        		var cid = 0;
+		        	var rid = 0;
+		        	r["country"].forEach(function(country){
+		        		if(country == selectedCountry){
+		        			$("#region").append("<option value=r" + rid.toString + " id=r" + rid.toString() + ">" + r["region"][cid] + "</option>");
+		        			++rid;
+		        		}
+		        		++cid;
+		        	});
+	        	});
+	        	
+	        	//selectiong hotel options from selected region
+	        	var selectedRegion;
+	        	$("#region").change(function(){
+	        		$("#hotel").empty();
+	        		$("#hotel").append('<option value="" disabled selected>' + "Choose Hotel" + '</option>');
+	        		selectedRegion = $("#region").find(":selected").text();
+	        		//console.log(selectedRegion);
+	        		
+	        		var regid = 0;
+		        	var hid = 0;
+		        	r["region"].forEach(function(region){
+		        		if(region == selectedRegion){
+		        			$("#hotel").append("<option value=h" + hid.toString + " id=h" + hid.toString() + ">" + r["name"][regid] + "</option>");
+		        			++hid;
+		        		}
+		        		++regid;
+		        	});
+	        	});
+	        }
+		})
+	}
+	
+
+	$(document).ready(function() {
+		destinationInfo();
+    	$("#startDate").datepicker({ 
+    		dateFormat: "yy-mm-dd",
+    		minDate: 0,
+    		onClose:function(selected){
+    			var newDate = selected;
+    			$("#endDate").datepicker("option", "minDate", selected);
+    		}
+    	});
     
-    $("#endDate").datepicker({ 
-    	dateFormat: "yy-mm-dd",
-    	minDate: 1,
-    	onClose:function(selected){
-    		$("#startDate").datepicker("option", "maxDate", selected)
-    	}
-    });
-});
+    	$("#endDate").datepicker({ 
+    		dateFormat: "yy-mm-dd",
+    		minDate: 1,
+    		onClose:function(selected){
+    			$("#startDate").datepicker("option", "maxDate", selected)
+    		}
+    	});
+	});
+	
 </script>
 </head>
 <body>
@@ -36,27 +98,19 @@ $(document).ready(function() {
 </h2>
 
 <label for="countries">Choose Country:</label><br>
-<select id="countries" name="countries">
+<select id="country" name="country">
+	<!--<option value="" disabled selected>Choose Country</option>-->
 	<option value="" disabled selected>Choose Country</option>
-	<option value="country1">Country 1</option>
-	<option value="country2">Country 2</option>
-	<option value="country3">Country 3</option>
 </select><br><br>
 
 <label for="regions">Choose Region:</label><br>
-<select id="regions" name="regions">
+<select id="region" name="region">
 	<option value="" disabled selected>Choose Region</option>
-	<option value="region1">Region 1</option>
-	<option value="region2">Region 2</option>
-	<option value="region3">Region 3</option>
 </select><br><br>
 
 <label for="hotels">Choose Hotel:</label><br>
-<select id="hotels" name="hotels">
+<select id="hotel" name="hotel">
 	<option value="" disabled selected>Choose Hotel</option>
-	<option value="hotel1">Hotel 1</option>
-	<option value="hotel2">Hotel 2</option>
-	<option value="hotel3">Hotel 3</option>
 </select><br><br>
 
 <label for="startDate">Start Date:</label>
