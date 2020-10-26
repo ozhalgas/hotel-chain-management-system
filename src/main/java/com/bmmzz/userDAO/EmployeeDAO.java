@@ -33,8 +33,8 @@ public class EmployeeDAO {
 				+ "'" + employee.getCitizenship() + "', '" + employee.getVisa() + "', '" + employee.getAddress() + "', '" + employee.getBankCardNumber() + "', "
 				+ "'" + employee.getEmailAddress() + "', '" + employee.getHomePhoneNumber() + "', '" + employee.getMobilePhoneNumber() + "', '" + employee.getLogin() + "', "
 				+ "'" + employee.getPassword() + "')");
-		UserDAO.executeUpdate("INSERT INTO mydb.employee_at_hotel VALUES (" + employeeID + ", " + employee.getHotelID() + ", '" + employee.getPosition() + "', "
-				+ "'" + employee.getStatus() + "', '" + employee.getPayRate() + "', '" + employee.getStartDate() + "', " + employee.getEndDate() + ")");
+		UserDAO.executeUpdate("INSERT INTO mydb.schedule VALUES (" + employeeID + ", " + employee.getHotelID() + ", '" + employee.getPosition() + "', "
+				+ "'" + employee.getStatus() + "', '" + employee.getPayRate() + "', '" + employee.getStartDate() + "', " + employee.getEndDate() + ", '" + employee.getStartTime() + "', '" + employee.getEndTime() + "')");
 	}
 	
 	public static String getEmployeeInfo(String auth) {
@@ -67,7 +67,7 @@ public class EmployeeDAO {
 			employeeInfo.setHomePhoneNumber( resultSet.getString(12) );
 			employeeInfo.setMobilePhoneNumber( resultSet.getString(13) );
 			
-			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee_at_hotel WHERE EmployeeID= BINARY " + employeeInfo.getEmployeeID());
+			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.schedule WHERE EmployeeID= BINARY " + employeeInfo.getEmployeeID());
 			resultSet.next();
 			employeeInfo.setHotelID( resultSet.getInt(2) );
 			employeeInfo.setPosition( resultSet.getString(3) );
@@ -78,6 +78,8 @@ public class EmployeeDAO {
 				employeeInfo.setEndDate("NULL");
 			else
 				employeeInfo.setEndDate( resultSet.getDate(7).toString() );
+			employeeInfo.setStartTime( resultSet.getString(8) );
+			employeeInfo.setEndTime( resultSet.getString(9) );
 			
 			resultSet = UserDAO.executeQuery("SELECT Name FROM mydb.hotel WHERE HotelID= BINARY " + employeeInfo.getHotelID() );
 			resultSet.next();

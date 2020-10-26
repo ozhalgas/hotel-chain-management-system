@@ -30,8 +30,10 @@ public class GuestDAO {
 		
 		UserDAO.executeUpdate("insert into mydb.guest "
 		+ "values "
-		+ "('" + guestID + "', '" + guest.getFullName() +"', '" + guest.getIdentificationType() + "', '" + guest.getIdentificationNumber() + "', "
-		+ "'" + guest.getCategoryName() + "', '" + guest.getAddress() +"', '" + guest.getHomePhoneNumber() + "', '" + guest.getMobilePhoneNumber() + "', '" + guest.getLogin() +"', '" + guest.getPassword() +"')");
+		+ "(" + guestID + ", '" + guest.getFullName() +"', '" + guest.getIdentificationType() + "', '" + guest.getIdentificationNumber() + "', "
+		+ "'" + guest.getAddress() +"', '" + guest.getHomePhoneNumber() + "', '" + guest.getMobilePhoneNumber() + "', '" + guest.getLogin() +"', '" + guest.getPassword() +"')");
+		
+		UserDAO.executeUpdate("insert into mydb.guest_belongs_category values ('" + guest.getCategoryName() + "', " + guestID + ")");
 	}
 	
 	public static String getGuestInfo(String auth) {
@@ -55,14 +57,16 @@ public class GuestDAO {
 			guestInfo.setFullName( resultSet.getString(2) );
 			guestInfo.setIdentificationType( resultSet.getString(3) );
 			guestInfo.setIdentificationNumber( resultSet.getString(4) );
-			guestInfo.setCategoryName( resultSet.getString(5) );
 			guestInfo.setAddress( resultSet.getString(6) );
 			guestInfo.setHomePhoneNumber( resultSet.getString(7) );
 			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );
 			
+			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.guest_belongs_category WHERE GuestID= BINARY '" + guestInfo.getGuestID() + "'" );
+			resultSet.next();
+			guestInfo.setCategoryName(resultSet.getString(1));
+			
 			json = gson.toJson(guestInfo, GuestInfo.class);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

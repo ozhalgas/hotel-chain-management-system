@@ -19,6 +19,8 @@ public class EmployeeInfo {
 	private String Payrate;
 	private String StartDate;
 	private String EndDate;
+	private String StartTime;
+	private String EndTime;
 	private int HotelID;
 	private String HotelName;
 	
@@ -119,18 +121,34 @@ public class EmployeeInfo {
 		Payrate = payrate;
 	}
 	public String getStartDate() {
+		if(StartDate == null)
+			return "09:00:00";
 		return StartDate;
 	}
 	public void setStartDate(String startDate) {
 		StartDate = startDate;
 	}
 	public String getEndDate() {
+		if(EndDate == null)
+			return "18:00:00";
 		return EndDate;
 	}
 	public void setEndDate(String endDate) {
 		EndDate = endDate;
 	}
 	
+	public String getStartTime() {
+		return StartTime;
+	}
+	public void setStartTime(String startTime) {
+		StartTime = startTime;
+	}
+	public String getEndTime() {
+		return EndTime;
+	}
+	public void setEndTime(String endTime) {
+		EndTime = endTime;
+	}
 	public int getHotelID() {
 		return HotelID;
 	}

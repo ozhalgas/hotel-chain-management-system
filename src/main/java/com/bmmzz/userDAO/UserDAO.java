@@ -128,7 +128,7 @@ public class UserDAO {
 				e.printStackTrace();
 			}
 			
-			resultSet = executeQuery("SELECT Position FROM mydb.employee_at_hotel WHERE EmployeeID= BINARY " + employeeID);
+			resultSet = executeQuery("SELECT Position FROM mydb.schedule WHERE EmployeeID= BINARY " + employeeID);
 			String position = "";
 			try {
 				resultSet.next();
@@ -143,7 +143,6 @@ public class UserDAO {
 				return null;
 		}
 		return null;
-		
 	}
 	
 	public static String getEncodedAuth(String username, String password) {

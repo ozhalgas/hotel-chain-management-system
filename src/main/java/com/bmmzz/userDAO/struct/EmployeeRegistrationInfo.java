@@ -21,9 +21,25 @@ public class EmployeeRegistrationInfo {
 	private String payRate;
 	private String startDate;
 	private String endDate;
+	private String startTime;
+	private String endTime;
 	
-	
-	
+	public String getStartTime() {
+		if(startTime == null)
+			return "09:00:00";
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+	public String getEndTime() {
+		if(endTime == null)
+			return "18:00:00";
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
 	public String getFullName() {
 		return fullName;
 	}
