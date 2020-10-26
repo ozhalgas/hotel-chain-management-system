@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Reserves` (
   `GuestID` INT NOT NULL,
   `CheckInDate` DATE NOT NULL,
   `CheckOutDate` DATE NOT NULL,
-  `NumberOfOccupants` INT NOT NULL,
+  `NumberOfRooms` INT NOT NULL,
   PRIMARY KEY (`RoomTypeName`, `HotelID`, `GuestID`),
   INDEX `fk_Room_Type_has_Guest_Guest1_idx` (`GuestID` ASC) VISIBLE,
   INDEX `fk_Room_Type_has_Guest_Room_Type1_idx` (`RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
