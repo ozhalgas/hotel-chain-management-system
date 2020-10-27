@@ -11,10 +11,12 @@
 
 <script>
 	var link = window.location.href.toString();
+	var auth = link.substring(70, link.length);
+	var hotelId;
 	
 	function destinationInfo(){
 		$.ajax({
-			url: link.substring(0, 70) + "/hotel-choosing-info" + link.substring(70, link.length),
+			url: link.substring(0, 70) + "/hotel-choosing-info" + auth,
 	        dataType: "json",
 	        success: function (r) {
 	        	//making country options
@@ -65,12 +67,22 @@
 		        		++regid;
 		        	});
 	        	});
+	        	
+	        	var selectedHotel;
+	        	$("#hotel").change(function(){
+	        		selectedHotel = $("#hotel").find(":selected").text();
+	        		var index = r["name"].indexOf(selectedHotel);
+	        		hotelId = r["hotelID"][index];
+	        		console.log(selectedHotel + " " + hotelId);
+	        	})
 	        }
 		})
 	}
 	
 
 	$(document).ready(function() {
+		var startYear, startMonth, startDay;
+		var endYear, endMonth, endDay;
 		destinationInfo();
     	$("#startDate").datepicker({ 
     		dateFormat: "yy-mm-dd",
@@ -78,6 +90,16 @@
     		onClose:function(selected){
     			var newDate = selected;
     			$("#endDate").datepicker("option", "minDate", selected);
+    		},
+    		onSelect:function(start){
+    			var startDate = new Date(start);
+    			startYear = startDate.getFullYear();
+    			startMonth = startDate.getMonth() + 1;
+    			startDay = startDate.getDate();
+    			
+    			if(startMonth < 10) startMonth = '0' + startMonth;
+    			if(startDay < 10) startDay = '0' + startDay;
+    			console.log(startYear + " " + startMonth + " " + startDay);
     		}
     	});
     
@@ -86,8 +108,40 @@
     		minDate: 1,
     		onClose:function(selected){
     			$("#startDate").datepicker("option", "maxDate", selected)
+    		},
+    		onSelect:function(end){
+    			var endDate = new Date(end);
+    			endYear = endDate.getFullYear();
+    			endMonth = endDate.getMonth() + 1;
+    			endDay = endDate.getDate();
+    			
+    			if(endMonth < 10) endMonth = '0' + endMonth;
+    			if(endDay < 10) endDay = '0' + endDay;
+    			console.log(endYear + " " + endMonth + " " + endDay);
     		}
     	});
+    	
+    	$('#find').click(function() {
+            //console.log('clicked');
+            //console.log(hotelId);
+            if(!$("#country").val() || !$("#region").val() || !$("#hotel").val() || !$("#startDate").val() || !$("#endDate").val()){
+            	$("#warning").html("Please, fill or choose all of the information above!");
+            }else{
+            	window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"
+                	+ "/" + hotelId + "-" + startYear+":"+startMonth+":"+startDay + "-" + endYear+":"+endMonth+":"+endDay + auth;
+            }
+        });
+        
+        onkeypress = function (event) {  
+			if (event.keyCode == 13) {
+				if(!$("#country").val() || !$("#region").val() || !$("#hotel").val() || !$("#startDate").val() || !$("#endDate").val()){
+	            	$("#warning").html("Please, fill or choose all of the information above!");
+	            }else{
+	            	window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"
+	                	+ "/" + hotelId + "-" + startYear+":"+startMonth+":"+startDay + "-" + endYear+":"+endMonth+":"+endDay + auth;
+	            }
+			}
+		};
 	});
 	
 </script>
@@ -118,6 +172,8 @@
 <label for="endDate">End Date:</label>
 <input type="text" id="endDate" name="endDate" placeholder="End Date"><br><br>
 
-<button id="find">Book</button>
+<h4 id="warning" style="color:red"></h4>
+
+<button id="find">Find Available Rooms</button>
 </body>
 </html>
