@@ -10,11 +10,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.bmmzz.userDAO.HotelDAO;
+import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
 @Path("/room-booking")
@@ -85,6 +87,21 @@ public class RoomBookingService {
 		if(!UserDAO.checkAuth(auth) || !UserDAO.getRole(auth).equals("guest"))
 			return null;
 		
+		String json = RoomDAO.getAvailableRoomsInfo(hotelID, startDate, endDate);
+		return Response.ok(json).build();
+	}
+	
+	@POST
+	@Path("{hotelID}-{startDate}-{endDate}/to-book")
+	public Response toBook( @DefaultValue("") @QueryParam("auth") String auth,
+									@PathParam("hotelID") int hotelID,
+									@PathParam("startDate") String startDate,
+									@PathParam("endDate") String endDate,
+									@FormParam("roomTypeName") String typeName,
+									@FormParam("numberOfRooms") int numberOfRooms) {
+		startDate = startDate.replace(':', '-');
+		endDate = endDate.replace(':', '-');
+		RoomDAO.reserveRoomType(typeName, hotelID, auth, startDate, endDate, numberOfRooms);
 		return Response.ok().build();
 	}
 }

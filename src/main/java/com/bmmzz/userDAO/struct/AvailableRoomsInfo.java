@@ -5,21 +5,21 @@ import java.util.ArrayList;
 public class AvailableRoomsInfo {
 	private ArrayList<SingleRoomType> availableRoomsInfo = new ArrayList<SingleRoomType>();
 	
-	public void add(String typeName, String size, String occupancy,
-			  			   String initialPrice, String numberOfAvailableRooms) {
+	public void add(String typeName, double size, int occupancy,
+			  		double initialPrice, int numberOfAvailableRooms) {
 		availableRoomsInfo.add(new SingleRoomType(typeName, size, occupancy, initialPrice, numberOfAvailableRooms));
 		return;
 	}
 	
 	private class SingleRoomType {
 		private String typeName;
-		private String size;
-		private String occupancy;
-		private String initialPrice;
-		private String numberOfAvailableRooms;
+		private double size;
+		private int occupancy;
+		private double initialPrice;
+		private int numberOfAvailableRooms;
 		
-		public SingleRoomType(String typeName, String size, String occupancy,
-							  String initialPrice, String numberOfAvailableRooms) {
+		public SingleRoomType(String typeName, double size, int occupancy,
+							  double initialPrice, int numberOfAvailableRooms) {
 			this.typeName = typeName;
 			this.size = size;
 			this.occupancy = occupancy;

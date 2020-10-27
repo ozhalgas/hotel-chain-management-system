@@ -4,6 +4,147 @@
 <meta charset="ISO-8859-1">
 <title>Hotel Choosing</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet" type="text/css" />
+
+<script>
+	var link = window.location.href.toString();
+	var auth = link.substring(70, link.length);
+	var hotelId;
+	
+	function destinationInfo(){
+		$.ajax({
+			url: link.substring(0, 70) + "/hotel-choosing-info" + auth,
+	        dataType: "json",
+	        success: function (r) {
+	        	//making country options
+	        	var cId = 0;
+	        	r["country"].forEach(function(option){
+	        		$("#country").append("<option value=c" + cId.toString + " id=c" + cId.toString() + ">" + option + "</option>");
+	        		++cId;
+	        	});
+	        	
+	        	//selecting region options from selected country
+	        	var selectedCountry;
+	        	$("#country").change(function(){
+	        		$("#region").empty();
+	        		$("#region").append('<option value="" disabled selected>' + "Choose Region" + '</option>');
+	        		
+	        		$("#hotel").empty();
+	        		$("#hotel").append('<option value="" disabled selected>' + "Choose Hotel" + '</option>');
+	        		
+	        		selectedCountry = $("#country").find(":selected").text();
+	        		//console.log(selectedCountry);
+	        		
+	        		var cid = 0;
+		        	var rid = 0;
+		        	r["country"].forEach(function(country){
+		        		if(country == selectedCountry){
+		        			$("#region").append("<option value=r" + rid.toString + " id=r" + rid.toString() + ">" + r["region"][cid] + "</option>");
+		        			++rid;
+		        		}
+		        		++cid;
+		        	});
+	        	});
+	        	
+	        	//selectiong hotel options from selected region
+	        	var selectedRegion;
+	        	$("#region").change(function(){
+	        		$("#hotel").empty();
+	        		$("#hotel").append('<option value="" disabled selected>' + "Choose Hotel" + '</option>');
+	        		selectedRegion = $("#region").find(":selected").text();
+	        		//console.log(selectedRegion);
+	        		
+	        		var regid = 0;
+		        	var hid = 0;
+		        	r["region"].forEach(function(region){
+		        		if(region == selectedRegion){
+		        			$("#hotel").append("<option value=h" + hid.toString + " id=h" + hid.toString() + ">" + r["name"][regid] + "</option>");
+		        			++hid;
+		        		}
+		        		++regid;
+		        	});
+	        	});
+	        	
+	        	var selectedHotel;
+	        	$("#hotel").change(function(){
+	        		selectedHotel = $("#hotel").find(":selected").text();
+	        		var index = r["name"].indexOf(selectedHotel);
+	        		hotelId = r["hotelID"][index];
+	        		console.log(selectedHotel + " " + hotelId);
+	        	})
+	        }
+		})
+	}
+	
+
+	$(document).ready(function() {
+		var startYear, startMonth, startDay;
+		var endYear, endMonth, endDay;
+		destinationInfo();
+    	$("#startDate").datepicker({ 
+    		dateFormat: "yy-mm-dd",
+    		minDate: 0,
+    		onClose:function(selected){
+    			var newDate = selected;
+    			$("#endDate").datepicker("option", "minDate", selected);
+    		},
+    		onSelect:function(start){
+    			var startDate = new Date(start);
+    			startYear = startDate.getFullYear();
+    			startMonth = startDate.getMonth() + 1;
+    			startDay = startDate.getDate();
+    			
+    			if(startMonth < 10) startMonth = '0' + startMonth;
+    			if(startDay < 10) startDay = '0' + startDay;
+    			console.log(startYear + " " + startMonth + " " + startDay);
+    		}
+    	});
+    
+    	$("#endDate").datepicker({ 
+    		dateFormat: "yy-mm-dd",
+    		minDate: 1,
+    		onClose:function(selected){
+    			$("#startDate").datepicker("option", "maxDate", selected)
+    		},
+    		onSelect:function(end){
+    			var endDate = new Date(end);
+    			endYear = endDate.getFullYear();
+    			endMonth = endDate.getMonth() + 1;
+    			endDay = endDate.getDate();
+    			
+    			if(endMonth < 10) endMonth = '0' + endMonth;
+    			if(endDay < 10) endDay = '0' + endDay;
+    			console.log(endYear + " " + endMonth + " " + endDay);
+    		}
+    	});
+    	
+    	$('#find').click(function() {
+            //console.log('clicked');
+            //console.log(hotelId);
+            if(!$("#country").val() || !$("#region").val() || !$("#hotel").val() || !$("#startDate").val() || !$("#endDate").val()){
+            	$("#warning").html("Please, fill or choose all of the information above!");
+            }else{
+            	window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"
+                	+ "/" + hotelId + "-" + startYear+":"+startMonth+":"+startDay + "-" + endYear+":"+endMonth+":"+endDay + auth;
+            }
+        });
+        
+        onkeypress = function (event) {  
+			if (event.keyCode == 13) {
+				if(!$("#country").val() || !$("#region").val() || !$("#hotel").val() || !$("#startDate").val() || !$("#endDate").val()){
+	            	$("#warning").html("Please, fill or choose all of the information above!");
+	            }else{
+	            	window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"
+	                	+ "/" + hotelId + "-" + startYear+":"+startMonth+":"+startDay + "-" + endYear+":"+endMonth+":"+endDay + auth;
+	            }
+			}
+		};
+	});
+	
+</script>
 </head>
 <body>
 <h2>
@@ -11,34 +152,28 @@
 </h2>
 
 <label for="countries">Choose Country:</label><br>
-<select id="countries" name="countries">
+<select id="country" name="country">
+	<!--<option value="" disabled selected>Choose Country</option>-->
 	<option value="" disabled selected>Choose Country</option>
-	<option value="country1">Country 1</option>
-	<option value="country2">Country 2</option>
-	<option value="country3">Country 3</option>
 </select><br><br>
 
 <label for="regions">Choose Region:</label><br>
-<select id="regions" name="regions">
+<select id="region" name="region">
 	<option value="" disabled selected>Choose Region</option>
-	<option value="region1">Region 1</option>
-	<option value="region2">Region 2</option>
-	<option value="region3">Region 3</option>
 </select><br><br>
 
-<label for="cities">Choose City:</label><br>
-<select id="cities" name="cities">
-	<option value="" disabled selected>Choose City</option>
-	<option value="city1">City 1</option>
-	<option value="city2">City 2</option>
-	<option value="city3">City 3</option>
+<label for="hotels">Choose Hotel:</label><br>
+<select id="hotel" name="hotel">
+	<option value="" disabled selected>Choose Hotel</option>
 </select><br><br>
 
 <label for="startDate">Start Date:</label>
-<input type="date" id="startDate" name="startDate">&emsp;
+<input type="text" id="startDate" name="startDate" placeholder="Start Date">&emsp;
 <label for="endDate">End Date:</label>
-<input type="date" id="endDate" name="endDate"><br><br>
+<input type="text" id="endDate" name="endDate" placeholder="End Date"><br><br>
 
-<button id="find">Find Hotel</button>
+<h4 id="warning" style="color:red"></h4>
+
+<button id="find">Find Available Rooms</button>
 </body>
 </html>
