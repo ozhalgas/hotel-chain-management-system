@@ -3,7 +3,44 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Room Booking</title>
+<style>
+	th {
+		width: 100px;
+	}
+	td {
+  		width: 10%;
+	}
+</style>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+	var link = window.location.href.toString();
+	var auth = link.substring(94, link.length);
+	
+	function availableRooms(){
+		$.ajax({
+			url: link.substring(0, 94) + "/available-rooms" + auth,
+	        dataType: "json",
+	        success: function(r){
+	        	var rid = 0;
+	        	var list = r["availableRoomsInfo"];
+	        	    	
+	        	for(var i = 0; i < list.length; ++i){	      		
+	        		var row = $("<tr>");
+	        		row.append("<td>" + list[i]["typeName"] + "</td>");
+	        		row.append("<td>" + list[i]["occupancy"] + "</td>");
+	        		row.append("<td>" + list[i]["size"] + "</td>");
+	        		row.append("<td>" + list[i]["initialPrice"] + "</td>");
+	        		row.append("<td>" + list[i]["numberOfAvailableRooms"] + "</td>");	
+	        		$("#info").append(row);
+	        	}
+	        }
+		})
+	}
+	
+	$(document).ready(function() {
+		availableRooms();
+	})
+</script>
 </head>
 <body>
 <h2>
@@ -22,6 +59,16 @@
 
 <label for="roomType3">Room Type 3</label>&emsp;
 <input type="number" id="numOfRoomType3" min="0" max="20" step="1"><br><br>
+
+<table id="info" align="right" border="1">
+	<tr>
+		<th>Room Type Name</th>
+		<th>Occupancy</th>
+		<th>Size(m^3)</th>
+		<th>Initial Price($)</th>
+		<th>Number of Available Rooms</th>
+	</tr>
+</table>
 
 <button id="bookFinal">Book</button>
 </body>
