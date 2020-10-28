@@ -15,6 +15,9 @@
 <script>
 	var link = window.location.href.toString();
 	var auth = link.substring(94, link.length);
+	const typeNames = [];
+	const numAvailRooms = [];
+	const occupancies = [];
 	
 	function availableRooms(){
 		$.ajax({
@@ -32,13 +35,55 @@
 	        		row.append("<td>" + list[i]["initialPrice"] + "</td>");
 	        		row.append("<td>" + list[i]["numberOfAvailableRooms"] + "</td>");	
 	        		$("#info").append(row);
+	        		
+	        		$("#choosingRooms").append("<label for="+i.toString()+">"+list[i]["typeName"]+"</label>&emsp;");
+	        		$("#choosingRooms").append('<input type="number" id='+"t"+i.toString()+' value="0" min="0" max='+list[i]["numberOfAvailableRooms"].toString()+' step="1"><br><br>');
+	        		
+	        		typeNames.push(list[i]["typeName"]);
+	        		numAvailRooms.push(list[i]["numberOfAvailableRooms"]);
+	        		occupancies.push(list[i]["occupancy"]);
+	        		
+	        		//console.log("t"+i.toString());
 	        	}
 	        }
 		})
 	}
 	
+	function checkRoomsNum(){
+		var sum = 0;
+		var test = 0;
+		var occupSum = 0;
+		var occupFact = document.querySelector("#numOfOccupants").value;
+		for(var k = 0; k < typeNames.length; ++k){
+			var id = "#t"+k.toString();
+			var val = document.querySelector(id).value;
+			if(val > numAvailRooms[k]){
+				$("#warning").html("Sorry, there is no "+val+" available "+typeNames[k]+" rooms.");
+				return false;
+			}
+			sum += val;
+			test += '0';
+			occupSum += occupancies[k] * val;
+		}
+		//console.log(occupSum);
+		//console.log(occupFact);
+		if(occupFact > occupSum){
+			$("#warning").html("You cannot order only "+occupSum+" beds in total, if number of occupants is "+occupFact+".");
+			return false;
+		}else if(sum === test){
+			$("#warning").html("Please, choose at least 1 room!");
+			return false;
+		}else return true;
+	}
+	
 	$(document).ready(function() {
 		availableRooms();
+		
+		$('#bookFinal').click(function() {
+			if(checkRoomsNum()){
+				console.log("Success!");
+			}
+		});
 	})
 </script>
 </head>
@@ -48,17 +93,11 @@
 </h2>
 
 <label for="numOfOccupants">Number Of Occupants:</label>
-<input type="number" id="numOfOccupants" min="1" max="20" step="1"><br><br>
+<input type="number" id="numOfOccupants" min="1" max="20" value="1" step="1"><br><br>
 
-<label for="rooms">Choose Rooms:</label><br>
-<label for="roomType1">Room Type 1</label>&emsp;
-<input type="number" id="numOfRoomType1" min="0" max="20" step="1"><br><br>
-
-<label for="roomType2">Room Type 2</label>&emsp;
-<input type="number" id="numOfRoomType2" min="0" max="20" step="1"><br><br>
-
-<label for="roomType3">Room Type 3</label>&emsp;
-<input type="number" id="numOfRoomType3" min="0" max="20" step="1"><br><br>
+<form id="choosingRooms">
+	<label for="rooms">Choose Rooms:</label><br>
+</form>
 
 <table id="info" align="right" border="1">
 	<tr>
@@ -70,6 +109,7 @@
 	</tr>
 </table>
 
-<button id="bookFinal">Book</button>
+<h4 id="warning" style="color:red"></h4>
+<button id="bookFinal" type="button">Book</button>
 </body>
 </html>
