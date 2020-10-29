@@ -18,6 +18,11 @@
 	const typeNames = [];
 	const numAvailRooms = [];
 	const occupancies = [];
+	var chosenOccup = [];
+	var hotelID = link[71];
+	var startDate = link.substring(73, 83);
+	var endDate = link.substring(84, 94);
+	var authPost = link.substring(100, link.length);
 	
 	function availableRooms(){
 		$.ajax({
@@ -57,23 +62,40 @@
 		for(var k = 0; k < typeNames.length; ++k){
 			var id = "#t"+k.toString();
 			var val = document.querySelector(id).value;
+			chosenOccup.push(val);
 			if(val > numAvailRooms[k]){
 				$("#warning").html("Sorry, there is no "+val+" available "+typeNames[k]+" rooms.");
+				chosenOccup.splice(0, chosenOccup.length);
 				return false;
 			}
 			sum += val;
 			test += '0';
 			occupSum += occupancies[k] * val;
 		}
-		//console.log(occupSum);
-		//console.log(occupFact);
+		//console.log(chosenOccup);
 		if(occupFact > occupSum){
 			$("#warning").html("You cannot order only "+occupSum+" beds in total, if number of occupants is "+occupFact+".");
+			chosenOccup.splice(0, chosenOccup.length);
 			return false;
 		}else if(sum === test){
 			$("#warning").html("Please, choose at least 1 room!");
+			chosenOccup.splice(0, chosenOccup.length);
 			return false;
 		}else return true;
+	}
+	
+	function toBook(x){
+		$.post(link.substring(0, 94) + "/to-book" + auth, 
+				{auth: authPost, hotelID: hotelID, startDate: startDate, endDate: endDate, roomTypeName: typeNames[x], numberOfRooms: chosenOccup[x]},
+				function(){
+					console.log("Sended to Back: "+typeNames[x]+" "+chosenOccup[x]);
+				});
+	};
+	
+	function bookAll(){
+		for(var z = 0; z < typeNames.length; ++z){
+			toBook(z);
+		}
 	}
 	
 	$(document).ready(function() {
@@ -82,6 +104,11 @@
 		$('#bookFinal').click(function() {
 			if(checkRoomsNum()){
 				console.log("Success!");
+				//console.log(hotelID + " " + startDate + " " + endDate);
+				bookAll();
+				//alert and redirecting to profilePage
+				alert("Successful Booking. You will see your bookings in Profile");
+				window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/profile" + auth;
 			}
 		});
 	})
