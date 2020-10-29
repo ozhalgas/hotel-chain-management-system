@@ -99,9 +99,11 @@ public class RoomBookingService {
 									@PathParam("endDate") String endDate,
 									@FormParam("roomTypeName") String typeName,
 									@FormParam("numberOfRooms") int numberOfRooms) {
-		startDate = startDate.replace(':', '-');
-		endDate = endDate.replace(':', '-');
-		RoomDAO.reserveRoomType(typeName, hotelID, auth, startDate, endDate, numberOfRooms);
+		if(numberOfRooms > 1) {
+			startDate = startDate.replace(':', '-');
+			endDate = endDate.replace(':', '-');
+			RoomDAO.reserveRoomType(typeName, hotelID, auth, startDate, endDate, numberOfRooms);
+		}
 		return Response.ok().build();
 	}
 }
