@@ -5,11 +5,40 @@
 <title>Authorization</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-<h2 style="text-align: center;">Hotel Chain Management System</h2>
-<h3>Welcome!</h3>
+<div class="header">
+<!--	<h2 style="text-align: center;">Hotel Chain Management System</h2>-->
+	<div class="center"> <img id="header-img" src="icons/header2.png"></div>
+	<div class="log-in"><img id="person-img" src="icons/person.png">
+		<form action="services/authorization" style="display: inline;">
+			<input id="log-in" type="submit" value="LOG IN">
+		</form>
+	</div>
+
+	<div class="register">
+		<img id="register-img" src="icons/register.png">
+		<form action="services/registration" style="display: inline;">
+			<input id="register" type="submit" value="REGISTER">
+		</form>
+	</div>
+
+	<div class="about">
+		<a href="#about">ABOUT US</a>
+	</div>
+</div>
+
+<div class="back">
+	<img id="bed" src="icons/bed3.jpg">
+	<div class="welcome">
+	<h4 id="welcome">WELCOME MATRENA</h4>
+		<h5 id="slogan">Experience the greatest for your holidays.</h5>
+	</div>
+</div>
+
+<div id="about">
 <p style="font-size:18px;">
 We are <b>Matrena</b>. International Hotel Chain.<br>
 Currently, our branches are serving clients from the whole world in N countries and M cities. You can book one or more of any kind of room in any city!<br>
@@ -17,12 +46,7 @@ If you are using our service for the first time, you can click the <i><b>REGISTE
 After you log in, you will be able to make a booking and see your Profile. Our system lets you choose an available room via filtering by date, destination,<br>
 occupancy, and price. You will see your booking history in the Profile.<br>
 <i>Make your way comfortable with <b>Matrena</b>!</i><br>
+</div>
 </p>
-<form action="services/authorization" style="display: inline;">
-	<input type="submit" value="Log in">
-</form>
-<form action="services/registration" style="display: inline;">
-	<input type="submit" value="Register">
-</form>
 </body>
 </html>
