@@ -58,9 +58,9 @@ public class GuestDAO {
 			guestInfo.setFullName( resultSet.getString(2) );
 			guestInfo.setIdentificationType( resultSet.getString(3) );
 			guestInfo.setIdentificationNumber( resultSet.getString(4) );
-			guestInfo.setAddress( resultSet.getString(6) );
-			guestInfo.setHomePhoneNumber( resultSet.getString(7) );
-			guestInfo.setMobilePhoneNumber( resultSet.getString(8) );
+			guestInfo.setAddress( resultSet.getString(5) );
+			guestInfo.setHomePhoneNumber( resultSet.getString(6) );
+			guestInfo.setMobilePhoneNumber( resultSet.getString(7) );
 			
 			resultSet = UserDAO.executeQuery("SELECT * FROM mydb.guest_belongs_category WHERE GuestID= BINARY '" + guestInfo.getGuestID() + "'" );
 			resultSet.next();
