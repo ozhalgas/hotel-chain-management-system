@@ -14,12 +14,12 @@ html {
     /*text-align: right;*/
 }
 .log-in {
-    position: fixed;
+    position: absolute;
     left: 90%;
     top: 7.5%;
 }
 .register {
-    position: fixed;
+    position: absolute;
     left: 80%;
     top: 6.5%;
 }
