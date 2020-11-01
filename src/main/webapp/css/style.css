@@ -3,7 +3,7 @@ html {
 }
 
 .header{
-    height: 90px;
+    height: 120px;
     background-color: #1E1E1E;
 }
 .center {
@@ -46,8 +46,8 @@ a:hover{
     left: 65%;
 }
 #header-img {
-    height: 88px;
-    width: 180px;
+    height: 80px;
+    width: 170px;
     opacity: 100%;
 
 }
@@ -80,7 +80,7 @@ input[type="submit"] {
 
 #welcome {
     position: absolute;
-    top: 25%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: "Lucida Console";
