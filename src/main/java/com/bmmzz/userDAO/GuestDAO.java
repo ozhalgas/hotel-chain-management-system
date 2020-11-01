@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.regex.Pattern;
 
+import com.bmmzz.userDAO.struct.GuestBookings;
 import com.bmmzz.userDAO.struct.GuestInfo;
 import com.bmmzz.userDAO.struct.GuestRegistrationInfo;
 import com.google.gson.Gson;
@@ -71,5 +72,59 @@ public class GuestDAO {
 		}
 		
 		return json;
+	}
+	
+	public static String getGuestBookings(String auth) {
+		Gson gson = new Gson();
+		GuestBookings guestBookings = new GuestBookings();
+		String json = "";
+		
+		byte[] decodedBytes = Base64.getDecoder().decode(auth);
+		String decodedAuth = new String(decodedBytes);
+		
+		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
+			return null;
+		
+		String username = decodedAuth.split(":", 2)[0];
+		
+		
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.guest WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID" );
+			while(resultSet.next()) {
+				guestBookings.addBooking( resultSet.getString(1), resultSet.getInt(2), resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6) );
+			}
+			
+			json = gson.toJson(guestBookings, GuestBookings.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	public static void removeBooking(String auth, int hotelID, String startDate, String endDate, String typeName) {		
+		
+		try {
+			byte[] decodedBytes = Base64.getDecoder().decode(auth);
+			String decodedAuth = new String(decodedBytes);
+			String username = decodedAuth.split(":", 2)[0];
+			
+			startDate = startDate.replace(':', '-');
+			endDate = endDate.replace(':', '-');
+			typeName = typeName.replace(':', ' ');
+			
+			String sql = "DELETE FROM mydb.reserves, mydb.guest WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID"
+					+ " and mydb.reserves.HotelID= BINARY '" + Integer.toString(hotelID) + "'"
+					+ " and mydb.reserves.CheckInDate= BINARY '" + startDate + "'"
+					+ " and mydb.reserves.CheckOutDate= BINARY '" + endDate + "'"
+					+ " and mydb.reserves.RoomTypeName= BINARY '" + typeName + "'";
+			
+			System.out.println(sql);
+
+			UserDAO.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
 	}
 }

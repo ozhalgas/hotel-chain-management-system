@@ -25,6 +25,7 @@ public class HotelChainManagementSystem extends Application {
 		singletons.add(new EmployeeRegistrationService());
 		singletons.add(new BookManagementService());
 		singletons.add(new RoomBookingService());
+		singletons.add(new BookManagementService());
 	}
 	
 	public Set<Class<?>> getClasses() {
