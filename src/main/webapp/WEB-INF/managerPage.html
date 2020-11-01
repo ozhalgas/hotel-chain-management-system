@@ -11,14 +11,17 @@
         width: 60%;
       }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="../css/managerPage.css">
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 	<script type="text/javascript">
-	
-	  var link = window.location.href.toString();
+
+      var link = window.location.href.toString();
     var auth = link.substring(65, link.length)
 
 	  function getRegisterURL() {
@@ -77,28 +80,44 @@
       }
 
       $(document).ready(function () {
+        var tablerev;
         getProfileName();
         gotoBook();
-        $("#breakAfterTable").html("<br>".repeat(20));		
         getRegisterURL();
-
-        $('#review').on('click', function() {
-          if($('#review-table').css('display') == 'none') 
+        $('#review').on('click', function () {
+          if($('#review-table').css('display') == 'none') {
             $('#review-table').css('display', 'block');
-          else 
-          $('#review-table').css('display', 'none')
-        });	
+            tablerev = $('#review-table').DataTable(
+                    {
+                      columns: [
+                        { width: '25%' },
+                        { width: '25%' },
+                        { width: '25%' },
+                        { width: '25%' }
+                      ]
+                    }
+            );
+          }
+          else {
+            $('#review-table').css('display', 'none')
+            tablerev.destroy();
+          }
+        });
+
+        $("#breaks").html("<br>".repeat(40));
       });
 
     </script>
   </head>
   <body>
-    <h2>
-      <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
-        >Hotel Chain Management System</a
-      >
-    </h2>
+  <div class="header">
+    <div class="center"> <img id="header-img" src="../icons/logo.png"></div>
+    <a id="main-page" href="http://localhost:8080/HotelChainManagementSystem">GO TO MAIN PAGE</a>
+  </div>
+
     <h3 id="welcome">Welcome, manager!</h3>
+    <div class="tables">
+    <div class="profile-info">
     <h4>Profile Information:</h4>
 
     <table id="info" align="left" border="1">
@@ -155,33 +174,35 @@
         <td id="hotel-name">null</td>
       </tr>
   </table>
-  
-  <table id="review-table" border="1" style="width: 40%; display: none;">
-		<thead>
-			<tr>
-			<th>Name</th>  
-			<th>Email</th>
-			<th>Working days</th>
-			<th>Position</th>
-		  </tr>
-		</thead>
-		<tbody>
-			<tr>
-			  <td>Paul Vanger</td>
-			  <td>PaulVanger@gmail.com</td>
-			  <td>M-F: 9am - 5pm</td>
-			  <td>Manager</td>
-			</tr>
-		</tbody>
-     
-	<div id="breakAfterTable"></div>
-	
+    </div>
+
+    <div class="review-table">
+      <table id="review-table" style="display: none; width: 100%" >
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Working days</th>
+          <th>Position</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Paul Vanger</td>
+          <td>PaulVanger@gmail.com</td>
+          <td>M-F: 9am - 5pm</td>
+          <td>Manager</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+	<div id="breaks"></div>
     <button id="regnewempl">Register new desk clerk</button>
     <button id="review">Review schedules</button>
     <form
       action="http://localhost:8080/HotelChainManagementSystem/"
-      style="display: inline"
-    >
+      style="display: inline">
       <input type="submit" value="Logout" />
     </form><br><br><br>
   </body>
