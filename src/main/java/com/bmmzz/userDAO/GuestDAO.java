@@ -113,7 +113,7 @@ public class GuestDAO {
 			endDate = endDate.replace(':', '-');
 			typeName = typeName.replace(':', ' ');
 			
-			String sql = "DELETE FROM mydb.reserves, mydb.guest WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID"
+			String sql = "DELETE mydb.reserves FROM mydb.reserves, mydb.guest WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID"
 					+ " and mydb.reserves.HotelID= BINARY '" + Integer.toString(hotelID) + "'"
 					+ " and mydb.reserves.CheckInDate= BINARY '" + startDate + "'"
 					+ " and mydb.reserves.CheckOutDate= BINARY '" + endDate + "'"
