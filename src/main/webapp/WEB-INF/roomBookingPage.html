@@ -59,6 +59,10 @@
 		var test = 0;
 		var occupSum = 0;
 		var occupFact = document.querySelector("#numOfOccupants").value;
+		if(occupFact == 0){
+			$("#warning").html("You cannot make booking for 0 people");
+			return false;
+		}		
 		for(var k = 0; k < typeNames.length; ++k){
 			var id = "#t"+k.toString();
 			var val = document.querySelector(id).value;
@@ -74,7 +78,7 @@
 		}
 		//console.log(chosenOccup);
 		if(occupFact > occupSum){
-			$("#warning").html("You cannot order only "+occupSum+" beds in total, if number of occupants is "+occupFact+".");
+			$("#warning").html("You cannot order rooms for only "+occupSum+" people in total, if number of occupants is "+occupFact+".");
 			chosenOccup.splice(0, chosenOccup.length);
 			return false;
 		}else if(sum === test){
