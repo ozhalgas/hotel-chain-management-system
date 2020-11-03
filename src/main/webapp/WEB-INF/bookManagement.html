@@ -1,12 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="ISO-8859-1">
+    <title>Booking Management</title>
+    <link rel="stylesheet" href="../css/bookManagement.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        var link = window.location.href.toString();
+        var auth = link.substring(73, link.length)
+        var bookings = {}
+        $(document).ready(function () {
+
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
+                bookings.roomType = data.roomTypeNames;
+                bookings.checkIn = data.checkInDates;
+                bookings.checkOut = data.checkOutDates;
+                bookings.numberOfRooms = data.numberOfRooms;
+
+                for (let i = 0; i < bookings.roomType.length; i++) {
+                    $('#table-body').append("<tr> <td>" +
+                        bookings.roomType[i] + "</td> <td>" + bookings.checkIn[i] + "</td> <td>" +
+                        bookings.checkOut[i] + "</td> <td>" + bookings.numberOfRooms[i] + "</td> </tr>");
+                }
+
+                $('#book-table').DataTable();
+            })
+
+            $.ajax({
+                type: 'DELETE',
+                url: 'http://localhost:8080/HotelChainManagementSystem/services/book-management/2-2020:11:11-2020:11:23-President?auth=dGVzdDpwYXNz',
+                success: function(result) {
+                    console.log(result)
+                }
+            });
+
+        })
+
+    </script>
 </head>
 <body>
 <h2>
-<a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
+    <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
 </h2>
+<div class="book-table">
+    <table class="cell-border" id="book-table" style="width: 100%">
+        <thead>
+        <tr>
+            <th>Room Type</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Number of Rooms</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        <tr>
+            <td style="display: none"></td>
+            <td style="display:none;"></td>
+            <td style="display: none"></td>
+            <td style="display: none"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

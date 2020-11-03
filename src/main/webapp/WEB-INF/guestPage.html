@@ -50,11 +50,13 @@
       }
 
       $(document).ready(function () {
+        $('#book-management').on('click', function () {
+          window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
+        })
         getProfileName();
         $("#breakAfterTable").html("<br>".repeat(10));
 
         $('#book').on('click', function() {
-          console.log('clicked')
           window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"+
           auth;
         }
@@ -97,10 +99,10 @@
     <form
       action="http://localhost:8080/HotelChainManagementSystem/"
       method="POST"
-      style="display: inline"
-    >
+      style="display: inline">
       <input type="submit" value="Log Out" />
     </form>
-    <button id="book">Book</button>
+    <button id="book">Book</button>&nbsp;
+    <button id="book-management">My Bookings</button>
   </body>
 </html>
