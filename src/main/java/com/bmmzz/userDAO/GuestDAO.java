@@ -89,9 +89,9 @@ public class GuestDAO {
 		
 		
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.guest WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID" );
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.guest, mydb.hotel WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID and mydb.reserves.HotelID = mydb.hotel.HotelID" );
 			while(resultSet.next()) {
-				guestBookings.addBooking( resultSet.getString(1), resultSet.getInt(2), resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6) );
+				guestBookings.addBooking( resultSet.getString(1), resultSet.getInt(2), resultSet.getString(17), resultSet.getString(18), resultSet.getString(19), resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6) );
 			}
 			
 			json = gson.toJson(guestBookings, GuestBookings.class);
