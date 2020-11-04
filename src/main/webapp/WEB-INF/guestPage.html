@@ -1,108 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Insert title here</title>
-    <style>
-      th {
-        width: 200px;
-      }
-      td {
-        width: 60%;
-      }
-    </style>
+    <link rel="stylesheet" href="../css/guestPage.css">
     <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"
     ></script>
     <script type="text/javascript">
-      var link = window.location.href.toString();
-      var auth = link.substring(65, link.length);
+        var link = window.location.href.toString();
+        var auth = link.substring(65, link.length);
 
-      function getProfileName() {
-        $.ajax({
-          url:
-            link.substring(0, 65) + "/info/" + link.substring(65, link.length),
-          dataType: "json",
-          success: function (r) {
-            $("#welcome").html(
-              "Welcome, " +
-                r["fullName"].substring(0, r["fullName"].indexOf(" ")) +
-                "!"
-            );
+        function getProfileName() {
+            $.ajax({
+                url:
+                    link.substring(0, 65) + "/info/" + link.substring(65, link.length),
+                dataType: "json",
+                success: function (r) {
+                    $("#welcome").html(
+                        "Welcome, " +
+                        r["fullName"].substring(0, r["fullName"].indexOf(" ")) +
+                        "!"
+                    );
 
-            $("#name").html(r["fullName"]);
-            $("#idnum").html(
-              r["identificationType"] + " number: " + r["identificationNumber"]
-            );
-            $("#categoryName").html(r["categoryName"]);
-            $("#address").html(r["address"]);
-            $("#phone").html(
-              "home: " +
-                r["homePhoneNumber"] +
-                "<br>" +
-                "mobile: " +
-                r["mobilePhoneNumber"]
-            );
-          },
-        });
-      }
-
-      $(document).ready(function () {
-        $('#book-management').on('click', function () {
-          window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
-        })
-        getProfileName();
-        $("#breakAfterTable").html("<br>".repeat(10));
-
-        $('#book').on('click', function() {
-          window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking"+
-          auth;
+                    $("#name").html(r["fullName"]);
+                    $("#idnum").html(
+                        r["identificationType"] + " number: " + r["identificationNumber"]
+                    );
+                    $("#categoryName").html(r["categoryName"]);
+                    $("#address").html(r["address"]);
+                    $("#phone").html(
+                        "home: " +
+                        r["homePhoneNumber"] +
+                        "<br>" +
+                        "mobile: " +
+                        r["mobilePhoneNumber"]
+                    );
+                },
+            });
         }
-      );
-      });
+
+        $(document).ready(function () {
+            $('#book-management').on('click', function () {
+                window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
+            })
+            getProfileName();
+            $("#breakAfterTable").html("<br>".repeat(20));
+
+            $('#book').on('click', function () {
+                    window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking" +
+                        auth;
+                }
+            );
+        });
     </script>
-  </head>
-  <body>
-    <h2>
-      <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
-        >Hotel Chain Management System</a
-      >
-    </h2>
-    <h3 id="welcome">Welcome, guest!</h3>
+</head>
+<body>
+<h2>
+    <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
+    >Hotel Chain Management System</a
+    >
+</h2>
+<h3 id="welcome">Welcome, guest!</h3>
+<div class="profile-info">
     <h4>Profile Information:</h4>
 
     <table id="info" align="left" border="1">
-      <tr>
-        <th>Name</th>
-        <td id="name">null</td>
-      </tr>
-      <tr>
-        <th>Idenfication Number</th>
-        <td id="idnum">null</td>
-      </tr>
-      <tr>
-        <th>Category</th>
-        <td id="categoryName">null</td>
-      </tr>
-      <tr>
-        <th>Address</th>
-        <td id="address">null</td>
-      </tr>
-      <tr>
-        <th>Phone Numbers</th>
-        <td id="phone">null</td>
-      </tr>
+        <tr>
+            <th>Name</th>
+            <td id="name">null</td>
+        </tr>
+        <tr>
+            <th>Idenfication Number</th>
+            <td id="idnum">null</td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td id="categoryName">null</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td id="address">null</td>
+        </tr>
+        <tr>
+            <th>Phone Numbers</th>
+            <td id="phone">null</td>
+        </tr>
     </table>
-    <div id="breakAfterTable"></div>
-    <form
-      action="http://localhost:8080/HotelChainManagementSystem/"
-      method="POST"
-      style="display: inline">
-      <input type="submit" value="Log Out" />
-    </form>
-    <button id="book">Book</button>&nbsp;
-    <button id="book-management">My Bookings</button>
-  </body>
+</div>
+<div id="breakAfterTable"></div>
+<form
+        action="http://localhost:8080/HotelChainManagementSystem/"
+        method="POST"
+        style="display: inline">
+    <input type="submit" value="Log Out"/>
+</form>
+<button id="book">Book</button>&nbsp;
+<button id="book-management">My Bookings</button>
+</body>
 </html>
