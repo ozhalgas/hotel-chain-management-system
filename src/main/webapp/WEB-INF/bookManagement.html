@@ -38,54 +38,19 @@
                     let r = $(this).closest('tr').index()
                     let id = parseInt(this.id);
                     let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
-                                bookings.hotelID[id].toString() + '-' +
-                                bookings.checkIn[id].substring(0, 4) + ":" + bookings.checkIn[id].substring(5, 7) + ':' + bookings.checkIn[id].substring(8, 10) + '-' +
-                                bookings.checkOut[id].substring(0, 4) + ":" + bookings.checkOut[id].substring(5, 7) + ':' + bookings.checkOut[id].substring(8, 10) + '-' +
-                                bookings.roomType[id] + auth;
+                        bookings.hotelID[id].toString() + '-' +
+                        bookings.checkIn[id].substring(0, 4) + ":" + bookings.checkIn[id].substring(5, 7) + ':' + bookings.checkIn[id].substring(8, 10) + '-' +
+                        bookings.checkOut[id].substring(0, 4) + ":" + bookings.checkOut[id].substring(5, 7) + ':' + bookings.checkOut[id].substring(8, 10) + '-' +
+                        bookings.roomType[id] + auth;
 
                     fetch(url, {
-                                method: 'DELETE',
-                            }).then(() => {
-                            table.row(r).remove().draw();
+                        method: 'DELETE',
+                    }).then(() => {
+                        table.row(r).remove().draw();
                     })
 
                 })
             })
-
-                // $('.delete').on('click', function () {
-                //         let id = parseInt(this.id);
-                //         console.log("clicked")
-                //         let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
-                //             bookings.hotelID[id].toString() + '-' +
-                //             bookings.checkIn[id].substring(0, 4) + ":" + bookings.checkIn[id].substring(5, 7) + ':' + bookings.checkIn[id].substring(8, 10) + '-' +
-                //             bookings.checkOut[id].substring(0, 4) + ":" + bookings.checkOut[id].substring(5, 7) + ':' + bookings.checkOut[id].substring(8, 10) + '-' +
-                //             bookings.roomType[id] + auth;
-                //         console.log(url)
-                //     fetch(url, {
-                //         method: 'DELETE',
-                //     })
-                //         .then(res => res.text()) // or res.json()
-                //         .then(res => console.log(res))
-                //         .then(() => {
-                //             bookings.roomType.splice(id, 1)
-                //             bookings.checkIn.splice(id, 1)
-                //             bookings.checkOut.splice(id, 1)
-                //             bookings.numberOfRooms.splice(id, 1)
-                //             console.log(bookings)
-                //             $('#table-body').empty();
-                //             for (let i = 0; i < bookings.roomType.length; i++) {
-                //                 $('#table-body').append("<tr> <td>" +
-                //                     bookings.roomType[i] + "</td> <td>" + bookings.checkIn[i] + "</td> <td>" +
-                //                     bookings.checkOut[i] + "</td> <td>" + bookings.numberOfRooms[i] + "</td> <td><button class='delete' id=" + i.toString() +
-                //                     "> Delete </button> </td> </tr>");
-                //             }
-                //
-                //             table = $('#book-table').DataTable();
-                //         })
-                //
-                //     }
-                // )
-
         })
 
     </script>
