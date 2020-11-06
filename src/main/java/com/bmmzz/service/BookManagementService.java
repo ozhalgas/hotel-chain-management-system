@@ -57,6 +57,16 @@ public class BookManagementService {
 		return null;
 	}
 	
+	@GET
+	@Path("/all-bookings")
+	public Response getAllBookings(@DefaultValue("") @QueryParam("auth") String auth) {
+		if (UserDAO.getRole(auth).equals("desk-clerk")) {
+			String json = HotelDAO.getHotelBookings(auth);
+			return Response.ok(json).build();
+		}
+		return null;
+	}
+	
 	@DELETE
 	@Path("/{hotelID}-{startDate}-{endDate}-{roomTypeName}")
 	public Response removeBooking(@DefaultValue("") @QueryParam("auth") String auth,
