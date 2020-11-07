@@ -109,13 +109,13 @@ Insert into mydb.employee values (7, 'Victor Valdes', 'Male', '1980-11-13', 'ID'
 Insert into mydb.employee values (8, 'Amir El-Masry', 'Male', '1992-10-21', 'ID', '32423', 'UAE', '454354', '9th Street', '324234', 'masry@mail.com', '3423423', '0434322', 'amir', 'elmasry');
 
 Insert into mydb.schedule values (0, 0, 'Manager', 'Full-time', '$2000', '2018-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (1, 0, 'Manager', 'Full-time', '$3000', '2016-02-04', null, '09:00', '18:00');
-Insert into mydb.schedule values (2, 1, 'Manager', 'Full-time', '$4500', '2018-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (3, 1, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (4, 2, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (1, 1, 'Manager', 'Full-time', '$3000', '2016-02-04', null, '09:00', '18:00');
+Insert into mydb.schedule values (2, 2, 'Manager', 'Full-time', '$4500', '2018-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (3, 0, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (4, 1, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '09:00', '18:00');
 Insert into mydb.schedule values (5, 2, 'desk-clerk', 'Full-time', '$5000', '2015-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (6, 1, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '18:00', '05:00');
-Insert into mydb.schedule values (7, 2, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '18:00', '05:00');
+Insert into mydb.schedule values (6, 0, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '18:00', '05:00');
+Insert into mydb.schedule values (7, 1, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '18:00', '05:00');
 Insert into mydb.schedule values (8, 2, 'desk-clerk', 'Full-time', '$5000', '2015-06-24', null, '18:00', '05:00');
 
 Insert into mydb.category values ('None', 0, 0);
@@ -586,28 +586,49 @@ insert into mydb.day_of_the_week values('T',0,0,'Manager');
 insert into mydb.day_of_the_week values('W', 0, 0, 'Manager');
 insert into mydb.day_of_the_week values('R', 0, 0, 'Manager');
 
-insert into mydb.day_of_the_week values ('M', 1, 2,'Manager');
-insert into mydb.day_of_the_week values('T',1,2,'Manager');
-insert into mydb.day_of_the_week values('W', 1, 2, 'Manager');
-insert into mydb.day_of_the_week values('R', 1, 2, 'Manager');
+insert into mydb.day_of_the_week values ('M', 1, 1,'Manager');
+insert into mydb.day_of_the_week values('T',1,1,'Manager');
+insert into mydb.day_of_the_week values('W', 1, 1, 'Manager');
+insert into mydb.day_of_the_week values('R', 1, 1, 'Manager');
 
-insert into mydb.day_of_the_week values ('M', 2, 4,'Manager');
-insert into mydb.day_of_the_week values('T',2,4,'Manager');
-insert into mydb.day_of_the_week values('W', 2, 4, 'Manager');
-insert into mydb.day_of_the_week values('R', 2, 4, 'Manager');
+insert into mydb.day_of_the_week values ('M', 2, 2,'Manager');
+insert into mydb.day_of_the_week values('T',2,2,'Manager');
+insert into mydb.day_of_the_week values('W', 2, 2, 'Manager');
+insert into mydb.day_of_the_week values('R', 2, 2, 'Manager');
 
-insert into mydb.day_of_the_week values ('F', 0, 1,'desk-clerk');
-insert into mydb.day_of_the_week values('S',0,1,'desk-clerk');
-insert into mydb.day_of_the_week values('H', 0, 1, 'desk-clerk');
-insert into mydb.day_of_the_week values('M', 0, 1, 'desk-clerk');
+insert into mydb.day_of_the_week values ('F', 0, 3,'desk-clerk');
+insert into mydb.day_of_the_week values('S',0,3,'desk-clerk');
+insert into mydb.day_of_the_week values('H', 0, 3, 'desk-clerk');
+insert into mydb.day_of_the_week values('M', 0, 3, 'desk-clerk');
 
-insert into mydb.day_of_the_week values ('F', 1, 3,'desk-clerk');
-insert into mydb.day_of_the_week values('S',1,3,'desk-clerk');
-insert into mydb.day_of_the_week values('H', 1, 3, 'desk-clerk');
-insert into mydb.day_of_the_week values('M', 1, 3, 'desk-clerk');
+insert into mydb.day_of_the_week values ('F', 1, 4,'desk-clerk');
+insert into mydb.day_of_the_week values('S',1,4,'desk-clerk');
+insert into mydb.day_of_the_week values('H', 1, 4, 'desk-clerk');
+insert into mydb.day_of_the_week values('M', 1, 4, 'desk-clerk');
 
 insert into mydb.day_of_the_week values ('F', 2, 5,'desk-clerk');
 insert into mydb.day_of_the_week values('S',2,5,'desk-clerk');
 insert into mydb.day_of_the_week values('H', 2, 5, 'desk-clerk');
 insert into mydb.day_of_the_week values('M', 2, 5, 'desk-clerk');
+
+
+insert into mydb.day_of_the_week values ('M', 0, 6,'desk-clerk');
+insert into mydb.day_of_the_week values('T',0,6,'desk-clerk');
+insert into mydb.day_of_the_week values('W', 0, 6, 'desk-clerk');
+insert into mydb.day_of_the_week values('R', 0, 6, 'desk-clerk');
+
+insert into mydb.day_of_the_week values ('M', 1, 7,'desk-clerk');
+insert into mydb.day_of_the_week values('T',1,7,'desk-clerk');
+insert into mydb.day_of_the_week values('W', 1, 7, 'desk-clerk');
+insert into mydb.day_of_the_week values('R', 1, 7, 'desk-clerk');
+
+insert into mydb.day_of_the_week values ('M', 2, 8,'desk-clerk');
+insert into mydb.day_of_the_week values('T',2,8,'desk-clerk');
+insert into mydb.day_of_the_week values('W', 2, 8, 'desk-clerk');
+insert into mydb.day_of_the_week values('R', 2, 8, 'desk-clerk');
+
+
+
+
+
 
