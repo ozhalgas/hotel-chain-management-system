@@ -417,7 +417,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Day_of_the_Week` (
   `HotelID` INT NOT NULL,
   `EmployeeID` INT NOT NULL,
   `Position` VARCHAR(45) NOT NULL,
-  `Day_of_the_Weekcol` VARCHAR(45) NULL,
   PRIMARY KEY (`Day_of_the_Week`, `HotelID`, `EmployeeID`, `Position`),
   INDEX `fk_Day_of_the_Week_Schedule1_idx` (`HotelID` ASC, `EmployeeID` ASC, `Position` ASC) VISIBLE,
   CONSTRAINT `fk_Day_of_the_Week_Schedule1`
@@ -434,18 +433,17 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Cleans` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Cleans` (
-  `Schedule_HotelID` INT NOT NULL,
-  `Schedule_EmployeeID` INT NOT NULL,
-  `Schedule_Position` VARCHAR(45) NOT NULL,
+  `HotelID` INT NOT NULL,
+  `EmployeeID` INT NOT NULL,
+  `Position` VARCHAR(45) NOT NULL,
   `RoomNumber` VARCHAR(5) NOT NULL,
   `Floor` INT NOT NULL,
   `RoomTypeName` VARCHAR(45) NOT NULL,
-  `HotelID` INT NOT NULL,
-  PRIMARY KEY (`Schedule_HotelID`, `Schedule_EmployeeID`, `Schedule_Position`, `RoomNumber`, `Floor`, `RoomTypeName`, `HotelID`),
+  PRIMARY KEY (`HotelID`, `EmployeeID`, `Position`, `RoomNumber`, `Floor`, `RoomTypeName`),
   INDEX `fk_Schedule_has_Room_Room1_idx` (`RoomNumber` ASC, `Floor` ASC, `RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
-  INDEX `fk_Schedule_has_Room_Schedule1_idx` (`Schedule_HotelID` ASC, `Schedule_EmployeeID` ASC, `Schedule_Position` ASC) VISIBLE,
+  INDEX `fk_Schedule_has_Room_Schedule1_idx` (`HotelID` ASC, `EmployeeID` ASC, `Position` ASC) VISIBLE,
   CONSTRAINT `fk_Schedule_has_Room_Schedule1`
-    FOREIGN KEY (`Schedule_HotelID` , `Schedule_EmployeeID` , `Schedule_Position`)
+    FOREIGN KEY (`HotelID` , `EmployeeID` , `Position`)
     REFERENCES `mydb`.`Schedule` (`HotelID` , `EmployeeID` , `Position`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
