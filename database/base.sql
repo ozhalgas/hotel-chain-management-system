@@ -435,77 +435,151 @@ Insert into mydb.initial_price values ('President', 2, 'H', 'vacations', 4400.0)
 
 
 
-Insert into mydb.initial_price values ('Single', 0, 'M', 'fall', 60.0);
-Insert into mydb.initial_price values ('Single', 0, 'T', 'fall', 60.0);
-Insert into mydb.initial_price values ('Single', 0, 'W', 'fall', 60.0);
-Insert into mydb.initial_price values ('Single', 0, 'R', 'fall', 60.0);
-Insert into mydb.initial_price values ('Single', 0, 'F', 'fall', 65.0);
-Insert into mydb.initial_price values ('Single', 0, 'S', 'fall', 70.0);
-Insert into mydb.initial_price values ('Single', 0, 'H', 'fall', 70.0);
+Insert into mydb.initial_price values ('Single', 0, 'M', 'fall2020', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'T', 'fall2020', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'W', 'fall2020', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'R', 'fall2020', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'F', 'fall2020', 65.0);
+Insert into mydb.initial_price values ('Single', 0, 'S', 'fall2020', 70.0);
+Insert into mydb.initial_price values ('Single', 0, 'H', 'fall2020', 70.0);
 
-Insert into mydb.initial_price values ('Double', 0, 'M', 'fall', 80.0);
-Insert into mydb.initial_price values ('Double', 0, 'T', 'fall', 80.0);
-Insert into mydb.initial_price values ('Double', 0, 'W', 'fall', 80.0);
-Insert into mydb.initial_price values ('Double', 0, 'R', 'fall', 80.0);
-Insert into mydb.initial_price values ('Double', 0, 'F', 'fall', 85.0);
-Insert into mydb.initial_price values ('Double', 0, 'S', 'fall', 90.0);
-Insert into mydb.initial_price values ('Double', 0, 'H', 'fall', 90.0);
+Insert into mydb.initial_price values ('Double', 0, 'M', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'T', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'W', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'R', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'F', 'fall2020', 85.0);
+Insert into mydb.initial_price values ('Double', 0, 'S', 'fall2020', 90.0);
+Insert into mydb.initial_price values ('Double', 0, 'H', 'fall2020', 90.0);
 
-Insert into mydb.initial_price values ('Single', 1, 'M', 'fall', 80.0);
-Insert into mydb.initial_price values ('Single', 1, 'T', 'fall', 80.0);
-Insert into mydb.initial_price values ('Single', 1, 'W', 'fall', 80.0);
-Insert into mydb.initial_price values ('Single', 1, 'R', 'fall', 80.0);
-Insert into mydb.initial_price values ('Single', 1, 'F', 'fall', 85.0);
-Insert into mydb.initial_price values ('Single', 1, 'S', 'fall', 90.0);
-Insert into mydb.initial_price values ('Single', 1, 'H', 'fall', 90.0);
+Insert into mydb.initial_price values ('Single', 1, 'M', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'T', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'W', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'R', 'fall2020', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'F', 'fall2020', 85.0);
+Insert into mydb.initial_price values ('Single', 1, 'S', 'fall2020', 90.0);
+Insert into mydb.initial_price values ('Single', 1, 'H', 'fall2020', 90.0);
 
-Insert into mydb.initial_price values ('1 bed Double', 1, 'M', 'fall', 100.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'T', 'fall', 100.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'W', 'fall', 100.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'R', 'fall', 100.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'F', 'fall', 105.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'S', 'fall', 110.0);
-Insert into mydb.initial_price values ('1 bed Double', 1, 'H', 'fall', 110.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'M', 'fall2020', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'T', 'fall2020', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'W', 'fall2020', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'R', 'fall2020', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'F', 'fall2020', 105.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'S', 'fall2020', 110.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'H', 'fall2020', 110.0);
 
-Insert into mydb.initial_price values ('2 bed Double', 1, 'M', 'fall', 110.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'T', 'fall', 110.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'W', 'fall', 110.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'R', 'fall', 110.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'F', 'fall', 115.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'S', 'fall', 120.0);
-Insert into mydb.initial_price values ('2 bed Double', 1, 'H', 'fall', 120.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'M', 'fall2020', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'T', 'fall2020', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'W', 'fall2020', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'R', 'fall2020', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'F', 'fall2020', 115.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'S', 'fall2020', 120.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'H', 'fall2020', 120.0);
 
-Insert into mydb.initial_price values ('Luxury', 1, 'M', 'fall', 500.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'T', 'fall', 500.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'W', 'fall', 500.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'R', 'fall', 500.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'F', 'fall', 550.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'S', 'fall', 600.0);
-Insert into mydb.initial_price values ('Luxury', 1, 'H', 'fall', 600.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'M', 'fall2020', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'T', 'fall2020', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'W', 'fall2020', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'R', 'fall2020', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'F', 'fall2020', 550.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'S', 'fall2020', 600.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'H', 'fall2020', 600.0);
 
-Insert into mydb.initial_price values ('Double', 2, 'M', 'fall', 150.0);
-Insert into mydb.initial_price values ('Double', 2, 'T', 'fall', 150.0);
-Insert into mydb.initial_price values ('Double', 2, 'W', 'fall', 150.0);
-Insert into mydb.initial_price values ('Double', 2, 'R', 'fall', 150.0);
-Insert into mydb.initial_price values ('Double', 2, 'F', 'fall', 175.0);
-Insert into mydb.initial_price values ('Double', 2, 'S', 'fall', 200.0);
-Insert into mydb.initial_price values ('Double', 2, 'H', 'fall', 200.0);
+Insert into mydb.initial_price values ('Double', 2, 'M', 'fall2020', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'T', 'fall2020', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'W', 'fall2020', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'R', 'fall2020', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'F', 'fall2020', 175.0);
+Insert into mydb.initial_price values ('Double', 2, 'S', 'fall2020', 200.0);
+Insert into mydb.initial_price values ('Double', 2, 'H', 'fall2020', 200.0);
 
-Insert into mydb.initial_price values ('Luxury', 2, 'M', 'fall', 400.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'T', 'fall', 400.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'W', 'fall', 400.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'R', 'fall', 400.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'F', 'fall', 450.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'S', 'fall', 500.0);
-Insert into mydb.initial_price values ('Luxury', 2, 'H', 'fall', 500.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'M', 'fall2020', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'T', 'fall2020', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'W', 'fall2020', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'R', 'fall2020', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'F', 'fall2020', 450.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'S', 'fall2020', 500.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'H', 'fall2020', 500.0);
 
-Insert into mydb.initial_price values ('President', 2, 'M', 'fall', 3000.0);
-Insert into mydb.initial_price values ('President', 2, 'T', 'fall', 3000.0);
-Insert into mydb.initial_price values ('President', 2, 'W', 'fall', 3000.0);
-Insert into mydb.initial_price values ('President', 2, 'R', 'fall', 3000.0);
-Insert into mydb.initial_price values ('President', 2, 'F', 'fall', 3500.0);
-Insert into mydb.initial_price values ('President', 2, 'S', 'fall', 4000.0);
-Insert into mydb.initial_price values ('President', 2, 'H', 'fall', 4000.0);
+Insert into mydb.initial_price values ('President', 2, 'M', 'fall2020', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'T', 'fall2020', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'W', 'fall2020', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'R', 'fall2020', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'F', 'fall2020', 3500.0);
+Insert into mydb.initial_price values ('President', 2, 'S', 'fall2020', 4000.0);
+Insert into mydb.initial_price values ('President', 2, 'H', 'fall2020', 4000.0);
+
+
+
+Insert into mydb.initial_price values ('Single', 0, 'M', 'fall2021', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'T', 'fall2021', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'W', 'fall2021', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'R', 'fall2021', 60.0);
+Insert into mydb.initial_price values ('Single', 0, 'F', 'fall2021', 65.0);
+Insert into mydb.initial_price values ('Single', 0, 'S', 'fall2021', 70.0);
+Insert into mydb.initial_price values ('Single', 0, 'H', 'fall2021', 70.0);
+
+Insert into mydb.initial_price values ('Double', 0, 'M', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'T', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'W', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'R', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Double', 0, 'F', 'fall2021', 85.0);
+Insert into mydb.initial_price values ('Double', 0, 'S', 'fall2021', 90.0);
+Insert into mydb.initial_price values ('Double', 0, 'H', 'fall2021', 90.0);
+
+Insert into mydb.initial_price values ('Single', 1, 'M', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'T', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'W', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'R', 'fall2021', 80.0);
+Insert into mydb.initial_price values ('Single', 1, 'F', 'fall2021', 85.0);
+Insert into mydb.initial_price values ('Single', 1, 'S', 'fall2021', 90.0);
+Insert into mydb.initial_price values ('Single', 1, 'H', 'fall2021', 90.0);
+
+Insert into mydb.initial_price values ('1 bed Double', 1, 'M', 'fall2021', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'T', 'fall2021', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'W', 'fall2021', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'R', 'fall2021', 100.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'F', 'fall2021', 105.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'S', 'fall2021', 110.0);
+Insert into mydb.initial_price values ('1 bed Double', 1, 'H', 'fall2021', 110.0);
+
+Insert into mydb.initial_price values ('2 bed Double', 1, 'M', 'fall2021', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'T', 'fall2021', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'W', 'fall2021', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'R', 'fall2021', 110.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'F', 'fall2021', 115.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'S', 'fall2021', 120.0);
+Insert into mydb.initial_price values ('2 bed Double', 1, 'H', 'fall2021', 120.0);
+
+Insert into mydb.initial_price values ('Luxury', 1, 'M', 'fall2021', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'T', 'fall2021', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'W', 'fall2021', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'R', 'fall2021', 500.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'F', 'fall2021', 550.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'S', 'fall2021', 600.0);
+Insert into mydb.initial_price values ('Luxury', 1, 'H', 'fall2021', 600.0);
+
+Insert into mydb.initial_price values ('Double', 2, 'M', 'fall2021', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'T', 'fall2021', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'W', 'fall2021', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'R', 'fall2021', 150.0);
+Insert into mydb.initial_price values ('Double', 2, 'F', 'fall2021', 175.0);
+Insert into mydb.initial_price values ('Double', 2, 'S', 'fall2021', 200.0);
+Insert into mydb.initial_price values ('Double', 2, 'H', 'fall2021', 200.0);
+
+Insert into mydb.initial_price values ('Luxury', 2, 'M', 'fall2021', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'T', 'fall2021', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'W', 'fall2021', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'R', 'fall2021', 400.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'F', 'fall2021', 450.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'S', 'fall2021', 500.0);
+Insert into mydb.initial_price values ('Luxury', 2, 'H', 'fall2021', 500.0);
+
+Insert into mydb.initial_price values ('President', 2, 'M', 'fall2021', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'T', 'fall2021', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'W', 'fall2021', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'R', 'fall2021', 3000.0);
+Insert into mydb.initial_price values ('President', 2, 'F', 'fall2021', 3500.0);
+Insert into mydb.initial_price values ('President', 2, 'S', 'fall2021', 4000.0);
+Insert into mydb.initial_price values ('President', 2, 'H', 'fall2021', 4000.0);
 
 insert into mydb.day_of_the_week values ('M', 0, 0,'Manager');
 insert into mydb.day_of_the_week values('T',0,0,'Manager');
