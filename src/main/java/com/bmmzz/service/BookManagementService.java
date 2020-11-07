@@ -33,6 +33,8 @@ public class BookManagementService {
 		switch( UserDAO.getRole(auth) ) {
 			case "guest":
 				return Helper.getPage(servletContext, "bookManagement.html");
+			case "desk-clerk":
+				return Helper.getPage(servletContext, "bookManagement.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
@@ -54,12 +56,6 @@ public class BookManagementService {
 			String json = GuestDAO.getGuestBookings(auth);
 			return Response.ok(json).build();
 		}
-		return null;
-	}
-	
-	@GET
-	@Path("/all-bookings")
-	public Response getAllBookings(@DefaultValue("") @QueryParam("auth") String auth) {
 		if (UserDAO.getRole(auth).equals("desk-clerk")) {
 			String json = HotelDAO.getHotelBookings(auth);
 			return Response.ok(json).build();
