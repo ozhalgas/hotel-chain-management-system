@@ -3,7 +3,9 @@ package com.bmmzz.userDAO.struct;
 import java.util.ArrayList;
 
 public class HotelBookings {
-
+	private ArrayList<Integer> guestIDs = new ArrayList<Integer>();
+	private ArrayList<Integer> hotelIDs = new ArrayList<Integer>();
+	private ArrayList<String> hotelNames = new ArrayList<>();
 	private ArrayList<String> guestFullNames = new ArrayList<>();
 	private ArrayList<String> guestMobilePhoneNumbers = new ArrayList<>();
 	private ArrayList<String> roomTypeNames = new ArrayList<String>();
@@ -11,8 +13,11 @@ public class HotelBookings {
 	private ArrayList<String> checkOutDates = new ArrayList<String>();
 	private ArrayList<Integer> numberOfRooms = new ArrayList<Integer>();
     
-    public void addBooking(String guestFullName, String guestMobilePhoneNumber, String roomTypeName, String checkInDate, String checkOutDate, int numberOfRoom) {
-		roomTypeNames.add(roomTypeName);
+    public void addBooking(int guestID, int hotelID, String hotelName, String guestFullName, String guestMobilePhoneNumber, String roomTypeName, String checkInDate, String checkOutDate, int numberOfRoom) {
+		guestIDs.add(guestID);
+    	hotelIDs.add(hotelID);
+		hotelNames.add(hotelName);
+    	roomTypeNames.add(roomTypeName);
 		guestFullNames.add(guestFullName);
 		guestMobilePhoneNumbers.add(guestMobilePhoneNumber);
 		checkInDates.add(checkInDate);
@@ -42,5 +47,17 @@ public class HotelBookings {
 	
 	public ArrayList<Integer> getNumberOfRooms() {
 		return numberOfRooms;
+	}
+	
+	public ArrayList<Integer> getHotelIDs() {
+		return hotelIDs;
+	}
+	
+	public ArrayList<Integer> getGuestIDs() {
+		return guestIDs;
+	}
+	
+	public ArrayList<String> getHotelNames() {
+		return hotelNames;
 	}
 }

@@ -32,9 +32,9 @@ public class BookManagementService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "guest":
-				return Helper.getPage(servletContext, "bookManagement.html");
+				return Helper.getPage(servletContext, "bookManagementForGuest.html");
 			case "desk-clerk":
-				return Helper.getPage(servletContext, "bookManagement.html");
+				return Helper.getPage(servletContext, "bookManagementForDeskClerk.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
@@ -71,6 +71,18 @@ public class BookManagementService {
 			@PathParam("endDate") String endDate,
 			@PathParam("roomTypeName") String typeName){
 	   GuestDAO.removeBooking(auth, hotelID, startDate, endDate, typeName);
+	   return Response.ok().build();
+	}
+	
+	@DELETE
+	@Path("/{guestID}-{hotelID}-{startDate}-{endDate}-{roomTypeName}")
+	public Response removeBooking(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("guestID") int guestID,
+			@PathParam("hotelID") int hotelID,
+			@PathParam("startDate") String startDate,
+			@PathParam("endDate") String endDate,
+			@PathParam("roomTypeName") String typeName){
+	   GuestDAO.removeBooking(guestID, hotelID, startDate, endDate, typeName);
 	   return Response.ok().build();
 	}
 }

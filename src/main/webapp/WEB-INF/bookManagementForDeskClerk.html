@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Booking Management</title>
+    <link rel="stylesheet" href="../css/bookManagement.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        var link = window.location.href.toString();
+        var auth = link.substring(73, link.length)
+        var bookings = {}
+        var table;
+        
+        function visitBookingPage(){
+            window.location='http://localhost:8080/HotelChainManagementSystem';
+        }
+        
+        $(document).ready(function () {
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
+            	bookings.guestIDs = data.guestIDs;
+            	bookings.guestFullNames = data.guestFullNames;
+                bookings.guestMobilePhoneNumbers = data.guestMobilePhoneNumbers;
+                bookings.roomTypes = data.roomTypeNames;
+                bookings.checkInDates = data.checkInDates;
+                bookings.checkOutDates = data.checkOutDates;
+                bookings.numberOfRooms = data.numberOfRooms; 
+                bookings.hotelIDs = data.hotelIDs;
+                bookings.hotelNames = data.hotelNames;
+
+                for (let i = 0; i < bookings.guestFullNames.length; i++) {
+                    $('#table-body').append("<tr> <td>" +
+                    	bookings.guestIDs[i] + "</td> <td>" +
+                    	bookings.guestFullNames[i] + "</td> <td>" +
+                    	bookings.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                        bookings.roomTypes[i] + "</td> <td>" +
+                        bookings.checkInDates[i] + "</td> <td>" +
+                        bookings.checkOutDates[i] + "</td> <td>" + 
+                        bookings.numberOfRooms[i] + "</td> <td><button class='delete' id=" + i.toString() +
+                        "> Delete </button> </td> </tr>");
+                }
+                
+                document.getElementById("HotelName").innerHTML = bookings.hotelNames[0];
+
+                table = $('#book-table').DataTable();
+                $('.delete').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
+                    	bookings.guestIDs[id].toString() + '-' +
+                        bookings.hotelIDs[id].toString() + '-' +
+                        bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
+                        bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
+                        bookings.roomTypes[id] + auth;
+
+                    fetch(url, {
+                        method: 'DELETE',
+                    }).then(() => {
+                        table.row(r).remove().draw();
+                    })
+
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<h2>
+    <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
+</h2>
+<h3 id="HotelName"></h3>
+
+<div><button onclick=visitBookingPage();>Book a room</button></div><br>
+
+<div class="book-table">
+    <table class="cell-border" id="book-table" style="width: 100%">
+        <thead>
+        <tr>
+        	<th>Guest ID</th>
+        	<th>Full Name</th>
+        	<th>Mobile Phone Number</th>
+            <th>Room Type</th>
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
+            <th>Number of Rooms</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        <tr>
+        	<td style="display: none"></td>
+        	<td style="display: none"></td>
+        	<td style="display: none"></td>
+            <td style="display: none"></td>
+            <td style="display:none;"></td>
+            <td style="display: none"></td>
+            <td style="display: none"></td>
+            <td style="display: none"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

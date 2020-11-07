@@ -127,4 +127,26 @@ public class GuestDAO {
 		}
 	
 	}
+	
+public static void removeBooking(int guestID, int hotelID, String startDate, String endDate, String typeName) {		
+		
+		try {			
+			startDate = startDate.replace(':', '-');
+			endDate = endDate.replace(':', '-');
+			typeName = typeName.replace(':', ' ');
+			
+			String sql = "DELETE mydb.reserves FROM mydb.reserves, mydb.guest WHERE mydb.guest.GuestID= BINARY '" + guestID + "' and mydb.reserves.GuestID = mydb.guest.GuestID"
+					+ " and mydb.reserves.HotelID= BINARY '" + Integer.toString(hotelID) + "'"
+					+ " and mydb.reserves.CheckInDate= BINARY '" + startDate + "'"
+					+ " and mydb.reserves.CheckOutDate= BINARY '" + endDate + "'"
+					+ " and mydb.reserves.RoomTypeName= BINARY '" + typeName + "'";
+			
+			System.out.println(sql);
+
+			UserDAO.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
 }
