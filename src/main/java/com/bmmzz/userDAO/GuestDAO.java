@@ -2,8 +2,6 @@ package com.bmmzz.userDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
-import java.util.regex.Pattern;
 
 import com.bmmzz.userDAO.struct.GuestBookings;
 import com.bmmzz.userDAO.struct.GuestInfo;
@@ -42,13 +40,7 @@ public class GuestDAO {
 		GuestInfo guestInfo = new GuestInfo();
 		String json = "";
 		
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return null;
-		
-		String username = decodedAuth.split(":", 2)[0];
+		String username = UserDAO.getDecodedAuth(auth)[0];
 		
 		
 		try {
@@ -74,19 +66,24 @@ public class GuestDAO {
 		return json;
 	}
 	
+	public static String getGuestInfo(int guestID) {
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("Select Login, Password FROM mydb.guest WHERE GuestID = " + guestID);
+			resultSet.next();
+			String auth = UserDAO.getEncodedAuth(resultSet.getString(1), resultSet.getString(2));
+			return getGuestInfo(auth);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static String getGuestBookings(String auth) {
 		Gson gson = new Gson();
 		GuestBookings guestBookings = new GuestBookings();
 		String json = "";
 		
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return null;
-		
-		String username = decodedAuth.split(":", 2)[0];
-		
+		String username = UserDAO.getDecodedAuth(auth)[0];
 		
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.guest, mydb.hotel WHERE Login= BINARY '" + username + "' and mydb.reserves.GuestID = mydb.guest.GuestID and mydb.reserves.HotelID = mydb.hotel.HotelID" );
@@ -105,9 +102,7 @@ public class GuestDAO {
 	public static void removeBooking(String auth, int hotelID, String startDate, String endDate, String typeName) {		
 		
 		try {
-			byte[] decodedBytes = Base64.getDecoder().decode(auth);
-			String decodedAuth = new String(decodedBytes);
-			String username = decodedAuth.split(":", 2)[0];
+			String username = UserDAO.getDecodedAuth(auth)[0];
 			
 			startDate = startDate.replace(':', '-');
 			endDate = endDate.replace(':', '-');
@@ -127,8 +122,8 @@ public class GuestDAO {
 		}
 	
 	}
-	
-public static void removeBooking(int guestID, int hotelID, String startDate, String endDate, String typeName) {		
+
+	public static void removeBooking(int guestID, int hotelID, String startDate, String endDate, String typeName) {		
 		
 		try {			
 			startDate = startDate.replace(':', '-');

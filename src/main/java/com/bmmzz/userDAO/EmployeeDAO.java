@@ -2,8 +2,6 @@ package com.bmmzz.userDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
-import java.util.regex.Pattern;
 
 import com.bmmzz.userDAO.struct.EmployeeInfo;
 import com.bmmzz.userDAO.struct.EmployeeRegistrationInfo;
@@ -42,13 +40,7 @@ public class EmployeeDAO {
 		EmployeeInfo employeeInfo = new EmployeeInfo();
 		String json = "";
 		
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return null;
-		
-		String username = decodedAuth.split(":", 2)[0];
+		String username = UserDAO.getDecodedAuth(auth)[0];
 		
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee WHERE Login= BINARY '" + username + "'" );

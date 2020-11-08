@@ -43,9 +43,9 @@ public class BookManagementService {
 	@GET
 	@Path("/hotel-choosing-info")
 	public Response destinationInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
-		if(!UserDAO.checkAuth(auth) || !UserDAO.getRole(auth).equals("guest"))
+		if(!UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin"))
 			return null;
-		String json = HotelDAO.getHotelChoosingInfo();
+		String json = HotelDAO.getHotelChoosingInfo(auth);
 		return Response.ok(json).build();
 	}
 	
@@ -73,7 +73,7 @@ public class BookManagementService {
 	   GuestDAO.removeBooking(auth, hotelID, startDate, endDate, typeName);
 	   return Response.ok().build();
 	}
-	
+
 	@DELETE
 	@Path("/{guestID}-{hotelID}-{startDate}-{endDate}-{roomTypeName}")
 	public Response removeBooking(@DefaultValue("") @QueryParam("auth") String auth,

@@ -11,8 +11,7 @@ import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
 import com.google.gson.Gson;
 
 public class RoomDAO {
-	public static void reserveRoomType(String roomTypeName, int hotelID, String auth, String checkInDate, String checkOutDate, int numberOfRooms) {
-		int guestID = UserDAO.getGuestID(auth);
+	public static void reserveRoomType(String roomTypeName, int hotelID, int guestID, String checkInDate, String checkOutDate, int numberOfRooms) {
 		ResultSet resultSet = UserDAO.executeQuery("SELECT NumberOfRooms FROM mydb.reserves WHERE "
 				+ "RoomTypeName = BINARY '" + roomTypeName + "' AND HotelID = " + hotelID + " AND GuestID = " + guestID + " "
 				+ "AND CheckInDate = '" + checkInDate + "' AND CheckOutDate = '" + checkOutDate + "';");

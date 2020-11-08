@@ -86,26 +86,12 @@ public class UserDAO {
 	}
 	
 	public static boolean checkAuth(String auth) {
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return false;
-		
-		String username = decodedAuth.split(":", 2)[0];
-		String password = decodedAuth.split(":", 2)[1];
-		
-		return checkAuth(username, password);
+		String[] loginAndPassword = getDecodedAuth(auth);
+		return checkAuth(loginAndPassword[0], loginAndPassword[1]);
 	}
 	
 	public static int getGuestID(String auth) {
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return -1;
-		
-		String username = decodedAuth.split(":", 2)[0];
+		String username = getDecodedAuth(auth)[0];
 		
 		ResultSet resultSet = executeQuery("SELECT GuestID FROM mydb.guest WHERE Login= BINARY '" + username + "';");
 		try {
@@ -117,18 +103,19 @@ public class UserDAO {
 		return -1;
 	}
 	
-	public static boolean checkRoleAndAuth(String auth, String role) {
-		return checkAuth(auth) && getRole(auth).equals(role);
+	public static boolean checkRoleAndAuth(String auth, String... roles) {
+		if(!checkAuth(auth))
+			return false;
+		
+		for(String role : roles) {
+			if(getRole(auth).equals(role))
+				return true;
+		}
+		return false;
 	}
 	
 	public static String getRole(String auth) {
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return null;
-		
-		String login = decodedAuth.split(":", 2)[0];
+		String login = getDecodedAuth(auth)[0];
 		
 		if(login.equals("admin"))
 			return "admin";
@@ -162,6 +149,19 @@ public class UserDAO {
 				return null;
 		}
 		return null;
+	}
+	
+	public static String[] getDecodedAuth(String auth) {
+		byte[] decodedBytes = Base64.getDecoder().decode(auth);
+		String decodedAuth = new String(decodedBytes);
+		
+		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
+			return null;
+		
+		String[] loginAndPassword = new String[2]; 
+		loginAndPassword[0] = decodedAuth.split(":", 2)[0];
+		loginAndPassword[1] = decodedAuth.split(":",2)[1];
+		return loginAndPassword;
 	}
 	
 	public static String getEncodedAuth(String username, String password) {

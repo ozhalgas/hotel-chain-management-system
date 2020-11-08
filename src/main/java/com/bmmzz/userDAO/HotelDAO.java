@@ -2,8 +2,6 @@ package com.bmmzz.userDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
-import java.util.regex.Pattern;
 
 import com.bmmzz.userDAO.struct.HotelBookings;
 import com.bmmzz.userDAO.struct.HotelChoosingInfo;
@@ -34,13 +32,21 @@ public class HotelDAO {
 		return json;
 	}
 	
-	public static String getHotelChoosingInfo() {
+	public static String getHotelChoosingInfo(String auth) {
 		Gson gson = new Gson();
 		String json = "";
 		HotelChoosingInfo hotelChoosingInfo = new HotelChoosingInfo();
 		
+		String role = UserDAO.getRole(auth);
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("SELECT HotelID, Name, Country, Region FROM mydb.hotel;" );
+			ResultSet resultSet;
+			if(role.equals("desk-clerk"))
+				resultSet = UserDAO.executeQuery("SELECT HotelID, Name, Country, Region FROM mydb.hotel "
+						+ "JOIN mydb.schedule S USING(HotelID) "
+						+ "JOIN mydb.employee E USING(EmployeeID) "
+						+ "WHERE E.Login = '" + UserDAO.getDecodedAuth(auth)[0] + "'");
+			else
+				resultSet =  UserDAO.executeQuery("SELECT HotelID, Name, Country, Region FROM mydb.hotel;" );
 			while(resultSet.next()) {
 				hotelChoosingInfo.addHotel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 			}
@@ -77,14 +83,7 @@ public class HotelDAO {
 		HotelBookings hotelBookings = new HotelBookings();
 		String json = "";
 		
-		byte[] decodedBytes = Base64.getDecoder().decode(auth);
-		String decodedAuth = new String(decodedBytes);
-		
-		if( !Pattern.compile(".+:.+").matcher(decodedAuth).matches() )
-			return null;
-		
-		String username = decodedAuth.split(":", 2)[0];
-		
+		String username = UserDAO.getDecodedAuth(auth)[0];
 		
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.employee, mydb.schedule, mydb.guest, mydb.hotel WHERE mydb.Employee.Login= BINARY '" + username + "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.reserves.HotelID and mydb.hotel.HotelID = mydb.reserves.HotelID" );

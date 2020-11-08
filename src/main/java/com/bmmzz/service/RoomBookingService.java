@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.GuestDAO;
 import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
@@ -35,6 +36,7 @@ public class RoomBookingService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "guest":
+			case "desk-clerk":
 				return Helper.getPage(servletContext, "hotelChoosingPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
@@ -44,9 +46,26 @@ public class RoomBookingService {
 	@GET
 	@Path("hotel-choosing-info")
 	public Response destinationInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
-		if(!UserDAO.checkAuth(auth) || !UserDAO.getRole(auth).equals("guest"))
+		if	(!UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin"))
 			return null;
-		String json = HotelDAO.getHotelChoosingInfo();
+		String json = "";
+		json = HotelDAO.getHotelChoosingInfo(auth);
+		return Response.ok(json).build();
+	}
+	
+	@GET
+	@Path("role")
+	public Response getRoleOfUser( @DefaultValue("") @QueryParam("auth") String auth ) {
+		return Response.ok("{\"role\" : \"" + UserDAO.getRole(auth) + "\"}").build();
+	}
+	
+	@GET
+	@Path("{guestID}+")
+	public Response getGuestInfoForBooking( @DefaultValue("") @QueryParam("auth") String auth,
+													@PathParam("guestID") int guestID) {
+		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
+			return null;
+		String json = GuestDAO.getGuestInfo(guestID);
 		return Response.ok(json).build();
 	}
 	
@@ -60,6 +79,8 @@ public class RoomBookingService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "guest":
+			case "desk-clerk":
+			case "admin":
 				return Helper.getPage(servletContext, "roomBookingPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
@@ -72,7 +93,7 @@ public class RoomBookingService {
 								  	@PathParam("hotelID") int hotelID,
 								  	@PathParam("startDate") String startDate,
 								  	@PathParam("endDate") String endDate) {
-		if(!UserDAO.checkAuth(auth) || !UserDAO.getRole(auth).equals("guest"))
+		if	( !UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin") )
 			return null;
 		String json = HotelDAO.getHotelInfo(hotelID);
 		return Response.ok(json).build();
@@ -84,25 +105,27 @@ public class RoomBookingService {
 								  	@PathParam("hotelID") int hotelID,
 								  	@PathParam("startDate") String startDate,
 								  	@PathParam("endDate") String endDate) {
-		if(!UserDAO.checkAuth(auth) || !UserDAO.getRole(auth).equals("guest"))
+		if	(!UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin"))
 			return null;
-		
 		String json = RoomDAO.getAvailableRoomsInfo(hotelID, startDate, endDate);
 		return Response.ok(json).build();
 	}
 	
 	@POST
 	@Path("{hotelID}-{startDate}-{endDate}/to-book")
-	public Response toBook( @DefaultValue("") @QueryParam("auth") String auth,
-									@PathParam("hotelID") int hotelID,
-									@PathParam("startDate") String startDate,
-									@PathParam("endDate") String endDate,
-									@FormParam("roomTypeName") String typeName,
-									@FormParam("numberOfRooms") int numberOfRooms) {
+	public Response toBook( @DefaultValue("") 	@QueryParam("auth") String auth,
+												@PathParam("hotelID") int hotelID,
+												@PathParam("startDate") String startDate,
+												@PathParam("endDate") String endDate,
+												@FormParam("roomTypeName") String typeName,
+												@FormParam("numberOfRooms") int numberOfRooms,
+							@DefaultValue("-1") @FormParam("guestID") int guestID) {
 		if(numberOfRooms >= 1) {
 			startDate = startDate.replace(':', '-');
 			endDate = endDate.replace(':', '-');
-			RoomDAO.reserveRoomType(typeName, hotelID, auth, startDate, endDate, numberOfRooms);
+			if(UserDAO.getRole(auth).equals("guest"))
+				guestID = UserDAO.getGuestID(auth);
+			RoomDAO.reserveRoomType(typeName, hotelID, guestID, startDate, endDate, numberOfRooms);
 		}
 		return Response.ok().build();
 	}

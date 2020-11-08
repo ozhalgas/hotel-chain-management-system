@@ -23,6 +23,8 @@
 	var startDate = link.substring(73, 83);
 	var endDate = link.substring(84, 94);
 	var authPost = link.substring(100, link.length);
+	var guestID = -1;
+	var clerkRole = false;
 	
 	function availableRooms(){
 		$.ajax({
@@ -102,8 +104,42 @@
 		}
 	}
 	
+	function showFieldsForClerk() {
+		$.ajax({
+			url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/role" + auth,
+			dataType : "json",
+			success : function(r) {
+				if(r.role === "desk-clerk" || r.role === "admin") {
+					$('#gID').append("<label for=\"guestID\">Guest ID number:</label>");
+					$('#gID').append("<input type=\"text\" id=\"guestID\"><br><br>");
+					$('#gID').append("<button id=\"findGuest\" type=\"button\">Find guest</button>");
+					$('#gID').append('<h4 id=guestFound></h4>');
+					$('#bookFinal').attr("disabled", "true");
+					clerkRole = true;
+				}
+			}
+		})
+	}
+	
+	function findGuestByID() {
+		$.ajax({
+			url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/" + $('#guestID').val() + auth,
+			dataType : "json",
+			success : function(r) {
+				//$('#guestFound').val("Guest found: " + r.fullName);
+				guestID = $('#guestID').val();
+				$('#bookFinal').attr("disabled", "false");
+			}
+		})
+	}
+	
 	$(document).ready(function() {
 		availableRooms();
+		showFieldsForClerk();
+		
+		$(document).on('click', '#findGuest', function(r) {
+			findGuestByID();
+		});
 		
 		$('#bookFinal').click(function() {
 			if(checkRoomsNum()){
@@ -122,6 +158,8 @@
 <h2>
 <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
 </h2>
+
+<div id="gID"></div>
 
 <label for="numOfOccupants">Number Of Occupants:</label>
 <input type="number" id="numOfOccupants" min="1" max="20" value="1" step="1"><br><br>
