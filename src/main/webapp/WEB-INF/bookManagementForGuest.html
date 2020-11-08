@@ -17,6 +17,11 @@
         var auth = link.substring(73, link.length)
         var bookings = {}
         var table;
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
                 bookings.roomType = data.roomTypeNames;
@@ -28,7 +33,7 @@
                 for (let i = 0; i < bookings.roomType.length; i++) {
                     $('#table-body').append("<tr> <td>" +
                         bookings.roomType[i] + "</td> <td>" + bookings.checkIn[i] + "</td> <td>" +
-                        bookings.checkOut[i] + "</td> <td>" + bookings.numberOfRooms[i] + "</td> <td><button class='delete' id=" + i.toString() +
+                        bookings.checkOut[i] + "</td> <td>" + bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
                         "> Delete </button> </td> </tr>");
                 }
 
@@ -57,7 +62,7 @@
 </head>
 <body>
 <h2>
-    <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
+    Bookings History
 </h2>
 <div class="book-table">
     <table class="cell-border" id="book-table" style="width: 100%">
@@ -74,5 +79,8 @@
         </tbody>
     </table>
 </div>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
 </body>
 </html>
