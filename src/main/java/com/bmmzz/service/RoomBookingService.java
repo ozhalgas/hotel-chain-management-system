@@ -37,6 +37,7 @@ public class RoomBookingService {
 		switch( UserDAO.getRole(auth) ) {
 			case "guest":
 			case "desk-clerk":
+			case "admin":
 				return Helper.getPage(servletContext, "hotelChoosingPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
@@ -60,7 +61,7 @@ public class RoomBookingService {
 	}
 	
 	@GET
-	@Path("{guestID}+")
+	@Path("{guestID}")
 	public Response getGuestInfoForBooking( @DefaultValue("") @QueryParam("auth") String auth,
 													@PathParam("guestID") int guestID) {
 		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
