@@ -42,10 +42,9 @@ public class GuestDAO {
 		
 		String username = UserDAO.getDecodedAuth(auth)[0];
 		
-		
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.guest WHERE Login= BINARY '" + username + "'" );
-			resultSet.next();
+			if(!resultSet.next()) {return null;}
 			guestInfo.setGuestID( resultSet.getInt(1) );
 			guestInfo.setFullName( resultSet.getString(2) );
 			guestInfo.setIdentificationType( resultSet.getString(3) );
@@ -69,7 +68,7 @@ public class GuestDAO {
 	public static String getGuestInfo(int guestID) {
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("Select Login, Password FROM mydb.guest WHERE GuestID = " + guestID);
-			resultSet.next();
+			if(!resultSet.next()) {return null;}
 			String auth = UserDAO.getEncodedAuth(resultSet.getString(1), resultSet.getString(2));
 			return getGuestInfo(auth);
 		} catch (SQLException e) {

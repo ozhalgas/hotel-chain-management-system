@@ -31,9 +31,30 @@
 			url: link.substring(0, 94) + "/available-rooms" + auth,
 	        dataType: "json",
 	        success: function(r){
+	        	if(r.availableRoomsInfo.length == 0) {
+	        		$('#bookFinal').prop("disabled", true);
+	        		$('#findGuest').prop("disabled", true);
+	        		$('#info').empty();
+	        		if( $('#message').attr("style") == "color:green") {
+	        			$('#message').after('<p style="color:red">We are sorry, but <b>no more rooms</b> are available in the specified time interval.</p>');
+	        		}
+	        		else {
+	        			$('#message').attr("style", "color:red");
+		        		$('#message').html("We are sorry, but no rooms are available in the specified time interval.");
+	        		}
+	        		return;
+	        	}
+	        		
+	        	
 	        	var rid = 0;
 	        	var list = r["availableRoomsInfo"];
-	        	    	
+	        	
+	        	$("#info").empty();
+	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m^3)</th><th>Initial Price($)</th><th>Number of Available Rooms</th></tr>');
+	        	$("#choosingRooms").empty();
+	        	typeNames.length = 0;
+	        	numAvailRooms.length = 0;
+	        	occupancies.length = 0;
 	        	for(var i = 0; i < list.length; ++i){	      		
 	        		var row = $("<tr>");
 	        		row.append("<td>" + list[i]["typeName"] + "</td>");
@@ -62,15 +83,17 @@
 		var occupSum = 0;
 		var occupFact = document.querySelector("#numOfOccupants").value;
 		if(occupFact == 0){
-			$("#warning").html("You cannot make booking for 0 people");
+			$('#message').attr("style", "color:red");
+			$("#message").html("You cannot make booking for 0 people");
 			return false;
 		}		
 		for(var k = 0; k < typeNames.length; ++k){
 			var id = "#t"+k.toString();
-			var val = document.querySelector(id).value;
+			var val = $(id).val();
 			chosenOccup.push(val);
 			if(val > numAvailRooms[k]){
-				$("#warning").html("Sorry, there is no "+val+" available "+typeNames[k]+" rooms.");
+				$('#message').attr("style", "color:red");
+				$("#message").html("Sorry, there is no "+val+" available "+typeNames[k]+" rooms.");
 				chosenOccup.splice(0, chosenOccup.length);
 				return false;
 			}
@@ -80,11 +103,13 @@
 		}
 		//console.log(chosenOccup);
 		if(occupFact > occupSum){
-			$("#warning").html("You cannot order rooms for only "+occupSum+" people in total, if number of occupants is "+occupFact+".");
+			$('#message').attr("style", "color:red");
+			$("#message").html("You cannot order rooms for only "+occupSum+" people in total, if number of occupants is "+occupFact+".");
 			chosenOccup.splice(0, chosenOccup.length);
 			return false;
 		}else if(sum === test){
-			$("#warning").html("Please, choose at least 1 room!");
+			$('#message').attr("style", "color:red");
+			$("#message").html("Please, choose at least 1 room!");
 			chosenOccup.splice(0, chosenOccup.length);
 			return false;
 		}else return true;
@@ -92,7 +117,7 @@
 	
 	function toBook(x){
 		$.post(link.substring(0, 94) + "/to-book" + auth, 
-				{auth: authPost, hotelID: hotelID, startDate: startDate, endDate: endDate, roomTypeName: typeNames[x], numberOfRooms: chosenOccup[x]},
+				{auth: authPost, hotelID: hotelID, startDate: startDate, endDate: endDate, roomTypeName: typeNames[x], numberOfRooms: chosenOccup[x], guestID: guestID},
 				function(){
 					console.log("Sended to Back: "+typeNames[x]+" "+chosenOccup[x]);
 				});
@@ -102,6 +127,7 @@
 		for(var z = 0; z < typeNames.length; ++z){
 			toBook(z);
 		}
+		chosenOccup.length = 0;
 	}
 	
 	function showFieldsForClerk() {
@@ -114,7 +140,7 @@
 					$('#gID').append("<input type=\"text\" id=\"guestID\"><br><br>");
 					$('#gID').append("<button id=\"findGuest\" type=\"button\">Find guest</button>");
 					$('#gID').append('<h4 id=guestFound></h4>');
-					$('#bookFinal').attr("disabled", "true");
+					$('#bookFinal').prop("disabled", true);
 					clerkRole = true;
 				}
 			}
@@ -122,33 +148,53 @@
 	}
 	
 	function findGuestByID() {
+		var regexp = /^[0-9]{1,9}$/;
+		if(!regexp.test($('#guestID').val())) {
+			$('#guestFound').html("Guest ID must be a number containing less than 10 digits.");
+			$('#guestFound').attr("style", "color:red");
+			$('#bookFinal').prop("disabled", true);
+			return;
+		}
 		$.ajax({
 			url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/" + $('#guestID').val() + auth,
 			dataType : "json",
 			success : function(r) {
-				//$('#guestFound').val("Guest found: " + r.fullName);
-				guestID = $('#guestID').val();
-				$('#bookFinal').attr("disabled", "false");
+					$('#guestFound').html("Guest found: " + r.fullName);
+					$('#guestFound').attr("style", "color:green");
+					guestID = $('#guestID').val();
+					$('#bookFinal').prop("disabled", false);
+			},
+			error : function(r) {
+				$('#guestFound').html("Guest not found. Please, try again.");
+				$('#guestFound').attr("style", "color:red");
+				$('#bookFinal').prop("disabled", true);
 			}
 		})
 	}
 	
 	$(document).ready(function() {
-		availableRooms();
 		showFieldsForClerk();
+		availableRooms();
 		
 		$(document).on('click', '#findGuest', function(r) {
 			findGuestByID();
 		});
 		
 		$('#bookFinal').click(function() {
-			if(checkRoomsNum()){
+			if(checkRoomsNum() && (clerkRole === (guestID>-1) )){
 				console.log("Success!");
 				//console.log(hotelID + " " + startDate + " " + endDate);
 				bookAll();
-				//alert and redirecting to profilePage
-				alert("Successful Booking. You will see your bookings in Profile");
-				window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/profile" + auth;
+				//alert and redirecting to profilePage if guest
+				//show confirmation message if clerk
+				if(clerkRole) {
+					$('#message').attr("style", "color:green");
+					$('#message').html('Room(s) was/were successfully booked.');
+					availableRooms();
+				} else  {
+					alert("Successful Booking. You will see your bookings in Profile");
+					window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/profile" + auth;
+				}
 			}
 		});
 	})
@@ -168,17 +214,9 @@
 	<label for="rooms">Choose Rooms:</label><br>
 </form>
 
-<table id="info" align="right" border="1">
-	<tr>
-		<th>Room Type Name</th>
-		<th>Occupancy</th>
-		<th>Size(m^3)</th>
-		<th>Initial Price($)</th>
-		<th>Number of Available Rooms</th>
-	</tr>
-</table>
+<table id="info" align="right" border="1"></table>
 
-<h4 id="warning" style="color:red"></h4>
+<h4 id="message" style="color:red"></h4>
 <button id="bookFinal" type="button">Book</button>
 </body>
 </html>
