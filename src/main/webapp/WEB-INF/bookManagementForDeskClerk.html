@@ -45,8 +45,6 @@
                         bookings.numberOfRooms[i] + "</td> <td><button class='delete' id=" + i.toString() +
                         "> Delete </button> </td> </tr>");
                 }
-                
-                document.getElementById("HotelName").innerHTML = bookings.hotelNames[0];
 
                 table = $('#book-table').DataTable();
                 $('.delete').on('click', function () {
@@ -68,7 +66,16 @@
 
                 })
             })
+            
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+            	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+            														data.region + ", " +
+            														"Hotel " + '"' +
+            														data.name + '"';
+            })
+            
         })
+        
     </script>
 </head>
 <body>
