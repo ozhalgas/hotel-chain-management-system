@@ -3,15 +3,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Room Booking</title>
-<style>
-	th {
-		width: 100px;
-	}
-	td {
-  		width: 10%;
-	}
-</style>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="../css/styles.css">
 <script>
 	var link = window.location.href.toString();
 	var auth = link.substring(94, link.length);
@@ -25,6 +18,10 @@
 	var authPost = link.substring(100, link.length);
 	var guestID = -1;
 	var clerkRole = false;
+	
+	function cancel() {
+		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
+	}
 	
 	function availableRooms(){
 		$.ajax({
@@ -202,7 +199,7 @@
 </head>
 <body>
 <h2>
-<a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
+Choose the remaining booking information.
 </h2>
 
 <div id="gID"></div>
@@ -218,5 +215,8 @@
 
 <h4 id="message" style="color:red"></h4>
 <button id="bookFinal" type="button">Book</button>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
 </body>
 </html>
