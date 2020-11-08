@@ -3,12 +3,10 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Booking Management</title>
-    <link rel="stylesheet" href="../css/bookManagement.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"
     ></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
@@ -21,6 +19,10 @@
         function visitBookingPage(){
             window.location='http://localhost:8080/HotelChainManagementSystem/services/room-booking' + auth;
         }
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
         
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
@@ -42,7 +44,7 @@
                         bookings.roomTypes[i] + "</td> <td>" +
                         bookings.checkInDates[i] + "</td> <td>" +
                         bookings.checkOutDates[i] + "</td> <td>" + 
-                        bookings.numberOfRooms[i] + "</td> <td><button class='delete' id=" + i.toString() +
+                        bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
                         "> Delete </button> </td> </tr>");
                 }
 
@@ -65,29 +67,26 @@
                     })
 
                 })
-            })
+            });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
             	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
             														data.region + ", " +
             														"Hotel " + '"' +
             														data.name + '"';
-            })
+            });
             
         })
         
     </script>
 </head>
 <body>
-<h2>
-    <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
-</h2>
+
 <h3 id="HotelName"></h3>
 
-<div><button onclick=visitBookingPage();>Book a room</button></div><br>
+<button onclick=visitBookingPage();>Book a room</button>
 
-<div class="book-table">
-    <table class="cell-border" id="book-table" style="width: 100%">
+<table class="cell-border" id="book-table">
         <thead>
         <tr>
         	<th>Guest ID</th>
@@ -101,18 +100,10 @@
         </tr>
         </thead>
         <tbody id="table-body">
-        <tr>
-        	<td style="display: none"></td>
-        	<td style="display: none"></td>
-        	<td style="display: none"></td>
-            <td style="display: none"></td>
-            <td style="display:none;"></td>
-            <td style="display: none"></td>
-            <td style="display: none"></td>
-            <td style="display: none"></td>
-        </tr>
         </tbody>
-    </table>
-</div>
+</table>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
 </body>
 </html>
