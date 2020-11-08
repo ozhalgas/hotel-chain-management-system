@@ -14,10 +14,18 @@
 			}
 		})
 	}
+	
+	function cancel() {
+		window.location='http://localhost:8080/HotelChainManagementSystem';
+	}
 
 	$(document).ready(function() {
 		$('#log-in-button').on("click", function() {
 			authorization();
+		});
+		
+		$('#cancel').on("click", function() {
+			cancel();
 		});
 
 		onkeypress = function (event) {  
@@ -27,15 +35,32 @@
 		};
 	});
 </script>
+
+<link rel="stylesheet" href="../css/authorizationPage.css">
+
 </head>
+
 <body>
-<h2>
-<a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
-</h2>
-<h3>Please enter your login and password</h3>
-	Username: <input type="text" id="username" name="username"><br><br>
-	Password: <input type="password" id="password" name="password"><br><br>
-	<h4 id="warning" style="color:red"></h4><br>
-<button id="log-in-button" type="button">Log-in</button>
+
+<h2>Login Form</h2>
+<form>
+	<div class="container">
+
+		<label for="username"><b>Username</b></label>
+		<input type="text" placeholder="Enter Username" id="username" name="username" required>
+		
+		<label for="password"><b>Password</b></label>
+	    <input type="password" placeholder="Enter Password" id="password" name="password" required>
+
+		<h4 id="warning" style="color:red"></h4><br>
+	
+		<button id="log-in-button" type="button">Log-in</button>
+	</div>
+	
+	<div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn" id="cancel">Cancel</button>
+  </div>
+</form>
+
 </body>
 </html>
