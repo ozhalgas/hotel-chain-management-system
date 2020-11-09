@@ -44,11 +44,15 @@
                         bookings.roomTypes[i] + "</td> <td>" +
                         bookings.checkInDates[i] + "</td> <td>" +
                         bookings.checkOutDates[i] + "</td> <td>" + 
-                        bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
+                        bookings.numberOfRooms[i] + "</td> <td>" + 
+                        "<button class='edit' id=" + (i + bookings.guestFullNames.length).toString() +
+                        "> Edit </button> </td> <td>" +
+                        "<button class='delete cancelbtn' id=" + i.toString() +
                         "> Delete </button> </td> </tr>");
                 }
 
                 table = $('#book-table').DataTable();
+                
                 $('.delete').on('click', function () {
                     console.log('clicked')
                     let r = $(this).closest('tr').index()
@@ -66,6 +70,20 @@
                         table.row(r).remove().draw();
                     })
 
+                })
+                
+                $('.edit').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id) - bookings.guestFullNames.length;
+                    window.location='http://localhost:8080/HotelChainManagementSystem';
+                    //window.location='http://localhost:8080/HotelChainManagementSystem/services/room-booking-editing'
+                    				//'?auth=' + auth + '&' +
+                    				//'guestID=' + bookings.guestIDs[id].toString() + '&' +
+                    				//'hotelID=' + bookings.hotelIDs[id].toString() + '&' +
+                    				//'checkInDate=' + bookings.checkInDates[id] + '&' +
+                    				//'checkOutDate=' + bookings.checkOutDates[id] + '&' +
+                    				//'roomType=' + bookings.roomTypes[id];
                 })
             });
             
@@ -100,6 +118,7 @@
             <th>Check In Date</th>
             <th>Check Out Date</th>
             <th>Number of Rooms</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
