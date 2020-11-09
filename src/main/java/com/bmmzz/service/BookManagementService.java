@@ -85,4 +85,23 @@ public class BookManagementService {
 	   GuestDAO.removeBooking(guestID, hotelID, startDate, endDate, typeName);
 	   return Response.ok().build();
 	}
+	
+	@GET
+	@Path("/{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}")
+	public InputStream editBooking( @DefaultValue("") @QueryParam("auth") String auth,
+								  @PathParam("roomTypeName") String roomTypeName,
+								  @PathParam("hotelID") int hotelID,
+								  @PathParam("guestID") int guestID,
+								  @PathParam("checkInDate") String checkInDate,
+								  @PathParam("checkOutDate") String checkOutDate,
+								  @PathParam("numOfRooms") int numOfRooms) {
+		if(!UserDAO.checkAuth(auth))
+			return Helper.getPage(servletContext, "accessDeniedPage.html");
+		switch( UserDAO.getRole(auth) ) {
+			case "desk-clerk":
+				return Helper.getPage(servletContext, "roomBookingPage.html");
+			default:
+				return Helper.getPage(servletContext, "accessDeniedPage.html");
+		}
+	}
 }
