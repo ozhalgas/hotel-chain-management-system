@@ -107,6 +107,27 @@ public class BookManagementService {
 		}
 	}
 	
+	@GET
+	@Path("/{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}/{checkInDate2}-{checkOutDate2}")
+	public InputStream roomTypeEditing( @DefaultValue("") @QueryParam("auth") String auth,
+								  @PathParam("roomTypeName") String roomTypeName,
+								  @PathParam("hotelID") int hotelID,
+								  @PathParam("guestID") int guestID,
+								  @PathParam("checkInDate") String checkInDate,
+								  @PathParam("checkOutDate") String checkOutDate,
+								  @PathParam("numOfRooms") int numOfRooms,
+								  @PathParam("checkInDate2") String checkInDate2,
+								  @PathParam("checkOutDate2") String checkOutDate2) {
+		if(!UserDAO.checkAuth(auth))
+			return Helper.getPage(servletContext, "accessDeniedPage.html");
+		switch( UserDAO.getRole(auth) ) {
+			case "desk-clerk":
+				return Helper.getPage(servletContext, "roomBookingPage.html");
+			default:
+				return Helper.getPage(servletContext, "accessDeniedPage.html");
+		}
+	}
+	
 	@POST
 	@Path("/{roomTypeName1}-{hotelID}-{guestID1}-{checkInDate1}-{checkOutDate1}-{numOfRooms1}-{roomTypeName2}-{guestID2}-{checkInDate2}-{checkOutDate2}-{numOfRooms2}")
 	public Response bookEditing(@DefaultValue("") @QueryParam("auth") String auth,
