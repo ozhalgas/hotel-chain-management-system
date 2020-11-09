@@ -24,8 +24,8 @@ public class RoomBookingEditingService {
 	@GET
 	@Produces({MediaType.TEXT_HTML})
 	public InputStream hotelChoosing( @DefaultValue("") @QueryParam("auth") String auth, 
-			@DefaultValue("") @QueryParam("guestID") int guestID,
-			@DefaultValue("") @QueryParam("hotelID") int hotelID,
+			@DefaultValue("-1") @QueryParam("guestID") int guestID,
+			@DefaultValue("-1") @QueryParam("hotelID") int hotelID,
 			@DefaultValue("") @QueryParam("checkInDate") String checkInDate,
 			@DefaultValue("") @QueryParam("checkOutDate") String checkOutDate,
 			@DefaultValue("") @QueryParam("roomType") String roomType) {
