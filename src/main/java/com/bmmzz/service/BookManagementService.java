@@ -9,11 +9,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.bmmzz.userDAO.GuestDAO;
 import com.bmmzz.userDAO.HotelDAO;
+import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
 @Path("/book-management")
@@ -88,7 +90,7 @@ public class BookManagementService {
 	
 	@GET
 	@Path("/{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}")
-	public InputStream editBooking( @DefaultValue("") @QueryParam("auth") String auth,
+	public InputStream bookEditing( @DefaultValue("") @QueryParam("auth") String auth,
 								  @PathParam("roomTypeName") String roomTypeName,
 								  @PathParam("hotelID") int hotelID,
 								  @PathParam("guestID") int guestID,
@@ -104,4 +106,29 @@ public class BookManagementService {
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
 	}
+	
+	@POST
+	@Path("/{roomTypeName1}-{hotelID}-{guestID1}-{checkInDate1}-{checkOutDate1}-{numOfRooms1}-{roomTypeName2}-{guestID2}-{checkInDate2}-{checkOutDate2}-{numOfRooms2}")
+	public Response bookEditing(@DefaultValue("") @QueryParam("auth") String auth,
+			  					@PathParam("roomTypeName1") String roomTypeName1,
+								@PathParam("hotelID") int hotelID,
+								@PathParam("guestID1") int guestID1,
+								@PathParam("checkInDate1") String checkInDate1,
+								@PathParam("checkOutDate1") String checkOutDate1,
+								@PathParam("numOfRooms1") int numOfRooms1,
+								@PathParam("roomTypeName2") String roomTypeName2,
+								@PathParam("guestID2") int guestID2,
+								@PathParam("checkInDate2") String checkInDate2,
+								@PathParam("checkOutDate2") String checkOutDate2,
+								@PathParam("numOfRooms2") int numOfRooms2) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;
+		checkInDate1 = checkInDate1.replace(':', '-');
+		checkInDate2 = checkInDate2.replace(':', '-');
+		checkOutDate1 = checkOutDate1.replace(':', '-');
+		checkOutDate2 = checkOutDate2.replace(':', '-');
+		RoomDAO.bookEditing(roomTypeName1, hotelID, guestID1, checkInDate1, checkOutDate1, numOfRooms1, roomTypeName2, guestID2, checkInDate2, checkOutDate2, numOfRooms2);
+		return Response.ok().build();
+	}
+	
 }

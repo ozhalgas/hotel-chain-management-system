@@ -173,4 +173,11 @@ public class RoomDAO {
 	private static int getDifferenceInDays(Date startDate, Date endDate) {
 		return Math.round((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
 	}
+	
+	public static void bookEditing(String roomTypeName1, int hotelID, int guestID1, String checkInDate1, String checkOutDate1, int numberOfRooms1,
+								   String roomTypeName2, int guestID2, String checkInDate2, String checkOutDate2, int numberOfRooms2) {
+		UserDAO.executeUpdate("Update mydb.reserves" + 
+			"Set roomtypename='" + roomTypeName2 + "', GuestID='" + guestID2 + "', checkindate='" + checkInDate2 + "', checkoutdate='" + checkOutDate2 + "', numberofrooms='" + numberOfRooms2 + "'" +
+			"Where roomtypename= BINARY '" + roomTypeName1 + "' and hotelID='" + hotelID + "' and GuestID='" + guestID1 + "' and checkindate='" + checkInDate1 + "' and checkoutdate='" + checkOutDate1 + "' and numberofrooms='" + numberOfRooms1 + "'");
+	}
 }
