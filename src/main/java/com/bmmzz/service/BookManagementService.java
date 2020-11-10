@@ -101,14 +101,14 @@ public class BookManagementService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "desk-clerk":
-				return Helper.getPage(servletContext, "roomBookingPage.html");
+				return Helper.getPage(servletContext, "hotelChoosingPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}
 	}
 	
 	@GET
-	@Path("/{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}/{checkInDate2}-{checkOutDate2}")
+	@Path("/{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}/{hotelID}-{checkInDate2}-{checkOutDate2}")
 	public InputStream roomTypeEditing( @DefaultValue("") @QueryParam("auth") String auth,
 								  @PathParam("roomTypeName") String roomTypeName,
 								  @PathParam("hotelID") int hotelID,
@@ -122,7 +122,7 @@ public class BookManagementService {
 			return Helper.getPage(servletContext, "accessDeniedPage.html");
 		switch( UserDAO.getRole(auth) ) {
 			case "desk-clerk":
-				return Helper.getPage(servletContext, "roomBookingPage.html");
+				return Helper.getPage(servletContext, "bookEditingPage.html");
 			default:
 				return Helper.getPage(servletContext, "accessDeniedPage.html");
 		}

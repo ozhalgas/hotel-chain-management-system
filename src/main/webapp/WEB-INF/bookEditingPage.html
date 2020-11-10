@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Room Booking</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+	var link = window.location.href.toString();
+	const params = new URLSearchParams(window.location.search);
+	var auth = "?auth=" + params.get('auth');
+	
+	const typeNames = [];
+	const numAvailRooms = [];
+	const occupancies = [];
+	var chosenOccup = [];
+	
+	var hotelID = link[71];
+	var startDate = link.substring(73, 83);
+	var endDate = link.substring(84, 94);
+	var authPost = link.substring(100, link.length);
+	var guestID = -1;
+	var clerkRole = false;
+	var editing = false;
+	
+	var defRoomTypeName;
+	var defGuestID;
+	var defCheckInDate;
+	var defCheckoutDate;
+	var defNumOfRooms;
+	var chosenRoomTypeIndex;
+	
+	function cancel() {
+		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
+	}
+	
+	function availableRooms(){
+		var linkPart = hotelID + "-" + startDate + "-" + endDate;
+		$.ajax({
+			url: "http://localhost:8080/HotelChainManagementSystem/services/room-booking/" + linkPart + "/available-rooms" + auth,
+	        dataType: "json",
+	        success: function(r){
+	        	if(r.availableRoomsInfo.length == 0) {
+	        		$('#bookFinal').prop("disabled", true);
+	        		$('#findGuest').prop("disabled", true);
+	        		$('#info').empty();
+	        		if( $('#message').attr("style") == "color:green") {
+	        			$('#message').after('<p style="color:red">We are sorry, but <b>no more rooms</b> are available in the specified time interval.</p>');
+	        		}
+	        		else {
+	        			$('#message').attr("style", "color:red");
+		        		$('#message').html("We are sorry, but no rooms are available in the specified time interval.");
+	        		}
+	        		return;
+	        	}
+	        		
+	        	
+	        	var rid = 0;
+	        	var list = r["availableRoomsInfo"];
+	        	
+	        	$("#info").empty();
+	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m^3)</th><th>Initial Price($)</th><th>Number of Available Rooms</th></tr>');
+	        	$("#choosingRooms").empty();
+	        	typeNames.length = 0;
+	        	numAvailRooms.length = 0;
+	        	occupancies.length = 0;
+	        	for(var i = 0; i < list.length; ++i){	      		
+	        		
+	        		$("#choosingRooms").append("<label for="+i.toString()+">"+list[i]["typeName"]+"</label>&emsp;");
+		        	$("#choosingRooms").append('<input type="number" id='+"t"+i.toString()+' value="0" min="0" max='+list[i]["numberOfAvailableRooms"].toString()+' step="1"><br><br>');
+		        	if(list[i]["typeName"] === defRoomTypeName) {
+		        		$("#t" + i.toString()).val(defNumOfRooms);
+		        		list[i]["numberOfAvailableRooms"] = parseInt(list[i]["numberOfAvailableRooms"]) + parseInt(defNumOfRooms);
+		        	}
+		        	
+		        	var row = $("<tr>");
+	        		row.append("<td>" + list[i]["typeName"] + "</td>");
+	        		row.append("<td>" + list[i]["occupancy"] + "</td>");
+	        		row.append("<td>" + list[i]["size"] + "</td>");
+	        		row.append("<td>" + list[i]["initialPrice"] + "</td>");
+	        		row.append("<td>" + list[i]["numberOfAvailableRooms"] + "</td>");	
+	        		$("#info").append(row);
+	        		
+	        		typeNames.push(list[i]["typeName"]);
+	        		numAvailRooms.push(list[i]["numberOfAvailableRooms"]);
+	        		occupancies.push(list[i]["occupancy"]);
+	        		
+	        		//console.log("t"+i.toString());
+	        	}
+	        }
+		})
+	}
+	
+	function checkRoomsNum(){
+		var sum = 0;
+		var test = 0;
+		var occupSum = 0;
+		var occupFact = document.querySelector("#numOfOccupants").value;
+		if(occupFact == 0){
+			$('#message').attr("style", "color:red");
+			$("#message").html("You cannot make booking for 0 people");
+			return false;
+		}		
+		for(var k = 0; k < typeNames.length; ++k){
+			var id = "#t"+k.toString();
+			var val = $(id).val();
+			chosenOccup.push(val);
+			if(val > numAvailRooms[k]){
+				$('#message').attr("style", "color:red");
+				$("#message").html("Sorry, there is no "+val+" available "+typeNames[k]+" rooms.");
+				chosenOccup.splice(0, chosenOccup.length);
+				return false;
+			}
+			sum += val;
+			test += '0';
+			occupSum += occupancies[k] * val;
+		}
+		var roomTypeNum = 0;
+		for(var k = 0; k < chosenOccup.length; ++k ) {
+			if(chosenOccup[k] > 0) {
+				roomTypeNum++;
+				chosenRoomTypeIndex = k;
+			}
+		}
+		if (roomTypeNum > 1) {
+			$('#message').attr("style", "color:red");
+			$('#message').html("Please choose only one type of room to edit the booking!");
+			chosenOccup.splice(0, chosenOccup.length);
+			return false;
+		}else if(occupFact > occupSum){
+			$('#message').attr("style", "color:red");
+			$("#message").html("You cannot order rooms for only "+occupSum+" people in total, if number of occupants is "+occupFact+".");
+			chosenOccup.splice(0, chosenOccup.length);
+			return false;
+		}else if(sum === test){
+			$('#message').attr("style", "color:red");
+			$("#message").html("Please, choose at least 1 room!");
+			chosenOccup.splice(0, chosenOccup.length);
+			return false;
+		}else return true;
+	}
+	
+	function toBook(x){
+		if(editing) {
+			var linkPart = defRoomTypeName + "-" + hotelID + "-" + defGuestID + "-" + defCheckInDate.replace(/-/g, ":") + "-" + defCheckOutDate.replace(/-/g, ":") + "-" + defNumOfRooms + "-" + typeNames[chosenRoomTypeIndex] + "-" + guestID + "-" + startDate + "-" + endDate + "-" + chosenOccup[chosenRoomTypeIndex];
+			$.post("http://localhost:8080/HotelChainManagementSystem/services/book-management/" + linkPart + auth, {}, function() {
+				console.log("Sended to Back (Update booking): " + typeNames[x] + " " + chosenOccup[x]);
+			});
+		} else {
+			$.post("http://localhost:8080/HotelChainManagementSystem/services/room-booking/to-book" + auth, 
+					{auth: authPost, hotelID: hotelID, startDate: startDate, endDate: endDate, roomTypeName: typeNames[x], numberOfRooms: chosenOccup[x], guestID: guestID},
+					function(){
+						console.log("Sended to Back: "+typeNames[x]+" "+chosenOccup[x]);
+					}
+			);
+		}
+	};
+	
+	function adjustPage() {
+		// /{roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}/{hotelID}-{checkInDate2}-{checkOutDate2}
+		if(link.substring(58, 73) === "book-management") {
+			editing = true;
+			
+			var defValues = link.split("/")[6].split("-");
+			defRoomTypeName = defValues[0];
+			defGuestID = defValues[2];
+			defCheckInDate = defValues[3].replace(/:/g, "-");
+			defCheckOutDate = defValues[4].replace(/:/g, "-");
+			defNumOfRooms = defValues[5];
+			
+			var hotelAndTime = link.split("/")[7].split("?")[0].split("-");
+			hotelID = hotelAndTime[0];
+			startDate = hotelAndTime[1];
+			endDate = hotelAndTime[2];
+		}
+		
+		$.ajax({
+			url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/role" + auth,
+			dataType : "json",
+			success : function(r) {
+				if(r.role === "desk-clerk" || r.role === "admin") {
+					clerkRole = true;
+					
+					$('#gID').append("<label for=\"guestID\">Guest ID number:</label>");
+					$('#gID').append("<input type=\"text\" id=\"guestID\"><br><br>");
+					$('#gID').append("<button id=\"findGuest\" type=\"button\">Find guest</button>");
+					$('#gID').append('<h4 id=guestFound></h4>');
+					$('#bookFinal').prop("disabled", true);
+					$('#guestID').val(defGuestID);
+					findGuestByID();
+				}
+			}
+		})
+	}
+	
+	function findGuestByID() {
+		var regexp = /^[0-9]{1,9}$/;
+		if(!regexp.test($('#guestID').val())) {
+			$('#guestFound').html("Guest ID must be a number containing less than 10 digits.");
+			$('#guestFound').attr("style", "color:red");
+			$('#bookFinal').prop("disabled", true);
+			return;
+		}
+		
+		$.ajax({
+			url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/" + $('#guestID').val() + auth,
+			dataType : "json",
+			success : function(r) {
+					$('#guestFound').html("Guest found: " + r.fullName);
+					$('#guestFound').attr("style", "color:green");
+					guestID = $('#guestID').val();
+					$('#bookFinal').prop("disabled", false);
+			},
+			error : function(r) {
+				$('#guestFound').html("Guest not found. Please, try again.");
+				$('#guestFound').attr("style", "color:red");
+				$('#bookFinal').prop("disabled", true);
+			}
+		})
+	}
+	
+	$(document).ready(function() {
+		adjustPage();
+		availableRooms();
+		
+		$(document).on('click', '#findGuest', function(r) {
+			findGuestByID();
+		});
+		
+		$('#bookFinal').click(function() {
+			if(checkRoomsNum()){
+				console.log("Success!");
+				//console.log(hotelID + " " + startDate + " " + endDate);
+				toBook(chosenRoomTypeIndex);
+				//alert and redirecting to profilePage if guest
+				//show confirmation message if clerk
+				alert("Booking was successfully altered.");
+				window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/book-management" + auth;
+			}
+		});
+	})
+</script>
+</head>
+<body>
+<h2>
+Choose the remaining booking information.
+</h2>
+
+<div id="gID"></div>
+
+<label for="numOfOccupants">Number Of Occupants:</label>
+<input type="number" id="numOfOccupants" min="1" max="20" value="1" step="1"><br><br>
+
+<p>Choose rooms:</p>
+<form id="choosingRooms">
+	
+</form>
+
+<h4 id="message" style="color:red"></h4>
+<button id="bookFinal" type="button">Edit the booking</button>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
+<br><br><table id="info" align="left" border="1"></table>
+</body>
+</html>
