@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import com.bmmzz.userDAO.struct.HotelBookings;
 import com.bmmzz.userDAO.struct.HotelChoosingInfo;
 import com.bmmzz.userDAO.struct.HotelInfo;
+import com.bmmzz.userDAO.struct.HotelRoomsInfo;
 import com.bmmzz.userDAO.struct.Hotels;
 import com.google.gson.Gson;
 
@@ -92,6 +93,26 @@ public class HotelDAO {
 						resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6));
 			}
 			json = gson.toJson(hotelBookings, HotelBookings.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	public static String getHotelRooms(String auth) {
+		Gson gson = new Gson();
+		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
+		String json = "";
+		
+		String username = UserDAO.getDecodedAuth(auth)[0];
+		
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee, mydb.schedule, mydb.room, mydb.hotel WHERE mydb.Employee.Login= BINARY 'gal' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.room.HotelID and mydb.schedule.HotelID = mydb.hotel.HotelID" );
+			while(resultSet.next()) {
+				hotelRooms.addRoom( resultSet.getString(25), resultSet.getInt(26), resultSet.getInt(27), resultSet.getInt(28), resultSet.getInt(29), resultSet.getString(30), resultSet.getInt(31), resultSet.getNString(33));
+			}
+			json = gson.toJson(hotelRooms, HotelRoomsInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
