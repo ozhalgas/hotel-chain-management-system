@@ -180,4 +180,21 @@ public class RoomDAO {
 			"Set roomtypename='" + roomTypeName2 + "', GuestID='" + guestID2 + "', checkindate='" + checkInDate2 + "', checkoutdate='" + checkOutDate2 + "', numberofrooms='" + numberOfRooms2 + "'" +
 			"Where roomtypename= BINARY '" + roomTypeName1 + "' and hotelID='" + hotelID + "' and GuestID='" + guestID1 + "' and checkindate='" + checkInDate1 + "' and checkoutdate='" + checkOutDate1 + "' and numberofrooms='" + numberOfRooms1 + "'");
 	}
+	
+	public static void checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
+		String checkOutDate = java.time.LocalDate.now().toString();
+		try {
+			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
+			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
+			int days = getDifferenceInDays(inDate, outDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		UserDAO.executeUpdate("Update mydb.reserves " + 
+			"Set checkoutdate = " + checkOutDate + " " + 
+			"Where roomtypename=" + roomType + " and hotelid=" + EmployeeDAO.getHotelID(auth) + " and guestid=" + guestID + " and checkindate=" + checkInDate);
+		UserDAO.executeUpdate("Update mydb.single_stay " + 
+			"Set checkoutdate = "  + checkOutDate + " " + 
+			"Where checkindate=" + checkInDate + " and roomNumber=" + roomNumber + " and roomfloor=" + floor + " and guestid=" + guestID);
+	}
 }
