@@ -52,7 +52,7 @@ public class CheckInService {
 	}
 	
 	@POST
-	@Path("/checking-in/{gusetID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}")
+	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}")
 	public Response checkIn( @DefaultValue("") 	@QueryParam("auth") String auth,
 												@PathParam("checkInDate") String checkInDate,
 												@PathParam("roomTypeName") String roomTypeName,

@@ -38,7 +38,7 @@ public class CheckOutService {
     }
 	
 	@POST
-	@Path("/checking-out/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
+	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
 	public Response checkOut(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
 			@PathParam("roomNumber") String roomNumber,
