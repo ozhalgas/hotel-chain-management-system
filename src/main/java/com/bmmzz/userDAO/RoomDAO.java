@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
+import com.bmmzz.userDAO.struct.GuestInfo;
+import com.bmmzz.userDAO.struct.BillInfo;
 import com.google.gson.Gson;
 
 public class RoomDAO {
@@ -187,12 +189,16 @@ public class RoomDAO {
 				+ "'" + roomNumber + "', '" + roomFloor + "', " + guestID + ");");
 	}
 	
-	public static void checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
+	public static String checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
 		String checkOutDate = java.time.LocalDate.now().toString();
+		double finalBill = 0;
+		Gson gson = new Gson();
+		BillInfo bill;
+		String json = "";
 		try {
 			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
 			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
-			int days = getDifferenceInDays(inDate, outDate);
+			finalBill = getInitialPrice(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -200,7 +206,15 @@ public class RoomDAO {
 			"Set checkoutdate = " + checkOutDate + " " + 
 			"Where roomtypename=" + roomType + " and hotelid=" + EmployeeDAO.getHotelID(auth) + " and guestid=" + guestID + " and checkindate=" + checkInDate);
 		UserDAO.executeUpdate("Update mydb.single_stay " + 
-			"Set checkoutdate = "  + checkOutDate + " " + 
+			"Set checkoutdate = "  + checkOutDate + ", finalbill = " + finalBill + " " + 
 			"Where checkindate=" + checkInDate + " and roomNumber=" + roomNumber + " and roomfloor=" + floor + " and guestid=" + guestID);
+		try {
+			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest Where mydb.hotel.hotelid=" + EmployeeDAO.getHotelID(auth) + " mydb.single_stay.checkindate=" + checkInDate + " and mydb.single_stay.roomnumber=" + roomNumber + " and mydb.single_stay.roomfloor=" + floor + " and mydb.single_stay.guestid=" + guestID + " and mydb.guest.guestID=" + guestID);
+			bill = new BillInfo(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), result.getInt(7), result.getString(8), result.getString(9), result.getString(10), result.getString(11), result.getInt(12), result.getString(13), result.getString(14), result.getString(15));
+			json = gson.toJson(bill, BillInfo.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 }

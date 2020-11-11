@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
 @Path("/checkout")
@@ -37,16 +38,18 @@ public class CheckOutService {
         }
     }
 	
-	@POST
+	@GET
 	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
 	public Response checkOut(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
+			@PathParam("roomtype") String roomType,
 			@PathParam("roomNumber") String roomNumber,
 			@PathParam("floor") int floor,
 			@PathParam("checkInDate") String checkInDate) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
 		checkInDate = checkInDate.replace(':', '-');
-		return null;
+		String json = RoomDAO.checkOut(auth, guestID, roomType, roomNumber, floor, checkInDate);
+		return Response.ok(json).build();
 	}
 }
