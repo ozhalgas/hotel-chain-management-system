@@ -216,12 +216,14 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Single_Stay` (
   `RoomNumber` VARCHAR(5) NOT NULL,
   `RoomFloor` INT NOT NULL,
   `GuestID` INT NOT NULL,
-  PRIMARY KEY (`CheckInDate`, `RoomNumber`, `RoomFloor`, `GuestID`),
-  INDEX `fk_Single_Stay_Room1_idx` (`RoomNumber` ASC, `RoomFloor` ASC) VISIBLE,
+  `RoomTypeName` varchar(45) not null,
+    `HotelID` INT NOT NULL,
+  PRIMARY KEY (`CheckInDate`, `RoomNumber`, `RoomFloor`, `GuestID`, `RoomTypeName`, `HotelID`),
+  INDEX `fk_Single_Stay_Room1_idx` (`RoomNumber` ASC, `RoomFloor` ASC, `RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
   INDEX `fk_Single_Stay_Guest1_idx` (`GuestID` ASC) VISIBLE,
   CONSTRAINT `fk_Single_Stay_Room1`
-    FOREIGN KEY (`RoomNumber` , `RoomFloor`)
-    REFERENCES `mydb`.`Room` (`RoomNumber` , `Floor`)
+    FOREIGN KEY (`RoomNumber` , `RoomFloor`, `RoomTypeName`, `HotelID`)
+    REFERENCES `mydb`.`Room` (`RoomNumber` , `Floor`, `RoomTypeName`, `HotelID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Single_Stay_Guest1`
