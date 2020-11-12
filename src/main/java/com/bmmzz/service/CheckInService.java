@@ -52,14 +52,15 @@ public class CheckInService {
 	}
 	
 	@POST
-	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}")
+	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}")
 	public Response checkIn( @DefaultValue("") 	@QueryParam("auth") String auth,
 												@PathParam("checkInDate") String checkInDate,
 												@PathParam("checkOutDate") String checkOutDate,
 												@PathParam("roomTypeName") String roomTypeName,
 												@PathParam("roomNumber") String roomNumber,
 												@PathParam("roomFloor") int roomFloor,
-												@PathParam("guestID") int guestID) {
+												@PathParam("guestID") int guestID,
+												@PathParam("occupants") String occupantsIDs) {
 		
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;	
@@ -67,9 +68,18 @@ public class CheckInService {
 		checkOutDate = checkOutDate.replace(':', '-');
 		
 		//hotelId and roomTypeName should be added after DB updating
+		//insert into single_stay
 		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
+		String[] occupantsArr = occupantsIDs.split(":");
+		int n = occupantsArr.length;
+		
+		//insert into Occupies
+		for(String occupID : occupantsArr) {
+			RoomDAO.occupy(roomNumber, roomFloor, Integer.parseInt(occupID), checkInDate, checkOutDate);
+		}
 		
 		HotelDAO.setRoomOccupied(Integer.parseInt(roomNumber), 1);
+		HotelDAO.setNumOccupants(Integer.parseInt(roomNumber), n);
 		HotelDAO.setGuestInRoom(Integer.parseInt(roomNumber), guestID);
 		HotelDAO.setCID(Integer.parseInt(roomNumber), checkInDate);
 		HotelDAO.setCOD(Integer.parseInt(roomNumber), checkOutDate);

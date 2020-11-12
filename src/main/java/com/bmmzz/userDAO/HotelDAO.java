@@ -107,6 +107,11 @@ public class HotelDAO {
 		return json;
 	}
 	
+	public static void setNumOccupants(int roomNumber, int numOccupants) {
+		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
+		hotelRooms.setNumOccupants(roomNumber, numOccupants);
+	}
+	
 	public static void setRoomOccupied(int roomNumber, int occupied) {
 		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
 		hotelRooms.setOccupied(roomNumber, occupied);

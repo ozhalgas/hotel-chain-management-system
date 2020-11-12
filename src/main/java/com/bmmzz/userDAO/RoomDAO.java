@@ -189,6 +189,11 @@ public class RoomDAO {
 				+ roomNumber + "', '" + roomFloor + "', " + guestID + ");");
 	}
 	
+	public static void occupy(String roomNumber, int roomFloor, int occupID, String checkInDate, String checkOutDate) {
+		UserDAO.executeUpdate("INSERT INTO mydb.occupies VALUES "
+				+ "('" + roomNumber + "', '" + roomFloor + "', '" + occupID + "', '" + checkInDate + "', '" + checkOutDate + "');");
+	}
+	
 	public static void checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
 		String checkOutDate = java.time.LocalDate.now().toString();
 		double finalBill = 0;
