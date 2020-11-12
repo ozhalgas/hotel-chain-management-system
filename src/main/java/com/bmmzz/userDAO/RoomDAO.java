@@ -189,12 +189,9 @@ public class RoomDAO {
 				+ roomNumber + "', '" + roomFloor + "', " + guestID + ");");
 	}
 	
-	public static String checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
+	public static void checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
 		String checkOutDate = java.time.LocalDate.now().toString();
 		double finalBill = 0;
-		Gson gson = new Gson();
-		BillInfo bill;
-		String json = "";
 		try {
 			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
 			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
@@ -208,13 +205,51 @@ public class RoomDAO {
 		UserDAO.executeUpdate("Update mydb.single_stay " + 
 			"Set checkoutdate = "  + checkOutDate + ", finalbill = " + finalBill + " " + 
 			"Where checkindate=" + checkInDate + " and roomNumber=" + roomNumber + " and roomfloor=" + floor + " and guestid=" + guestID);
+		UserDAO.executeUpdate("Update mydb.occupies " + 
+			"Set checkoutdate = " + checkOutDate + " " +
+			"Where roomNumber=" + roomNumber + " and roomfloor=" + floor + " and checkindate=" + checkInDate);
+	}
+	
+	public static String finalBill(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
+		String checkOutDate = java.time.LocalDate.now().toString();
+		Gson gson = new Gson();
+		BillInfo bill;
+		String json = "";
+		double finalBill = 0;
 		try {
+			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
+			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
+			finalBill = getInitialPrice(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType);
 			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest Where mydb.hotel.hotelid=" + EmployeeDAO.getHotelID(auth) + " mydb.single_stay.checkindate=" + checkInDate + " and mydb.single_stay.roomnumber=" + roomNumber + " and mydb.single_stay.roomfloor=" + floor + " and mydb.single_stay.guestid=" + guestID + " and mydb.guest.guestID=" + guestID);
 			bill = new BillInfo(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), result.getInt(7), result.getString(8), result.getString(9), result.getString(10), result.getString(11), result.getInt(12), result.getString(13), result.getString(14), result.getString(15));
 			json = gson.toJson(bill, BillInfo.class);
-		} catch (SQLException e) {
+		} catch (ParseException | SQLException e) {
 			e.printStackTrace();
 		}
 		return json;
+	}
+	
+	
+	public static boolean checkOutEdit(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate, String oldCheckOutDate, String newCheckOutDate) {
+		try {
+			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(newCheckOutDate);
+			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(oldCheckOutDate);
+			inDate = new Date(inDate.getTime() + 86400000);
+			if (getNumberOfAvailableRooms(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType) > 0) {
+				UserDAO.executeUpdate("Update mydb.reserves " + 
+						"Set checkoutdate = " + newCheckOutDate + " " + 
+						"Where roomtypename=" + roomType + " and hotelid=" + EmployeeDAO.getHotelID(auth) + " and guestid=" + guestID + " and checkindate=" + checkInDate);
+				UserDAO.executeUpdate("Update mydb.single_stay " + 
+						"Set checkoutdate = "  + newCheckOutDate + 
+						"Where checkindate=" + checkInDate + " and roomNumber=" + roomNumber + " and roomfloor=" + floor + " and guestid=" + guestID);
+				UserDAO.executeUpdate("Update mydb.occupies " + 
+						"Set checkoutdate = " + newCheckOutDate + " " +
+						"Where roomNumber=" + roomNumber + " and roomfloor=" + floor + " and checkindate=" + checkInDate);
+				return true;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
