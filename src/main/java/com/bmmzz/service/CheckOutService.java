@@ -38,7 +38,26 @@ public class CheckOutService {
         }
     }
 	
-	@GET
+	@POST
+	@Path("/edit/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}-{oldCheckOutDate}-{newCheckOutDate}")
+	public Response checkOutEdit(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("guestID") int guestID,
+			@PathParam("roomtype") String roomType,
+			@PathParam("roomNumber") String roomNumber,
+			@PathParam("floor") int floor,
+			@PathParam("checkInDate") String checkInDate,
+			@PathParam("newCheckInDate") String newCheckOutDate,
+			@PathParam("oldCheckInDate") String oldCheckOutDate) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;
+		checkInDate = checkInDate.replace(':', '-');
+		oldCheckOutDate = oldCheckOutDate.replace(':', '-');
+		newCheckOutDate = newCheckOutDate.replace(':', '-');
+		boolean result = RoomDAO.checkOutEdit(auth, guestID, roomType, roomNumber, floor, checkInDate, oldCheckOutDate, newCheckOutDate);
+		return Response.ok(result).build();
+	}
+	
+	@POST
 	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
 	public Response checkOut(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
@@ -49,7 +68,22 @@ public class CheckOutService {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
 		checkInDate = checkInDate.replace(':', '-');
-		String json = RoomDAO.checkOut(auth, guestID, roomType, roomNumber, floor, checkInDate);
+		RoomDAO.checkOut(auth, guestID, roomType, roomNumber, floor, checkInDate);
+		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}/bill")
+	public Response finalBill(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("guestID") int guestID,
+			@PathParam("roomtype") String roomType,
+			@PathParam("roomNumber") String roomNumber,
+			@PathParam("floor") int floor,
+			@PathParam("checkInDate") String checkInDate) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;
+		checkInDate = checkInDate.replace(':', '-');
+		String json = RoomDAO.finalBill(auth, guestID, roomType, roomNumber, floor, checkInDate);
 		return Response.ok(json).build();
 	}
 }
