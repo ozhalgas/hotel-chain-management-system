@@ -53,7 +53,7 @@ public class CheckInService {
 	
 	@POST
 	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}")
-	public Response reservedCheckIn( @DefaultValue("") 	@QueryParam("auth") String auth,
+	public Response checkIn( @DefaultValue("") 	@QueryParam("auth") String auth,
 												@PathParam("checkInDate") String checkInDate,
 												@PathParam("checkOutDate") String checkOutDate,
 												@PathParam("roomTypeName") String roomTypeName,
@@ -65,27 +65,15 @@ public class CheckInService {
 			return null;	
 		checkInDate = checkInDate.replace(':', '-');
 		checkOutDate = checkOutDate.replace(':', '-');
-		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
-		return Response.ok().build();
-	}
-	
-	@POST
-	@Path("/new/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}")
-	public Response newCheckIn( @DefaultValue("") 	@QueryParam("auth") String auth,
-												@PathParam("checkInDate") String checkInDate,
-												@PathParam("checkOutDate") String checkOutDate,
-												@PathParam("roomTypeName") String roomTypeName,
-												@PathParam("roomNumber") String roomNumber,
-												@PathParam("roomFloor") int roomFloor,
-												@PathParam("guestID") int guestID) {
 		
-		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
-			return null;	
-		checkInDate = checkInDate.replace(':', '-');
-		checkOutDate = checkOutDate.replace(':', '-');
-		int hotelID = EmployeeDAO.getHotelID(auth);
-		RoomDAO.reserveRoomType(roomTypeName, hotelID, guestID, checkInDate, checkOutDate, 1);
+		//hotelId and roomTypeName should be added after DB updating
 		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
+		
+		HotelDAO.setRoomOccupied(Integer.parseInt(roomNumber), 1);
+		HotelDAO.setGuestInRoom(Integer.parseInt(roomNumber), guestID);
+		HotelDAO.setCID(Integer.parseInt(roomNumber), checkInDate);
+		HotelDAO.setCOD(Integer.parseInt(roomNumber), checkOutDate);
+		
 		return Response.ok().build();
 	}
 }

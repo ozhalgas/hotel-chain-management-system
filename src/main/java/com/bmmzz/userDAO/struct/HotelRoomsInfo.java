@@ -13,8 +13,11 @@ public class HotelRoomsInfo {
     private ArrayList<Integer> occupieds = new ArrayList<>();
     private ArrayList<Integer> cleaneds = new ArrayList<Integer>();
     private ArrayList<Integer> numbersOfOccupants = new ArrayList<Integer>();
+    private ArrayList<Integer> guestIDs = new ArrayList<Integer>();
+    private ArrayList<String> CIDs = new ArrayList<>();
+    private ArrayList<String> CODs = new ArrayList<>();
 
-    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName) {
+    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName, int guestID, String CID, String COD) {
         roomNumbers.add(roomNumber);
         roomFloors.add(roomFloor);
         hotelIDs.add(hotelID);
@@ -23,6 +26,9 @@ public class HotelRoomsInfo {
         occupieds.add(occupied);
         cleaneds.add(cleaned);
         numbersOfOccupants.add(numberOfOccupants);
+        guestIDs.add(guestID);
+        CIDs.add(CID);
+        CODs.add(COD);
     }
 
     public ArrayList<String> roomNumbers() {
@@ -57,26 +63,62 @@ public class HotelRoomsInfo {
         return numbersOfOccupants;
     }
     
+    public ArrayList<Integer> getGuestIDs() {
+        return guestIDs;
+    }
+    
+    public ArrayList<String> getCIDs() {
+        return CIDs;
+    }
+    
+    public ArrayList<String> getCODs() {
+        return CODs;
+    }
+    
     public void setNumOccupants(int roomNumber, int numOccupants) {
     	for (String room : this.roomNumbers) {
         	if ( room.equals( Integer.toString(roomNumber) ) ) {
-        		cleaneds.set(roomNumbers.indexOf(room), numOccupants);
+        		numbersOfOccupants.set(roomNumbers.indexOf(room), numOccupants);
         	}
         }
     }
 
-    public void setOccupieds(int roomNumber, int occupied) {
+    public void setOccupied(int roomNumber, int occupied) {
     	for (String room : this.roomNumbers) {
     		if ( room.equals( Integer.toString(roomNumber) ) ) {
-        		cleaneds.set(roomNumbers.indexOf(room), occupied);
+        		occupieds.set(roomNumbers.indexOf(room), occupied);
         	}
         }
     }
     
-    public void setCleaneds(int roomNumber, int cleaned) {
+    public void setCleaned(int roomNumber, int cleaned) {
         for (String room : this.roomNumbers) {
         	if ( room.equals( Integer.toString(roomNumber) ) ) {
         		cleaneds.set(roomNumbers.indexOf(room), cleaned);
+        	}
+        }
+    }
+    
+    public void setGuestInRoom(int roomNumber, int guestID) {
+        for (String room : this.roomNumbers) {
+        	if ( room.equals( Integer.toString(roomNumber) ) ) {
+        		guestIDs.set(roomNumbers.indexOf(room), guestID);
+        	}
+        }
+    }
+    
+    public void setCID(int roomNumber, String CID) {
+        for (String room : this.roomNumbers) {
+        	if ( room.equals( Integer.toString(roomNumber) ) ) {
+        		CIDs.set(roomNumbers.indexOf(room), CID);
+        	}
+        }
+    }
+    
+    public void setCOD(int roomNumber, String COD) {
+        for (String room : this.roomNumbers) {
+        	if ( room.equals( Integer.toString(roomNumber) ) ) {
+        		CODs.set(roomNumbers.indexOf(room), COD);
         	}
         }
     }
