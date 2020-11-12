@@ -627,6 +627,32 @@ insert into mydb.day_of_the_week values('T',2,8,'desk-clerk');
 insert into mydb.day_of_the_week values('W', 2, 8, 'desk-clerk');
 insert into mydb.day_of_the_week values('R', 2, 8, 'desk-clerk');
 
+insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 0);
+insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 1);
+insert into mydb.additional_feature values('Film', 12.0, '00:00:00.0', '23:59:59.9', 2);
+
+insert into mydb.additional_feature values('SPA', 50.0, '11:00:00.0', '22:00:00.0', 0);
+insert into mydb.additional_feature values('SPA', 60.0, '10:00:00.0', '21:00:00.0', 1);
+insert into mydb.additional_feature values('SPA', 55.0, '10:00:00.0', '22:00:00.0', 2);
+
+insert into mydb.additional_feature values('Excursion', 100.0, '09:00:00.0', '22:00:00.0', 0);
+insert into mydb.additional_feature values('Excursion', 70.0, '09:00:00.0', '22:00:00.0', 1);
+
+insert into mydb.additional_feature values('VIP Breakfast', 50.0, '07:00:00.0', '11:00:00.0', 0);
+insert into mydb.additional_feature values('VIP Breakfast', 60.0, '07:00:00.0', '11:00:00.0', 1);
+insert into mydb.additional_feature values('VIP Breakfast', 55.0, '07:00:00.0', '11:00:00.0', 2);
+
+insert into mydb.additional_feature values('VIP Lunch', 60.0, '12:00:00.0', '15:00:00.0', 0);
+insert into mydb.additional_feature values('VIP Lunch', 70.0, '12:00:00.0', '15:00:00.0', 1);
+insert into mydb.additional_feature values('VIP Lunch', 75.0, '12:00:00.0', '15:00:00.0', 2);
+
+insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 0);
+insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 1);
+insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
+
+
+
+
 
 
 
