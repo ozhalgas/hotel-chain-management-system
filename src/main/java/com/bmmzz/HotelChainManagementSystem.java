@@ -8,6 +8,8 @@ import javax.ws.rs.core.Application;
 
 import com.bmmzz.service.AuthorizationService;
 import com.bmmzz.service.BookManagementService;
+import com.bmmzz.service.CheckInService;
+import com.bmmzz.service.CheckOutService;
 import com.bmmzz.service.EmployeeRegistrationService;
 import com.bmmzz.service.ProfileService;
 import com.bmmzz.service.RegistrationService;
@@ -26,6 +28,8 @@ public class HotelChainManagementSystem extends Application {
 		singletons.add(new BookManagementService());
 		singletons.add(new RoomBookingService());
 		singletons.add(new BookManagementService());
+		singletons.add(new CheckInService());
+		singletons.add(new CheckOutService());
 	}
 	
 	public Set<Class<?>> getClasses() {

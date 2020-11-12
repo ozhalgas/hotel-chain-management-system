@@ -45,7 +45,7 @@
                         bookings.checkInDates[i] + "</td> <td>" +
                         bookings.checkOutDates[i] + "</td> <td>" + 
                         bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
-                        "> Delete </button> </td> </tr>");
+                        "> Delete </button> </td> + <td><button class='edit cancelbtn' id=e" + i.toString() + "> Edit </button></td></tr>");
                 }
 
                 table = $('#book-table').DataTable();
@@ -66,6 +66,20 @@
                         table.row(r).remove().draw();
                     })
 
+                })
+                
+                // {roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}
+                $('.edit').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id.substring(1));
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
+                    	bookings.roomTypes[id] + '-' +
+                        bookings.hotelIDs[id].toString() + '-' +
+                        bookings.guestIDs[id].toString() + '-' +
+                        bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
+                        bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() + auth;
+                    window.location.href = url;
                 })
             });
             
@@ -101,6 +115,7 @@
             <th>Check Out Date</th>
             <th>Number of Rooms</th>
             <th>Delete</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tbody id="table-body">
