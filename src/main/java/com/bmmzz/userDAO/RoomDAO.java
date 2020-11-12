@@ -183,10 +183,10 @@ public class RoomDAO {
 			"Where roomtypename= BINARY '" + roomTypeName1 + "' and hotelID='" + hotelID + "' and GuestID='" + guestID1 + "' and checkindate='" + checkInDate1 + "' and checkoutdate='" + checkOutDate1 + "' and numberofrooms='" + numberOfRooms1 + "'");
 	}
 	
-	public static void checkInRoom(String checkInDate, String roomNumber, int roomFloor, int guestID) {
+	public static void checkInRoom(String checkInDate, String checkOutDate, String roomNumber, int roomFloor, int guestID) {
 		UserDAO.executeUpdate("INSERT INTO mydb.single_stay VALUES "
-				+ "('" + checkInDate + "', " + null + ", " + null + ", "
-				+ "'" + roomNumber + "', '" + roomFloor + "', " + guestID + ");");
+				+ "('" + checkInDate + "', '" + checkOutDate + "', 'null', '" 
+				+ roomNumber + "', '" + roomFloor + "', " + guestID + ");");
 	}
 	
 	public static String checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {

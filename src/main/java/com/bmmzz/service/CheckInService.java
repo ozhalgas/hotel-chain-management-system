@@ -52,26 +52,40 @@ public class CheckInService {
 	}
 	
 	@POST
-	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}")
-	public Response checkIn( @DefaultValue("") 	@QueryParam("auth") String auth,
+	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}")
+	public Response reservedCheckIn( @DefaultValue("") 	@QueryParam("auth") String auth,
 												@PathParam("checkInDate") String checkInDate,
+												@PathParam("checkOutDate") String checkOutDate,
 												@PathParam("roomTypeName") String roomTypeName,
 												@PathParam("roomNumber") String roomNumber,
 												@PathParam("roomFloor") int roomFloor,
-							   @DefaultValue("-1") @FormParam("guestID") int guestID) {
+												@PathParam("guestID") int guestID) {
 		
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;	
 		checkInDate = checkInDate.replace(':', '-');
-		String checkOutDate = checkInDate;
-		int hotelID = EmployeeDAO.getHotelID(auth);
-		boolean isReserved = HotelDAO.isGuestReserved(guestID, hotelID, roomTypeName, checkInDate);
-		if(!isReserved) {
-			RoomDAO.reserveRoomType(roomTypeName, hotelID, guestID, checkInDate, checkOutDate, 1);
-		}
-		RoomDAO.checkInRoom(checkInDate, roomNumber, roomFloor, guestID);
-		
+		checkOutDate = checkOutDate.replace(':', '-');
+		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
 		return Response.ok().build();
 	}
+	
+	@POST
+	@Path("/new/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}")
+	public Response newCheckIn( @DefaultValue("") 	@QueryParam("auth") String auth,
+												@PathParam("checkInDate") String checkInDate,
+												@PathParam("checkOutDate") String checkOutDate,
+												@PathParam("roomTypeName") String roomTypeName,
+												@PathParam("roomNumber") String roomNumber,
+												@PathParam("roomFloor") int roomFloor,
+												@PathParam("guestID") int guestID) {
 		
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;	
+		checkInDate = checkInDate.replace(':', '-');
+		checkOutDate = checkOutDate.replace(':', '-');
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		RoomDAO.reserveRoomType(roomTypeName, hotelID, guestID, checkInDate, checkOutDate, 1);
+		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
+		return Response.ok().build();
+	}
 }

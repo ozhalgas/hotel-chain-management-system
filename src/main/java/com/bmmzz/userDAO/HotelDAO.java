@@ -121,18 +121,4 @@ public class HotelDAO {
 		
 		return json;
 	}
-	
-	public static boolean isGuestReserved(int guestID, int hotelID, String roomTypeName, String checkInDate) {
-		ResultSet resultSet = UserDAO.executeQuery("SELECT RV.guestID " +
-												   "FROM mydb.reserves RV, " +
-												   "WHERE RV.guestID = " + guestID + " AND RV.HotelID = " + hotelID + " AND RV.CheckInDate = '" + checkInDate + "' AND RV.RoomTypeName = '" + roomTypeName + "';");
-		try {
-			while(resultSet.next()) {
-				if(resultSet.getInt(1) == guestID) return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 }
