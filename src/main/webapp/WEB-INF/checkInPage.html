@@ -11,7 +11,7 @@
         var link = window.location.href.toString();
         const params = new URLSearchParams(window.location.search);
         var auth = "?auth=" + params.get('auth');
-        var rooms = {}
+        var rooms = {};
         var table;
         
         pathParams = link.split("/")[6].split("?")[0].split("-");
@@ -21,9 +21,11 @@
         var selectedCheckOutDate = pathParams[3];
         var selectedNumberOfRooms = pathParams[4];
         var numberOfRoomsToCheck = selectedNumberOfRooms;
+        var checkedRoomsIDs = [];
+        var linksToPost = [];
         
         function cancel() {
-    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
     	}
         
         function showOccupantsFields() {
@@ -32,6 +34,128 @@
         	$('#occupants').remove();
         	
         	$('#book-table').after("<div id=occupantsFields></div>");
+        	
+        	updateOccupantsFields();
+        }
+        
+        function updateOccupantsFields() {
+        	$('.guestNotFoundMessage').remove();
+        	
+        	// checking if fields are empty, invalid, or repetitive; if not then creating links to post using occupants
+        	if($('#occupantsFields').children().length) {
+        		var regexp = /^\d{1,9}$/;
+        		var emptyReg = /^\s*$/;	
+        		
+        		var fieldsEmpty = true;
+        		var wrongInput = false;
+        		var repetitive = false;
+        		var allValidEnteredIDs = [];
+        		
+        		for(let i = 0; i < 8; i++) {
+        			if( !emptyReg.test($('#o' + i).val()) ) {
+        				fieldsEmpty = false;
+        				
+        				if( !regexp.test($('#o' + i).val()) ) {
+            				wrongInput = true;
+            				break;
+            			} else {
+            				if(allValidEnteredIDs.includes($('#o' + i).val())) {
+        						repetitive = true;
+        						break;
+        					}
+        					allValidEnteredIDs.push($('#o' + i).val());
+            			}
+        			}
+        		}
+        		
+        		if(wrongInput || fieldsEmpty || repetitive) {
+        			if(!$('#messageInOccupants').length) {
+        				$('#next').before("<p id=messageInOccupants></p>")
+        			}
+        			$('#messageInOccupants').attr('style', 'color:red');
+        			
+        			if(wrongInput)
+        				$('#messageInOccupants').html("Guest ID must be a number containing less than 10 digits.");
+        			else if (fieldsEmpty)
+        				$('#messageInOccupants').html("Please, fill at least one field.");
+        			else
+        				$('#messageInOccupants').html("Guest IDs cannot be identical.");
+    				
+        			return;
+        			
+        		} else {
+        			// checking if such Guest IDs exists in database
+        			var existsInDatabase = true;
+        			
+        			for(let i = 0; i < 8; i++) {
+        				if( regexp.test($('#o' + i).val()) ) {
+        					if(allValidEnteredIDs.includes($('#o' + i).val())) {
+        						
+        					}
+        					allValidEnteredIDs.push($('#o' + i).val());
+        					
+        					$.ajax({
+        						url : "http://localhost:8080/HotelChainManagementSystem/services/room-booking/" + $('#o' + i).val() + auth,
+        						dataType : "json",
+        						async : false,
+        						success : function(r) {},
+        						error : function(r) {
+        							$('#o' + i).after("<span style=\"color:red\" class=\"guestNotFoundMessage\"> Guest not found.</span>");
+        							existsInDatabase = false;
+        						}
+        					})
+        					if(!existsInDatabase) 
+                				return;
+        				}
+        			}
+        			
+        			// storing all occupant Guest IDs in the string seperated by ":"
+        			var occupants = "";
+        			for(let i = 0; i < 8; i++) {
+        				if( regexp.test($('#o' + i).val()) ) {
+        					occupants += ":" + $('#o' + i).val();
+        				}
+        			}
+        			occupants = occupants.substring(1);
+        			
+        			// {guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}
+        			// creating post link from information of occupants, room number, and reservation
+        			linksToPost.push("http://localhost:8080/HotelChainManagementSystem/services/checkin/" + selectedGuestID + "-" + selectedRoomType + "-" + rooms.roomNumbers[checkedRoomsIDs[0]] + "-" +
+        							 rooms.roomFloors[checkedRoomsIDs[0]] + "-" + selectedCheckInDate + "-" + selectedCheckOutDate + "-" +
+        							 occupants + auth);
+        			
+        			// updating occupants fields to go to next rooms
+        			checkedRoomsIDs.shift();
+        			$('#occupantsFields').empty();
+        			
+        			if(checkedRoomsIDs.length == 0) {
+        				linksToPost.forEach(function (url, index, array) {
+        					fetch(url, {
+                                method: 'POST',
+                            }).then(() => {
+                            	alert(url);
+                            	if(index === array.length - 1) {
+                            		alert("The guests were successfully checked-in.");
+                                    cancel();
+                            	}
+                            })
+        				});
+        			}
+        		}
+        	}
+        	
+        	if(checkedRoomsIDs.length > 0) {
+        		$('#occupantsFields').append("<p>Please enter Guest ID-s of guests who will occupy room <b>\"" + rooms.roomNumbers[checkedRoomsIDs[0]] + "\"</b>.</p>");
+            	
+        		for(let i = 0; i < 8; i++) {
+            		$('#occupantsFields').append("<input type=\"text\" id=o" + i.toString() + " ><br>");
+            	}
+            	
+            	if(checkedRoomsIDs.length > 1)
+            		$('#occupantsFields').append("<button id=\"next\" onclick=updateOccupantsFields();>Next</button>")
+            	else
+            		$('#occupantsFields').append("<button id=\"next\" onclick=updateOccupantsFields();>To check-in</button>")
+        	}
         }
         
         $(document).ready(function () {
@@ -74,11 +198,13 @@
                 
                 // {guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}
                 $('.roomsToSelect').on('change', function () {
-                    console.log('change')
+                    console.log('change');
                     if(this.checked) {
                     	numberOfRoomsToCheck--;
+                    	checkedRoomsIDs.push(this.id);
                     } else {
                     	numberOfRoomsToCheck++;
+                    	checkedRoomsIDs.splice(checkedRoomsIDs.indexOf(this.id), 1);
                     }
                     
                     if(numberOfRoomsToCheck==0) {

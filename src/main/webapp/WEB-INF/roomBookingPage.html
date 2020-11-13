@@ -7,7 +7,9 @@
 <link rel="stylesheet" href="../css/styles.css">
 <script>
 	var link = window.location.href.toString();
-	var auth = link.substring(94, link.length);
+	const params = new URLSearchParams(window.location.search);
+	var auth = "?auth=" + params.get('auth');
+	var checkin = params.get('checkin');
 	const typeNames = [];
 	const numAvailRooms = [];
 	const occupancies = [];
@@ -18,6 +20,7 @@
 	var authPost = link.substring(100, link.length);
 	var guestID = -1;
 	var clerkRole = false;
+	var selectID = -1;
 	
 	function cancel() {
 		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
@@ -99,6 +102,22 @@
 			occupSum += occupancies[k] * val;
 		}
 		//console.log(chosenOccup);
+		if(checkin == 1) {
+			selectID = -1;
+			for(var k = 0; k < typeNames.length; ++k) {
+				if(chosenOccup[k] > 0) {
+					if(selectID == -1)
+						selectID = k;
+					else {
+						$('#message').attr("style", "color:red");
+						$("#message").html("Please, choose only one room type to for check-in.");
+						chosenOccup.splice(0, chosenOccup.length);
+						return false;
+					}
+						
+				}
+			}
+		}
 		if(occupFact > occupSum){
 			$('#message').attr("style", "color:red");
 			$("#message").html("You cannot order rooms for only "+occupSum+" people in total, if number of occupants is "+occupFact+".");
@@ -121,6 +140,11 @@
 	};
 	
 	function bookAll(){
+		if(checkin == 1) {
+			toBook(selectID);
+			return;
+		}
+
 		for(var z = 0; z < typeNames.length; ++z){
 			toBook(z);
 		}
@@ -173,6 +197,9 @@
 		showFieldsForClerk();
 		availableRooms();
 		
+		if(checkin == 1)
+			$('#bookFinal').html("Continue");
+		
 		$(document).on('click', '#findGuest', function(r) {
 			findGuestByID();
 		});
@@ -184,7 +211,11 @@
 				bookAll();
 				//alert and redirecting to profilePage if guest
 				//show confirmation message if clerk
-				if(clerkRole) {
+				if(checkin == 1) {
+					window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/checkin/" + 
+											guestID + "-" + typeNames[selectID] + "-" + startDate + "-" + 
+											endDate + "-" + chosenOccup[selectID] + auth;
+				} else if(clerkRole) {
 					$('#message').attr("style", "color:green");
 					$('#message').html('Room(s) was/were successfully booked.');
 					availableRooms();
