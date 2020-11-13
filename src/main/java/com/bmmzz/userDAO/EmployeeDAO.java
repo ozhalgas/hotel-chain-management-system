@@ -89,6 +89,7 @@ public class EmployeeDAO {
 		String username = UserDAO.getDecodedAuth(auth)[0];
 		try {
 			ResultSet result = UserDAO.executeQuery("Select mydb.schedule.hotelID From mydb.schedule, mydb.employee Where Login= BINARY '" + username + "' and mydb.schedule.employeeid = mydb.employee.EmployeeID");
+			result.next();
 			return result.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();

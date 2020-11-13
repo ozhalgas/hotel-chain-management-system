@@ -17,9 +17,9 @@ public class BillInfo {
 	private String hotelAddress;
 	
 	
-	public BillInfo(String checkInDate, String checkOutDate, double finalBill, String roomNumber, int floor,
-					int hotelID, String hotelName, String hotelCountry, String hotelRegion, String hotelAddress,
-					int guestID, String guestFullName, String guestIdType, String guestIdNumber) {
+	public void add(String checkInDate, String checkOutDate, double finalBill, String roomNumber, int floor,
+					int guestID, String guestFullName, String guestIdType, String guestIdNumber,
+					int hotelID, String hotelName, String hotelCountry, String hotelRegion, String hotelAddress) {
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
 		this.finalBill = finalBill;
