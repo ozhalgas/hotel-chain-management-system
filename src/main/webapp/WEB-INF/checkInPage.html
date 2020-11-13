@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+    <title>Check-in page</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" charset="utf8" 
+    	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        var link = window.location.href.toString();
+        const params = new URLSearchParams(window.location.search);
+        var auth = "?auth=" + params.get('auth');
+        var rooms = {}
+        var table;
+        
+        pathParams = link.split("/")[6].split("?")[0].split("-");
+        var selectedGuestID = pathParams[0];
+        var selectedRoomType = pathParams[1];
+        var selectedCheckInDate = pathParams[2];
+        var selectedCheckOutDate = pathParams[3];
+        var selectedNumberOfRooms = pathParams[4];
+        var numberOfRoomsToCheck = selectedNumberOfRooms;
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
+        function showOccupantsFields() {
+        	$('.roomsToSelect').prop("disabled", true);
+        	
+        	$('#occupants').remove();
+        	
+        	$('#book-table').after("<div id=occupantsFields></div>");
+        }
+        
+        $(document).ready(function () {
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
+            	rooms.guestIDs = data.guestIDs;
+            	rooms.roomTypes = data.roomTypeNames;
+            	rooms.roomNumbers = data.roomNumbers;
+            	rooms.roomFloors = data.roomFloors;
+            	rooms.occupancy = data.numbersOfOccupants;
+            	rooms.cleaneds = data.cleaneds;
+            	rooms.occupieds = data.occupieds;
+            	rooms.checkInDates = data.CIDs;
+            	rooms.checkOutDates = data.CODs;
+            	
+            	for(let i = 0; i < rooms.guestIDs.length; i++) {
+            		if(rooms.guestIDs[i] = -1)
+            			rooms.guestIDs[i] = "";
+            		if(rooms.checkInDates[i] = "null") 
+            			rooms.checkInDates[i] = "";
+            		if(rooms.checkOutDates[i] = "null")
+            			rooms.checkOutDates[i] = "";
+            	}
+
+                for (let i = 0; i < rooms.guestIDs.length; i++) {
+                	if(rooms.roomTypes[i] === selectedRoomType)
+                    $('#table-body').append("<tr> <td>" +
+                    	rooms.guestIDs[i] + "</td> <td>" +
+                    	rooms.roomTypes[i] + "</td> <td>" +
+                    	rooms.roomNumbers[i] + "</td> <td>" +
+                    	rooms.roomFloors[i] + "</td> <td>" +
+                    	rooms.occupancy[i] + "</td> <td>" +
+                    	rooms.cleaneds[i] + "</td> <td>" +
+                    	rooms.occupieds[i] + "</td> <td>" +
+                    	rooms.checkInDates[i] + "</td> <td>" +
+                    	rooms.checkOutDates[i] + "</td> <td>" +
+                    	"<input type=\"checkbox\" class='roomsToSelect' id=" + i.toString() + ">" + "</td> </tr>");
+                }
+            
+                table = $('#book-table').DataTable();
+                
+                // {guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}
+                $('.roomsToSelect').on('change', function () {
+                    console.log('change')
+                    if(this.checked) {
+                    	numberOfRoomsToCheck--;
+                    } else {
+                    	numberOfRoomsToCheck++;
+                    }
+                    
+                    if(numberOfRoomsToCheck==0) {
+                    	$('#occupants').prop("disabled", false);
+                    } else {
+                    	$('#occupants').prop("disabled", true);
+                    }
+                    
+                    /*let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/' +
+                    	selectedGuestID + '-' +
+                    	selectedRoomType + '-' +
+                    	rooms.roomNumbers[id].replace(/ /g, ':') + '-' +
+                    	rooms.roomFloors[id].toString().replace(/ /g, ':') + '-' +
+                    	selectedCheckInDate + '-' + selectedCheckOutDate + '-' +
+                        occupants + auth;
+					
+                    console.log(url)
+                        
+                    fetch(url, {
+                        method: 'POST',
+                    }).then(() => {
+                        table.row(r).remove().draw();
+                    })*/
+
+                })
+                
+                
+        	});
+            
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+            	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+            														data.region + ", " +
+            														"Hotel " + '"' +
+            														data.name + '"';
+            	$('#selectedNumberOfRooms').html("Please select " + selectedNumberOfRooms + " room(s) to check-in.");
+            });
+        })
+        
+    </script>
+</head>
+<body>
+<h2>
+    Rooms
+</h2>
+
+<h3 id="HotelName"></h3>
+<h3 id="selectedNumberOfRooms"></h3>
+
+<table class="cell-border" id="book-table">
+        <thead>
+        <tr>
+        	<th>Guest ID</th>
+            <th>Room Type</th>
+            <th>Room Number</th>
+            <th>Floor</th>
+            <th>Occupancy</th>
+            <th>Cleaned</th>
+            <th>Occupied</th>
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
+            <th>Check In</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+</table>
+<button id="occupants" onclick=showOccupantsFields(); disabled>Enter occupants information</button>
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+</body>
+</html>

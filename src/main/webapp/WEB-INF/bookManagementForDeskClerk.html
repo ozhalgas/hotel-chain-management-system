@@ -96,12 +96,12 @@
                     console.log('clicked')
                     let r = $(this).closest('tr').index()
                     let id = parseInt(this.id.substring(1));
-                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
-                    	//bookings.roomTypes[id] + '-' +
-                        //bookings.hotelIDs[id].toString() + '-' +
-                        //bookings.guestIDs[id].toString() + '-' +
-                        //bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
-                        //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() +
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/' +
+                    	bookings.guestIDs[id].toString() + '-' +
+                        bookings.roomTypes[id] + '-' +
+                        bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
+                        bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + 
+                        bookings.numberOfRooms[id].toString() +
                         auth;
                     window.location.href = url;
                 })

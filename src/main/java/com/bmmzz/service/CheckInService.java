@@ -32,6 +32,13 @@ public class CheckInService {
 	@GET
     @Produces({MediaType.TEXT_HTML})
     public InputStream get( @DefaultValue("") @QueryParam("auth") String auth ) {
+            return Helper.getPage(servletContext, "accessDeniedPage.html");
+    }
+	
+	@GET
+	@Path("/{guestID}-{roomTypeName}-{checkInDate}-{checkOutDate}-{numberOfRooms}")
+    @Produces({MediaType.TEXT_HTML})
+    public InputStream getRooms( @DefaultValue("") @QueryParam("auth") String auth ) {
         if(!UserDAO.checkAuth(auth))
             return Helper.getPage(servletContext, "accessDeniedPage.html");
         switch( UserDAO.getRole(auth) ) {
