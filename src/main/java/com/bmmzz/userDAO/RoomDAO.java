@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
 import com.bmmzz.userDAO.struct.GuestInfo;
 import com.bmmzz.userDAO.struct.BillInfo;
@@ -183,15 +182,15 @@ public class RoomDAO {
 			"Where roomtypename= BINARY '" + roomTypeName1 + "' and hotelID='" + hotelID + "' and GuestID='" + guestID1 + "' and checkindate='" + checkInDate1 + "' and checkoutdate='" + checkOutDate1 + "' and numberofrooms='" + numberOfRooms1 + "'");
 	}
 	
-	public static void checkInRoom(String checkInDate, String checkOutDate, String roomNumber, int roomFloor, int guestID) {
+	public static void checkInRoom(String checkInDate, String checkOutDate, String roomNumber, int roomFloor, int guestID, String roomTypeName, int hotelID) {
 		UserDAO.executeUpdate("INSERT INTO mydb.single_stay VALUES "
-				+ "('" + checkInDate + "', '" + checkOutDate + "', " + "null" + ", '" 
-				+ roomNumber + "', '" + roomFloor + "', '" + guestID + "');");
+                + "('" + checkInDate + "', '" + checkOutDate + "', " + "null" + ", '" 
+                + roomNumber + "', '" + roomFloor + "', '" + guestID +  "', '" + roomTypeName + "', '" +  hotelID +"');");
 	}
 	
-	public static void occupy(String roomNumber, int roomFloor, int occupID, String checkInDate, String checkOutDate) {
+	public static void occupy(String roomNumber, int roomFloor, int occupID, String checkInDate, String checkOutDate, String roomTypeName, int hotelID) {
 		UserDAO.executeUpdate("INSERT INTO mydb.occupies VALUES "
-				+ "('" + roomNumber + "', '" + roomFloor + "', '" + occupID + "', '" + checkInDate + "', '" + checkOutDate + "');");
+                + "('" + roomNumber + "', '" + roomFloor + "', '" + occupID + "', '" + checkInDate + "', '" + checkOutDate + "', '" +  hotelID +  "', '" + roomTypeName +"');");
 	}
 	
 	public static void checkOut(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
@@ -209,10 +208,10 @@ public class RoomDAO {
 			"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
 		UserDAO.executeUpdate("Update mydb.single_stay " + 
 			"Set checkoutdate = '"  + checkOutDate + "', finalbill = '" + finalBill + "' " + 
-			"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "'");
+			"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
 		UserDAO.executeUpdate("Update mydb.occupies " + 
 			"Set checkoutdate = '" + checkOutDate + "' " +
-			"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "'");
+			"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
 	}
 	
 	public static String finalBill(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
@@ -250,10 +249,10 @@ public class RoomDAO {
 						"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
 				UserDAO.executeUpdate("Update mydb.single_stay " + 
 						"Set checkoutdate = '"  + newCheckOutDate + "' " +
-						"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "'");
+						"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
 				UserDAO.executeUpdate("Update mydb.occupies " + 
 						"Set checkoutdate = '" + newCheckOutDate + "' " +
-						"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "'");
+						"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
 				return true;
 			}
 		} catch (ParseException e) {
