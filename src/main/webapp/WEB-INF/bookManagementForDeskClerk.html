@@ -24,6 +24,14 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
     	}
         
+        function check_in() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
+        function check_out() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
             	bookings.guestIDs = data.guestIDs;
@@ -44,8 +52,10 @@
                         bookings.roomTypes[i] + "</td> <td>" +
                         bookings.checkInDates[i] + "</td> <td>" +
                         bookings.checkOutDates[i] + "</td> <td>" + 
-                        bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
-                        "> Delete </button> </td> + <td><button class='edit cancelbtn' id=e" + i.toString() + "> Edit </button></td></tr>");
+                        bookings.numberOfRooms[i] + "</td> <td>" + 
+                        "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
+                        "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                        "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
                 }
 
                 table = $('#book-table').DataTable();
@@ -81,6 +91,20 @@
                         bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() + auth;
                     window.location.href = url;
                 })
+                
+                $('.check-in').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id.substring(1));
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
+                    	//bookings.roomTypes[id] + '-' +
+                        //bookings.hotelIDs[id].toString() + '-' +
+                        //bookings.guestIDs[id].toString() + '-' +
+                        //bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
+                        //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() +
+                        auth;
+                    window.location.href = url;
+                })
             });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
@@ -114,14 +138,17 @@
             <th>Check In Date</th>
             <th>Check Out Date</th>
             <th>Number of Rooms</th>
-            <th>Delete</th>
+            <th>Check-In</th>
             <th>Edit</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
 </table>
 
+<button class="main-check-in" id="main-check-in" onclick=check_in();>Check-In</button>
+<button class="main-check-out" id="main-check-out" onclick=check_out();>Check-Out</button>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 
 </body>
