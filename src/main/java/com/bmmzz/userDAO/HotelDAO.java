@@ -130,17 +130,19 @@ public class HotelDAO {
 		return json;
 	}
 	
-	public static void setNumOccupants(int roomNumber, int numOccupants) {
-		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
-		hotelRooms.setNumOccupants(roomNumber, numOccupants);
+	public static void setNumOccupants(int hotelID, String roomNumber, int numOccupants) {
+		UserDAO.executeUpdate("Update mydb.room " + 
+				"Set numberOfOccupants = '" + numOccupants + "' " +
+				"Where RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
 	}
 	
-	public static void setRoomOccupied(int roomNumber, int occupied) {
-		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
-		hotelRooms.setOccupied(roomNumber, occupied);
+	public static void setRoomOccupied(int hotelID, String roomNumber, int occupied) {
+		UserDAO.executeUpdate("Update mydb.room " + 
+				"Set Occupied = '" + occupied + "' " +
+				"Where RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
 	}
 	
-	public static void setGuestInRoom(int roomNumber, int guestID) {
+	/*public static void setGuestInRoom(int roomNumber, int guestID) {
 		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
 		hotelRooms.setGuestInRoom(roomNumber, guestID);
 	}
@@ -153,7 +155,7 @@ public class HotelDAO {
 	public static void setCOD(int roomNumber, String COD) {
 		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
 		hotelRooms.setCOD(roomNumber, COD);
-	}
+	}*/
 	
 	//hotelID and roomTypeNames should be considered
 	public static String getHotelRooms(String auth) {
@@ -184,8 +186,10 @@ public class HotelDAO {
 			e1.printStackTrace();
 		}
 		
+		int hID = EmployeeDAO.getHotelID(auth);
 		try {
-			ResultSet resSS = UserDAO.executeQuery("SELECT * FROM mydb.single_stay");
+			//select single stays only in hotel, where clerk works
+			ResultSet resSS = UserDAO.executeQuery("SELECT * FROM mydb.single_stay where mydb.single_stay.HotelID='" + hID + "';");
 			while(resSS.next()) {
 				Date tempCheckOutDate = new Date();
 				try {
@@ -207,7 +211,9 @@ public class HotelDAO {
 		}
 		
 		try {	
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee, mydb.schedule, mydb.room, mydb.hotel WHERE mydb.Employee.Login= BINARY '" + username+ "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.room.HotelID and mydb.schedule.HotelID = mydb.hotel.HotelID" );
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee, mydb.schedule, mydb.room, mydb.hotel, mydb.room_type " +
+													   "WHERE mydb.Employee.Login= BINARY '" + username+ "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.room.HotelID and mydb.schedule.HotelID = mydb.hotel.HotelID " +
+													   "and mydb.room.RoomTypeName=mydb.room_type.TypeName and mydb.room_type.HotelID=mydb.hotel.HotelID order by mydb.room.RoomNumber;");
 			int ind = 0;
 			while(resultSet.next()) {
 				boolean exists = false;
@@ -225,7 +231,7 @@ public class HotelDAO {
 					roomCID.add(null);
 					roomCOD.add(null);
 				}
-				hotelRooms.addRoom( resultSet.getString(25), resultSet.getInt(26), resultSet.getInt(27), resultSet.getInt(28), resultSet.getInt(29), resultSet.getString(30), resultSet.getInt(31), resultSet.getNString(33), roomGuestID.get(ind), roomCID.get(ind), roomCOD.get(ind));
+				hotelRooms.addRoom( resultSet.getString(25), resultSet.getInt(26), resultSet.getInt(27), resultSet.getInt(28), resultSet.getInt(29), resultSet.getString(30), resultSet.getInt(31), resultSet.getNString(33), roomGuestID.get(ind), roomCID.get(ind), roomCOD.get(ind), resultSet.getInt(39));
 				++ind;
 			}
 			json = gson.toJson(hotelRooms, HotelRoomsInfo.class);

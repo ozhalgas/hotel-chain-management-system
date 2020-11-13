@@ -60,6 +60,7 @@ public class CheckInService {
 	
 	@POST
 	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}")
+	//@Path("/test")
 	public Response checkIn( @DefaultValue("") 	@QueryParam("auth") String auth,
 												@PathParam("checkInDate") String checkInDate,
 												@PathParam("checkOutDate") String checkOutDate,
@@ -67,29 +68,28 @@ public class CheckInService {
 												@PathParam("roomNumber") String roomNumber,
 												@PathParam("roomFloor") int roomFloor,
 												@PathParam("guestID") int guestID,
-												@PathParam("occupants") String occupantsIDs) {
+												@PathParam("occupants") String occupantsIDs,
+												@FormParam("hotelID") int hotelID) {
 		
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;	
 		checkInDate = checkInDate.replace(':', '-');
 		checkOutDate = checkOutDate.replace(':', '-');
+		hotelID = EmployeeDAO.getHotelID(auth);
 		
 		//hotelId and roomTypeName should be added after DB updating
 		//insert into single_stay
-		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID);
+		RoomDAO.checkInRoom(checkInDate, checkOutDate, roomNumber, roomFloor, guestID, roomTypeName, hotelID);
 		String[] occupantsArr = occupantsIDs.split(":");
 		int n = occupantsArr.length;
 		
 		//insert into Occupies
 		for(String occupID : occupantsArr) {
-			RoomDAO.occupy(roomNumber, roomFloor, Integer.parseInt(occupID), checkInDate, checkOutDate);
+			RoomDAO.occupy(roomNumber, roomFloor, Integer.parseInt(occupID), checkInDate, checkOutDate, hotelID, roomTypeName);
 		}
 		
-		HotelDAO.setRoomOccupied(Integer.parseInt(roomNumber), 1);
-		HotelDAO.setNumOccupants(Integer.parseInt(roomNumber), n);
-		HotelDAO.setGuestInRoom(Integer.parseInt(roomNumber), guestID);
-		HotelDAO.setCID(Integer.parseInt(roomNumber), checkInDate);
-		HotelDAO.setCOD(Integer.parseInt(roomNumber), checkOutDate);
+		HotelDAO.setRoomOccupied(hotelID, roomNumber, 1);
+		HotelDAO.setNumOccupants(hotelID, roomNumber, n);
 		
 		return Response.ok().build();
 	}
