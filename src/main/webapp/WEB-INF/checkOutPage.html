@@ -3,12 +3,14 @@
 <head>
 	<meta charset="ISO-8859-1">
     <title>Check-Out Page</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" charset="utf8" 
     	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
         var link = window.location.href.toString();
-        var auth = link.substring(83, link.length)
+        var auth = link.substring(66, link.length)
         var occupied = {}
         var table;
         
@@ -17,7 +19,7 @@
     	}
         
         $(document).ready(function () {
-            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/occupied" + auth, function (data) {
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkout/occupied" + auth, function (data) {
             	occupied.guestIDs = data.guestIDs;
             	occupied.guestFullNames = data.guestFullNames;
             	occupied.guestMobilePhoneNumbers = data.guestMobilePhoneNumbers;
@@ -39,22 +41,35 @@
                     	occupied.roomFloors[i] + "</td> <td>" +
                     	occupied.checkInDates[i] + "</td> <td>" +
                     	occupied.checkOutDates[i] + "</td> <td>" +
-                    	"<button class='check-out' id=c" + i.toString() + "> Check-Out </button>" + "</td> </tr>");
+                    	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> </tr>");
                 }
             
-            $('.check-out').on('click', function () {
-                console.log('clicked')
-                let r = $(this).closest('tr').index()
-                let id = parseInt(this.id.substring(1));
-                let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
-                	//bookings.roomTypes[id] + '-' +
-                    //bookings.hotelIDs[id].toString() + '-' +
-                    //bookings.guestIDs[id].toString() + '-' +
-                    //bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
-                    //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() +
-                    auth;
-                window.location.href = url;
-            })
+                table = $('#book-table').DataTable();
+                
+                // "{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}"
+                $('.check-out').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/' +
+                    	occupied.guestIDs[id].toString().replace(/ /g, ':') + '-' +
+                    	occupied.roomTypes[id].replace(/ /g, ':') + '-' +
+                    	occupied.roomNumbers[id].replace(/ /g, ':') + '-' +
+                    	occupied.roomFloors[id].toString().replace(/ /g, ':') + '-' +
+                    	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + //'-' +
+                        //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
+                        //bookings.roomTypes[id] + 
+                        auth;
+					
+                    console.log(url)
+                        
+                    fetch(url, {
+                        method: 'POST',
+                    }).then(() => {
+                        table.row(r).remove().draw();
+                    })
+
+                })
         });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {

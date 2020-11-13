@@ -119,8 +119,8 @@ public class HotelDAO {
 		try {
 			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.occupies" );
 			while(resultSet.next()) {
-				hotelOccupied.addOccupied( resultSet.getInt(3), 1, "Hotel Name", "Room Type Name", "Full Name", 
-						"Mobile Phone", resultSet.getString(4), resultSet.getString(5), resultSet.getString(1), resultSet.getInt(2));
+				hotelOccupied.addOccupied( resultSet.getInt(3), 1, "Exclusive", "test test", 
+						"12111", "1 bed Double", resultSet.getString(4), resultSet.getString(5), resultSet.getString(1), resultSet.getInt(2));
 			}
 			json = gson.toJson(hotelOccupied, HotelOccupied.class);
 		} catch (SQLException e) {

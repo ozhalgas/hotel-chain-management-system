@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
@@ -37,6 +38,16 @@ public class CheckOutService {
                 return Helper.getPage(servletContext, "accessDeniedPage.html");
         }
     }
+	
+	@GET
+	@Path("/occupied")
+	public Response getOccupied( @DefaultValue("") @QueryParam("auth") String auth) {
+		if (UserDAO.getRole(auth).equals("desk-clerk")) {
+			String json = HotelDAO.getHotelOccupied(auth);
+			return Response.ok(json).build();
+		}
+		return null;
+	}
 	
 	@POST
 	@Path("/edit/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}-{oldCheckOutDate}-{newCheckOutDate}")
@@ -82,6 +93,8 @@ public class CheckOutService {
 			@PathParam("checkInDate") String checkInDate) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
+		roomType = roomType.replace(':', ' ');
+		roomNumber = roomNumber.replace(':', ' ');
 		checkInDate = checkInDate.replace(':', '-');
 		String json = RoomDAO.finalBill(auth, guestID, roomType, roomNumber, floor, checkInDate);
 		return Response.ok(json).build();
