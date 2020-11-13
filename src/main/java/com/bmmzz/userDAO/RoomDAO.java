@@ -185,8 +185,8 @@ public class RoomDAO {
 	
 	public static void checkInRoom(String checkInDate, String checkOutDate, String roomNumber, int roomFloor, int guestID) {
 		UserDAO.executeUpdate("INSERT INTO mydb.single_stay VALUES "
-				+ "('" + checkInDate + "', '" + checkOutDate + "', 'null', '" 
-				+ roomNumber + "', '" + roomFloor + "', " + guestID + ");");
+				+ "('" + checkInDate + "', '" + checkOutDate + "', " + "null" + ", '" 
+				+ roomNumber + "', '" + roomFloor + "', '" + guestID + "');");
 	}
 	
 	public static void occupy(String roomNumber, int roomFloor, int occupID, String checkInDate, String checkOutDate) {

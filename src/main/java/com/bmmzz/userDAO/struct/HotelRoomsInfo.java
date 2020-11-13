@@ -11,13 +11,14 @@ public class HotelRoomsInfo {
     private ArrayList<String> roomTypeNames = new ArrayList<String>();
 
     private ArrayList<Integer> occupieds = new ArrayList<>();
-    private ArrayList<Integer> cleaneds = new ArrayList<Integer>();
-    private ArrayList<Integer> numbersOfOccupants = new ArrayList<Integer>();
-    private ArrayList<Integer> guestIDs = new ArrayList<Integer>();
+    private ArrayList<Integer> cleaneds = new ArrayList<>();
+    private ArrayList<Integer> numbersOfOccupants = new ArrayList<>();
+    private ArrayList<Integer> guestIDs = new ArrayList<>();
     private ArrayList<String> CIDs = new ArrayList<>();
     private ArrayList<String> CODs = new ArrayList<>();
+    private ArrayList<Integer> capacities = new ArrayList<>();
 
-    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName, int guestID, String CID, String COD) {
+    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName, int guestID, String CID, String COD, int capacity) {
         roomNumbers.add(roomNumber);
         roomFloors.add(roomFloor);
         hotelIDs.add(hotelID);
@@ -29,6 +30,7 @@ public class HotelRoomsInfo {
         guestIDs.add(guestID);
         CIDs.add(CID);
         CODs.add(COD);
+        capacities.add(capacity);
     }
 
     public ArrayList<String> roomNumbers() {
