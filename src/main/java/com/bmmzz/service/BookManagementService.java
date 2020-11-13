@@ -65,6 +65,30 @@ public class BookManagementService {
 		return null;
 	}
 	
+	@GET
+	@Path("/occupied")
+	public Response getOccupied( @DefaultValue("") @QueryParam("auth") String auth) {
+		if (UserDAO.getRole(auth).equals("desk-clerk")) {
+			String json = HotelDAO.getHotelOccupied(auth);
+			return Response.ok(json).build();
+		}
+		return null;
+	}
+	
+	@GET
+	@Path("/check-out")
+	@Produces({MediaType.TEXT_HTML})
+	public InputStream getCheckOutPage( @DefaultValue("") @QueryParam("auth") String auth ) {
+		if(!UserDAO.checkAuth(auth))
+			return Helper.getPage(servletContext, "accessDeniedPage.html");
+		switch( UserDAO.getRole(auth) ) {
+			case "desk-clerk":
+				return Helper.getPage(servletContext, "checkOutPage.html");
+			default:
+				return Helper.getPage(servletContext, "accessDeniedPage.html");
+		}
+	}
+	
 	@DELETE
 	@Path("/{hotelID}-{startDate}-{endDate}-{roomTypeName}")
 	public Response removeBooking(@DefaultValue("") @QueryParam("auth") String auth,

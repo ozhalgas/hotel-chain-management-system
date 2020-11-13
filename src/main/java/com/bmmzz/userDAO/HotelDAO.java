@@ -13,6 +13,7 @@ import javax.sql.RowSet;
 import com.bmmzz.userDAO.struct.HotelBookings;
 import com.bmmzz.userDAO.struct.HotelChoosingInfo;
 import com.bmmzz.userDAO.struct.HotelInfo;
+import com.bmmzz.userDAO.struct.HotelOccupied;
 import com.bmmzz.userDAO.struct.HotelRoomsInfo;
 import com.bmmzz.userDAO.struct.Hotels;
 import com.google.gson.Gson;
@@ -100,6 +101,28 @@ public class HotelDAO {
 						resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6));
 			}
 			json = gson.toJson(hotelBookings, HotelBookings.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	//NEED UPDATE FROM DB SIDE
+	public static String getHotelOccupied(String auth) {
+		Gson gson = new Gson();
+		HotelOccupied hotelOccupied = new HotelOccupied();
+		String json = "";
+		
+		String username = UserDAO.getDecodedAuth(auth)[0];
+		
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.occupies" );
+			while(resultSet.next()) {
+				hotelOccupied.addOccupied( resultSet.getInt(3), 1, "Hotel Name", "Room Type Name", "Full Name", 
+						"Mobile Phone", resultSet.getString(4), resultSet.getString(5), resultSet.getString(1), resultSet.getInt(2));
+			}
+			json = gson.toJson(hotelOccupied, HotelOccupied.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
