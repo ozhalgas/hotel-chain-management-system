@@ -43,7 +43,8 @@
                 r["FullName"].substring(0, r["FullName"].indexOf(" ")) +
                 "!"
             );
-
+            
+			$("#employeeID").html(r["EmployeeID"]);
             $("#name").html(r["FullName"]);
             $("#idnum").html(
               r.IdentificationType + " number: " + r.IdentificationNumber
@@ -87,6 +88,10 @@
     <h4>Profile Information:</h4>
 
     <table id="info" align="left" border="1">
+   	  <tr>
+        <th>Employee ID</th>
+        <td id="employeeID">null</td>
+      </tr>
       <tr>
         <th>Name</th>
         <td id="name">null</td>
@@ -128,7 +133,7 @@
         <td id="position">null</td>
       </tr>
       <tr>
-        <th>Salary</th>
+        <th>Hourly wage</th>
         <td id="salary">null</td>
       </tr>
       <tr>
