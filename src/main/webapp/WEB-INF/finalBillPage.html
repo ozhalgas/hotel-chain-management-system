@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1">
+    <title>Final Bill</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" charset="utf8" 
+    	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        var link = window.location.href.toString();
+        var auth = link.substring(66, link.length)
+        var table;
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+            
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+            	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+            														data.region + ", " +
+            														"Hotel " + '"' +
+            														data.name + '"';
+            });
+            
+        })
+        
+    </script>
 </head>
 <body>
+<h2>
+    Final Bill
+</h2>
 
+<h3 id="HotelName"></h3>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 </body>
 </html>

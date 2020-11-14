@@ -93,8 +93,6 @@ public class CheckOutService {
 			@PathParam("checkInDate") String checkInDate) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
-		roomType = roomType.replace(':', ' ');
-		roomNumber = roomNumber.replace(':', ' ');
 		checkInDate = checkInDate.replace(':', '-');
 		String json = RoomDAO.finalBill(auth, guestID, roomType, roomNumber, floor, checkInDate);
 		return Response.ok(json).build();

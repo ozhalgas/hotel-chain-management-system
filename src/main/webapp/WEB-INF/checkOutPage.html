@@ -41,6 +41,23 @@
     		})
     	}
         
+ 		function show_final_bill(id) {
+        	
+        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/' +
+        	occupied.guestIDs[id].toString() + '-' +
+        	occupied.roomTypes[id] + '-' +
+        	occupied.roomNumbers[id] + '-' +
+        	occupied.roomFloors[id].toString() + '-' +
+        	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + //'-' +
+            //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
+            //bookings.roomTypes[id] + 
+            "/bill" + auth;
+		
+        	console.log(url)
+    		
+        	window.location.href = url;
+    	}
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkout/occupied" + auth, function (data) {
             	occupied.guestIDs = data.guestIDs;
@@ -79,7 +96,8 @@
                              	occupied.roomFloors[i] + "</td> <td>" +
                              	occupied.checkInDates[i] + "</td> <td>" +
                              	occupied.checkOutDates[i] + "</td> <td>" +
-                             	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> </tr>");
+                             	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
+                             	"Not Available" + "</td> </tr>");
                 	} else {
                 		$('#table-body').append("<tr> <td>" +
                              	occupied.guestIDs[i] + "</td> <td>" +
@@ -90,7 +108,8 @@
                              	occupied.roomFloors[i] + "</td> <td>" +
                              	occupied.checkInDates[i] + "</td> <td>" +
                              	occupied.checkOutDates[i] + "</td> <td>" +
-                             	"Checked-Out" + "</td> </tr>");
+                             	"Checked-Out" + "</td> <td>" +
+                             	"<button class='final-bill' id=" + i.toString() + "> Show Final Bill </button>" + "</td> </tr>");
                 	}
                 	       
                 }
@@ -104,6 +123,14 @@
                     let id = parseInt(this.id);
                     
                     checkout(id)
+                })
+                
+                $('.final-bill').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    
+                    show_final_bill(id)
                 })
         });
             
@@ -137,6 +164,7 @@
             <th>Check In Date</th>
             <th>Check Out Date</th>
             <th>Check Out</th>
+            <th>Final Bill</th>
         </tr>
         </thead>
         <tbody id="table-body">
