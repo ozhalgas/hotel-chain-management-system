@@ -18,6 +18,29 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
     	}
         
+        function checkout(id) {
+        	
+        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/' +
+        	occupied.guestIDs[id].toString() + '-' +
+        	occupied.roomTypes[id] + '-' +
+        	occupied.roomNumbers[id] + '-' +
+        	occupied.roomFloors[id].toString() + '-' +
+        	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + //'-' +
+            //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
+            //bookings.roomTypes[id] + 
+            auth;
+		
+        	console.log(url)
+    		$.post(url, 
+    				{}, function(r) {
+    			if(r == null) 
+    				$("#warning").html("Unexpected error. Please try again!");
+    			else {
+    				window.location.href = link;
+    			}
+    		})
+    	}
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkout/occupied" + auth, function (data) {
             	occupied.guestIDs = data.guestIDs;
@@ -51,24 +74,8 @@
                     console.log('clicked')
                     let r = $(this).closest('tr').index()
                     let id = parseInt(this.id);
-                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/' +
-                    	occupied.guestIDs[id].toString().replace(/ /g, ':') + '-' +
-                    	occupied.roomTypes[id].replace(/ /g, ':') + '-' +
-                    	occupied.roomNumbers[id].replace(/ /g, ':') + '-' +
-                    	occupied.roomFloors[id].toString().replace(/ /g, ':') + '-' +
-                    	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + //'-' +
-                        //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
-                        //bookings.roomTypes[id] + 
-                        auth;
-					
-                    console.log(url)
-                        
-                    fetch(url, {
-                        method: 'POST',
-                    }).then(() => {
-                        table.row(r).remove().draw();
-                    })
-
+                    
+                    checkout(id)
                 })
         });
             
