@@ -46,6 +46,10 @@
         			   checkOutDates[i] == bookings.checkOutDates[x]) {
         				 $('#c' + x.toString()).after("<p>Checked-in</p>");
         				 $('#c' + x.toString()).remove();
+        				 $('#e' + x.toString()).after("<p>Not available</p>");
+        				 $('#e' + x.toString()).remove();
+        				 $('#' + x.toString()).after("<p>Not available</p>");
+        				 $('#' + x.toString()).remove();
         				 return;
         			}
         		}
