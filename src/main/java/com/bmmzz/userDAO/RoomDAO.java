@@ -212,6 +212,9 @@ public class RoomDAO {
 		UserDAO.executeUpdate("Update mydb.occupies " + 
 			"Set checkoutdate = '" + checkOutDate + "' " +
 			"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
+		UserDAO.executeUpdate("Update mydb.room " + 
+				"Set occupied = '0', numberofoccupants = '0' " +
+				"Where roomNumber='" + roomNumber + "' and floor='" + floor + "'");	
 	}
 	
 	public static String finalBill(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate) {
