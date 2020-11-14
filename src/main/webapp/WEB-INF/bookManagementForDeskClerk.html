@@ -44,6 +44,7 @@
         			   guestIDs[i] == bookings.guestIDs[x] &&
         			   checkInDates[i] == bookings.checkInDates[x] &&
         			   checkOutDates[i] == bookings.checkOutDates[x]) {
+        				 $('#c' + x.toString()).after("<p>Checked-in</p>");
         				 $('#c' + x.toString()).remove();
         				 return;
         			}
