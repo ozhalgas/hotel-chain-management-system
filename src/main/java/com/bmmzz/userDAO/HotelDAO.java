@@ -198,7 +198,7 @@ public class HotelDAO {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(todayDate.before(tempCheckOutDate)) {
+				if(todayDate.before(tempCheckOutDate) || todayDate.equals(tempCheckOutDate)) {
 					checkInD.add(resSS.getString(1));
 					checkOutD.add(resSS.getString(2));
 					roomN.add(resSS.getString(4));
