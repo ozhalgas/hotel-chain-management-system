@@ -43,7 +43,7 @@
         
  		function show_final_bill(id) {
         	
-        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/' +
+        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/bill/' +
         	occupied.guestIDs[id].toString() + '-' +
         	occupied.roomTypes[id] + '-' +
         	occupied.roomNumbers[id] + '-' +
@@ -51,7 +51,7 @@
         	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + //'-' +
             //bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' +
             //bookings.roomTypes[id] + 
-            "/bill" + auth;
+            auth;
 		
         	console.log(url)
     		

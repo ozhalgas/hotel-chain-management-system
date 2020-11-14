@@ -4,27 +4,53 @@
 	<meta charset="ISO-8859-1">
     <title>Final Bill</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" charset="utf8" 
     	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
         var link = window.location.href.toString();
-        var auth = link.substring(66, link.length)
+        var auth = link.substring(link.indexOf('?') + 1, link.length);
         var table;
         
         function cancel() {
-    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile?' + auth;
     	}
+        
+        function getReceipt() {
+            $.ajax({
+              url:
+            	link.substring(0, 57) + "/checkout/" + link.substring(63, link.indexOf('?')) + "/bill?" + auth,
+              dataType: "json",
+              success: function (r) {
+                $("#check-in-date").html(r["checkInDate"]);
+                $("#check-out-date").html(r["checkOutDate"]);
+                $("#final-bill").html(r["finalBill"]);
+                $("#room-number").html(r["roomNumber"]);
+                $("#floor").html(r["floor"]);
+                $("#guest-id").html(r["guestID"]);
+                $("#guest-full-name").html(r["guestFullName"]);
+                $("#hotel-id").html(r["hotelID"]);
+                $("#hotel-name").html(r["hotelName"]);
+                $("#hotel-region").html(r["hotelRegion"]);
+                $("#hotel-address").html(r["hotelAddress"]);
+                $("#guest-id-number").html(
+                  r.guestIdType + " number: " + r.guestIdNumber
+                );
+              },
+            });
+          }
+        
+        $(document).ready(function () {
+            getReceipt();
+            $("#breakAfterTable").html("<br>".repeat(20));		
+    	  });
             
-            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info?" + auth, function (data) {
             	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
             														data.region + ", " +
             														"Hotel " + '"' +
             														data.name + '"';
             });
-            
-        })
         
     </script>
 </head>
@@ -35,6 +61,60 @@
 
 <h3 id="HotelName"></h3>
 
+<table id="info" align="left" border="1">
+      <tr>
+        <th>Check-In Date</th>
+        <td id="check-in-date">null</td>
+      </tr>
+      <tr>
+        <th>Check-Out Date</th>
+        <td id="check-out-date">null</td>
+      </tr>
+      <tr>
+        <th>Final Bill</th>
+        <td id="final-bill">null</td>
+      </tr>
+      <tr>
+        <th>Room Number</th>
+        <td id="room-number">null</td>
+      </tr>
+      <tr>
+        <th>Floor</th>
+        <td id="floor">null</td>
+      </tr>
+      <tr>
+        <th>Guest ID</th>
+        <td id="guest-id">null</td>
+      </tr>
+      <tr>
+        <th>Guest Full Name</th>
+        <td id="guest-full-name">null</td>
+      </tr>
+      <tr>
+        <th>Guest ID Number</th>
+        <td id="guest-id-number">null</td>
+      </tr>
+      <tr>
+        <th>Hotel ID</th>
+        <td id="hotel-id">null</td>
+      </tr>
+      <tr>
+        <th>Hotel Name</th>
+        <td id="hotel-name">null</td>
+      </tr>
+      <tr>
+        <th>Hotel Region</th>
+        <td id="hotel-region">null</td>
+      </tr>
+      <tr>
+        <th>Hotel Address</th>
+        <td id="hotel-address">null</td>
+      </tr>
+  </table>
+  
+<div id="breakAfterTable"></div>
+ 
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 </body>
 </html>
