@@ -55,16 +55,44 @@
             	occupied.hotelNames = data.hotelNames;
 
                 for (let i = 0; i < occupied.guestFullNames.length; i++) {
-                    $('#table-body').append("<tr> <td>" +
-                    	occupied.guestIDs[i] + "</td> <td>" +
-                    	occupied.guestFullNames[i] + "</td> <td>" +
-                    	occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
-                    	occupied.roomTypes[i] + "</td> <td>" +
-                    	occupied.roomNumbers[i] + "</td> <td>" +
-                    	occupied.roomFloors[i] + "</td> <td>" +
-                    	occupied.checkInDates[i] + "</td> <td>" +
-                    	occupied.checkOutDates[i] + "</td> <td>" +
-                    	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> </tr>");
+                	
+                	str = occupied.checkOutDates[i];
+                	
+                	const now = new Date();
+                	const checkOutDate = new Date(parseInt(str.substr(0, 4)),
+                			parseInt(str.substr(5, 2) - 1),
+                			parseInt(str.substr(8, 2)),
+                			0, 0, 0, 0);
+                	
+                	var diff = checkOutDate.getTime() - now.getTime();
+                	
+                	console.log(checkOutDate);
+                	console.log(diff);
+                	
+                	if(diff > 0) {
+                		 $('#table-body').append("<tr> <td>" +
+                             	occupied.guestIDs[i] + "</td> <td>" +
+                             	occupied.guestFullNames[i] + "</td> <td>" +
+                             	occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                             	occupied.roomTypes[i] + "</td> <td>" +
+                             	occupied.roomNumbers[i] + "</td> <td>" +
+                             	occupied.roomFloors[i] + "</td> <td>" +
+                             	occupied.checkInDates[i] + "</td> <td>" +
+                             	occupied.checkOutDates[i] + "</td> <td>" +
+                             	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> </tr>");
+                	} else {
+                		$('#table-body').append("<tr> <td>" +
+                             	occupied.guestIDs[i] + "</td> <td>" +
+                             	occupied.guestFullNames[i] + "</td> <td>" +
+                             	occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                             	occupied.roomTypes[i] + "</td> <td>" +
+                             	occupied.roomNumbers[i] + "</td> <td>" +
+                             	occupied.roomFloors[i] + "</td> <td>" +
+                             	occupied.checkInDates[i] + "</td> <td>" +
+                             	occupied.checkOutDates[i] + "</td> <td>" +
+                             	"Checked-Out" + "</td> </tr>");
+                	}
+                	       
                 }
             
                 table = $('#book-table').DataTable();
