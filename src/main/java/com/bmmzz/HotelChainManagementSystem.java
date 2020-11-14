@@ -11,6 +11,7 @@ import com.bmmzz.service.BookManagementService;
 import com.bmmzz.service.CheckInService;
 import com.bmmzz.service.CheckOutService;
 import com.bmmzz.service.EmployeeRegistrationService;
+import com.bmmzz.service.EmployeeScheduleService;
 import com.bmmzz.service.FinalBillService;
 import com.bmmzz.service.ProfileService;
 import com.bmmzz.service.RegistrationService;
@@ -32,6 +33,7 @@ public class HotelChainManagementSystem extends Application {
 		singletons.add(new CheckInService());
 		singletons.add(new CheckOutService());
 		singletons.add(new FinalBillService());
+		singletons.add(new EmployeeScheduleService());
 	}
 	
 	public Set<Class<?>> getClasses() {
