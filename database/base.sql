@@ -104,19 +104,19 @@ Insert into mydb.employee values (2, 'Kim Kardashian', 'Female', '1980-10-21', '
 Insert into mydb.employee values (3, 'Alexander Hamilton', 'Male', '1974-04-13', 'Passport', '32367', 'Spain', '47543', 'Wall Street 2', '53229', 'hamilton@mail.com', '902365', '320029', 'ahamilton', 'hamilton');
 Insert into mydb.employee values (4, 'Xavier Moro', 'Male', '1990-07-09', 'ID', '14324', 'UAE', '34323', 'Hallway 2', '332328', 'moro@mail.com', '32329', '92439', 'xavier', 'xavier');
 Insert into mydb.employee values (5, 'Gal Gadot', 'Female', '1982-10-21', 'ID', '38439', 'UAE', '6743242', 'East street 21A', '7432423', 'gadot@mail.com', '77454645', '2434238', 'gal', 'gadot');
-Insert into mydb.employee values (6, 'Madison Montfomery', 'Female', '1984-03-23', 'Passport', '32423', 'USA', '645452', '23rd Avenue', '930849', 'madison@mail.com', '3214635', '3211338', 'madison', 'montgomery');
+Insert into mydb.employee values (6, 'Madison Montgomery', 'Female', '1984-03-23', 'Passport', '32423', 'USA', '645452', '23rd Avenue', '930849', 'madison@mail.com', '3214635', '3211338', 'madison', 'montgomery');
 Insert into mydb.employee values (7, 'Victor Valdes', 'Male', '1980-11-13', 'ID', '42423429', 'Spain', '543543', '17th Avenue', '432423', 'valdes@mail.com', '732423', '43232', 'victor', 'valdes');
 Insert into mydb.employee values (8, 'Amir El-Masry', 'Male', '1992-10-21', 'ID', '32423', 'UAE', '454354', '9th Street', '324234', 'masry@mail.com', '3423423', '0434322', 'amir', 'elmasry');
 
-Insert into mydb.schedule values (0, 0, 'Manager', 'Full-time', '$2000', '2018-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (1, 1, 'Manager', 'Full-time', '$3000', '2016-02-04', null, '09:00', '18:00');
-Insert into mydb.schedule values (2, 2, 'Manager', 'Full-time', '$4500', '2018-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (3, 0, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (4, 1, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (5, 2, 'desk-clerk', 'Full-time', '$5000', '2015-06-24', null, '09:00', '18:00');
-Insert into mydb.schedule values (6, 0, 'desk-clerk', 'Full-time', '$5500', '2013-06-24', null, '18:00', '05:00');
-Insert into mydb.schedule values (7, 1, 'desk-clerk', 'Full-time', '$4500', '2014-06-24', null, '18:00', '05:00');
-Insert into mydb.schedule values (8, 2, 'desk-clerk', 'Full-time', '$5000', '2015-06-24', null, '18:00', '05:00');
+Insert into mydb.schedule values (0, 0, 'Manager', 'Full-time', '$20', '2018-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (1, 1, 'Manager', 'Full-time', '$25', '2016-02-04', null, '09:00', '18:00');
+Insert into mydb.schedule values (2, 2, 'Manager', 'Full-time', '$23', '2018-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (3, 0, 'desk-clerk', 'Full-time', '$15', '2013-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (4, 1, 'desk-clerk', 'Full-time', '$14', '2014-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (5, 2, 'desk-clerk', 'Full-time', '$10', '2015-06-24', null, '09:00', '18:00');
+Insert into mydb.schedule values (6, 0, 'desk-clerk', 'Full-time', '$15', '2013-06-24', null, '18:00', '05:00');
+Insert into mydb.schedule values (7, 1, 'desk-clerk', 'Full-time', '$14', '2014-06-24', null, '18:00', '05:00');
+Insert into mydb.schedule values (8, 2, 'desk-clerk', 'Full-time', '$10', '2015-06-24', null, '18:00', '05:00');
 
 Insert into mydb.category values ('None', 0, 0);
 Insert into mydb.category values ('VIP', 0.05, 0);
@@ -650,11 +650,23 @@ insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 1);
 insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
 
+insert mydb.guest values(1, 'Guest One', 'ID', '24234234', '8th Avenue', '4234324', '32423423', 'guest1', 'pass');
+insert mydb.guest values(2, 'Guest Two', 'ID', '89532343', '13th Street', '7567456', '9849324', 'guest2', 'pass');
 
+insert into mydb.occupies values('12', 1, 1, '2020-09-10', '2020-11-11',1, 'Single');
+insert into mydb.occupies values('12', 1, 1, '2020-11-23', '2020-11-29',1, 'Single');
 
+insert into mydb.occupies values('13', 1, 2, '2020-09-10', '2020-11-11',0, 'Double');
+insert into mydb.occupies values('12', 1, 2, '2020-11-30', '2020-12-10',1, 'Single');
+insert into mydb.occupies values('15', 1, 2, '2020-10-23', '2020-10-25',2, 'Double');
 
+insert into mydb.cleans values(0, 3, 'desk-clerk', '10', 1, 'Single');
+insert into mydb.cleans values(1, 4, 'desk-clerk', '21', 2, 'Single');
+insert into mydb.cleans values(2, 5, 'desk-clerk', '38', 3, 'Luxury');
 
+insert into mydb.guest_belongs_category values('Disabled', 1);
 
+insert into mydb.reserves values('Single', 0, 1, '2021-03-02', '2021-03-24', 1);
 
-
+insert into mydb.single_stay values('2020-12-26', '2020-12-28', 1000.0, 10, 1, 1, 'Single', 0);
 

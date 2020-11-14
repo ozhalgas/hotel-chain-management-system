@@ -367,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Occupies` (
   `CheckOutDate` DATE NULL,
   `HotelID` INT NOT NULL,
   `RoomTypeName` varchar(45) not null,
-  PRIMARY KEY (`RoomNumber`, `Floor`, `GuestID`, `RoomTypeName` , `HotelID`),
+  PRIMARY KEY (`CheckInDate`, `RoomNumber`, `Floor`, `GuestID`, `RoomTypeName` , `HotelID`),
   INDEX `fk_Room_has_Guest_Guest1_idx` (`GuestID` ASC) VISIBLE,
   INDEX `fk_Room_has_Guest_Room1_idx` (`RoomNumber` ASC, `Floor` ASC, `RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
   CONSTRAINT `fk_Room_has_Guest_Room1`
