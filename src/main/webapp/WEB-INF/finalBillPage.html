@@ -12,6 +12,14 @@
         var auth = link.substring(link.indexOf('?') + 1, link.length);
         var table;
         
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w=window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+        
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile?' + auth;
     	}
@@ -61,6 +69,7 @@
 
 <h3 id="HotelName"></h3>
 
+<div id="print-content">
 <table id="info" align="left" border="1">
       <tr>
         <th>Check-In Date</th>
@@ -111,10 +120,11 @@
         <td id="hotel-address">null</td>
       </tr>
   </table>
-  
+</div>
+
 <div id="breakAfterTable"></div>
- 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<input type="button" onclick="printDiv('print-content')" value="Print"/>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 </body>
 </html>
