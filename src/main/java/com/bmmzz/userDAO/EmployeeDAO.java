@@ -100,7 +100,7 @@ public class EmployeeDAO {
 	public static void editEmployeeSchedule(String auth, int employeeID, String startTime, String endTime) {
 		UserDAO.executeUpdate("Update mydb.schedule " + 
 							"Set starttime='" + startTime + "', endtime='" + endTime + "' " +
-							"Where employeeID='" + employeeID + "' and hotelid='" + getHotelID(auth) + "'");
+							"Where employeeID='" + employeeID + "' and hotelid='" + getHotelID(auth) + "' and position<>'Manager'");
 	}
 	
 }
