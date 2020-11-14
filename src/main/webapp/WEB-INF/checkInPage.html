@@ -25,6 +25,7 @@
         var linksToPost = [];
         
         var hotelID = -1;
+        var capacity = -1;
         
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
@@ -53,7 +54,7 @@
         		var repetitive = false;
         		var allValidEnteredIDs = [];
         		
-        		for(let i = 0; i < 8; i++) {
+        		for(let i = 0; i < capacity; i++) {
         			if( !emptyReg.test($('#o' + i).val()) ) {
         				fieldsEmpty = false;
         				
@@ -89,7 +90,7 @@
         			// checking if such Guest IDs exists in database
         			var existsInDatabase = true;
         			
-        			for(let i = 0; i < 8; i++) {
+        			for(let i = 0; i < capacity; i++) {
         				if( regexp.test($('#o' + i).val()) ) {
         					if(allValidEnteredIDs.includes($('#o' + i).val())) {
         						
@@ -113,7 +114,7 @@
         			
         			// storing all occupant Guest IDs in the string seperated by ":"
         			var occupants = "";
-        			for(let i = 0; i < 8; i++) {
+        			for(let i = 0; i < capacity; i++) {
         				if( regexp.test($('#o' + i).val()) ) {
         					occupants += ":" + $('#o' + i).val();
         				}
@@ -135,7 +136,6 @@
         					$.post(url, 
         							{hotelID: hotelID},
         							function(){
-        								alert(url);
         								if(index === array.length - 1) {
                                     		alert("The guests were successfully checked-in.");
                                             cancel();
@@ -149,7 +149,7 @@
         	if(checkedRoomsIDs.length > 0) {
         		$('#occupantsFields').append("<p>Please enter Guest ID-s of guests who will occupy room <b>\"" + rooms.roomNumbers[checkedRoomsIDs[0]] + "\"</b>.</p>");
             	
-        		for(let i = 0; i < 8; i++) {
+        		for(let i = 0; i < capacity; i++) {
             		$('#occupantsFields').append("<input type=\"text\" id=o" + i.toString() + " ><br>");
             	}
             	
@@ -166,18 +166,19 @@
             	rooms.roomTypes = data.roomTypeNames;
             	rooms.roomNumbers = data.roomNumbers;
             	rooms.roomFloors = data.roomFloors;
-            	rooms.occupancy = data.numbersOfOccupants;
+            	rooms.numbersOfOccupants = data.numbersOfOccupants;
+            	rooms.capacities = data.capacities;
             	rooms.cleaneds = data.cleaneds;
             	rooms.occupieds = data.occupieds;
             	rooms.checkInDates = data.CIDs;
             	rooms.checkOutDates = data.CODs;
             	
             	for(let i = 0; i < rooms.guestIDs.length; i++) {
-            		if(rooms.guestIDs[i] = -1)
+            		if(rooms.guestIDs[i] == -1)
             			rooms.guestIDs[i] = "";
-            		if(rooms.checkInDates[i] = "null") 
+            		if(rooms.checkInDates[i] == null) 
             			rooms.checkInDates[i] = "";
-            		if(rooms.checkOutDates[i] = "null")
+            		if(rooms.checkOutDates[i] == null)
             			rooms.checkOutDates[i] = "";
             	}
 
@@ -188,12 +189,17 @@
                     	rooms.roomTypes[i] + "</td> <td>" +
                     	rooms.roomNumbers[i] + "</td> <td>" +
                     	rooms.roomFloors[i] + "</td> <td>" +
-                    	rooms.occupancy[i] + "</td> <td>" +
+                    	rooms.numbersOfOccupants[i] + "</td> <td>" +
+                    	rooms.capacities[i] + "</td> <td>" +
                     	rooms.cleaneds[i] + "</td> <td>" +
                     	rooms.occupieds[i] + "</td> <td>" +
                     	rooms.checkInDates[i] + "</td> <td>" +
                     	rooms.checkOutDates[i] + "</td> <td>" +
                     	"<input type=\"checkbox\" class='roomsToSelect' id=" + i.toString() + ">" + "</td> </tr>");
+                	if( rooms.guestIDs[i] > 0  )
+                		$('#' + i.toString()).prop("disabled", true);
+                	if(rooms.roomTypes[i] === selectedRoomType)
+                		capacity = rooms.capacities[i];
                 }
             
                 table = $('#book-table').DataTable();
@@ -214,25 +220,6 @@
                     } else {
                     	$('#occupants').prop("disabled", true);
                     }
-                    
-                    /*let r = $(this).closest('tr').index()
-                    let id = parseInt(this.id);
-                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/' +
-                    	selectedGuestID + '-' +
-                    	selectedRoomType + '-' +
-                    	rooms.roomNumbers[id].replace(/ /g, ':') + '-' +
-                    	rooms.roomFloors[id].toString().replace(/ /g, ':') + '-' +
-                    	selectedCheckInDate + '-' + selectedCheckOutDate + '-' +
-                        occupants + auth;
-					
-                    console.log(url)
-                        
-                    fetch(url, {
-                        method: 'POST',
-                    }).then(() => {
-                        table.row(r).remove().draw();
-                    })*/
-
                 })
                 
                 
@@ -265,6 +252,7 @@
             <th>Room Type</th>
             <th>Room Number</th>
             <th>Floor</th>
+            <th>Number of Occupants</th>
             <th>Occupancy</th>
             <th>Cleaned</th>
             <th>Occupied</th>
