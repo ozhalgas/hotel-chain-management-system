@@ -2,6 +2,7 @@ package com.bmmzz.service;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.bmmzz.userDAO.EmployeeDAO;
+import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
@@ -19,6 +21,15 @@ public class EmployeeScheduleService {
 	
 	public EmployeeScheduleService() {
 		UserDAO.connectToUserDAO();
+	}
+	
+	@GET
+	@Path("/schedules")
+	public Response employeeSchedulesInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
+		if(!UserDAO.checkRoleAndAuth(auth, "manager"))
+			return null;
+		String json = EmployeeDAO.getSchedules(auth);
+		return Response.ok(json).build();
 	}
 	
 	@POST

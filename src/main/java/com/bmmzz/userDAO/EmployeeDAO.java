@@ -2,9 +2,14 @@ package com.bmmzz.userDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.bmmzz.userDAO.struct.EmployeeInfo;
 import com.bmmzz.userDAO.struct.EmployeeRegistrationInfo;
+import com.bmmzz.userDAO.struct.EmployeeSchedulesInfo;
+import com.bmmzz.userDAO.struct.HotelRoomsInfo;
 import com.google.gson.Gson;
 
 public class EmployeeDAO {
@@ -101,6 +106,72 @@ public class EmployeeDAO {
 		UserDAO.executeUpdate("Update mydb.schedule " + 
 							"Set starttime='" + startTime + "', endtime='" + endTime + "' " +
 							"Where employeeID='" + employeeID + "' and hotelid='" + getHotelID(auth) + "' and position<>'Manager'");
+	}
+	
+	public static String getSchedules(String auth) {
+		Gson gson = new Gson();
+		EmployeeSchedulesInfo es = new EmployeeSchedulesInfo();
+		String json = "";
+		int hID = EmployeeDAO.getHotelID(auth);
+		
+		//get es for this hotel
+		ResultSet rES = UserDAO.executeQuery("Select * From mydb.employee E, mydb.schedule S " +
+											"Where S.HotelID='" + hID + "' and " +
+											"E.EmployeeID=S.EmployeeID and S.Position<>'Manager';");
+		//System.out.println("Select * From mydb.employee E, mydb.schedule S " +
+		//		"Where S.HotelID='" + hID + "' and " +
+		//		"E.EmployeeID=S.EmployeeID and S.Position<>'Manager';");
+		try {
+			while(rES.next()) {
+				Date startTime = new Date();
+				Date endTime = new Date();
+				try {
+					startTime = new SimpleDateFormat("HH:mm:ss").parse(rES.getString(23));
+					endTime = new SimpleDateFormat("HH:mm:ss").parse(rES.getString(24));				
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+				long minLong = (endTime.getTime() - startTime.getTime()) / (60 * 1000);
+				double hoursDb = (double) minLong/60;
+				double hours = Math.round(hoursDb * 100.0) / 100.0;
+				
+				//checking for right hours
+				int startH = Integer.parseInt(rES.getString(23).substring(0, 2));
+				int endH = Integer.parseInt(rES.getString(24).substring(0, 2));
+				//System.out.println(startH + " " + endH);
+				if(endH < startH) hours += 24;
+				//System.out.println(hours);
+				
+				double hourlyWage = Double.parseDouble(rES.getString(20).substring(1, rES.getString(20).length()));
+				double dailySalDb = hours * hourlyWage;
+
+				//get numWorkingDays/Week
+				ResultSet numDays = UserDAO.executeQuery("SELECT count(*) " +
+													   "FROM mydb.day_of_the_week D " +
+													   "Where D.EmployeeID='" + rES.getInt(1)+ "' and D.HotelID='" + rES.getInt(17) + "';");
+				
+				//System.out.println("SELECT count(*) " +
+				//		   "FROM mydb.day_of_the_week D " +
+				//		   "Where D.EmployeeID='" + rES.getInt(1)+ "' and D.HotelID='" + rES.getInt(17) + "';");
+				
+				double weeklySalDb = 0;
+				if(numDays.next()) {
+					weeklySalDb = dailySalDb * numDays.getInt(1);
+					System.out.println("Daily: " + dailySalDb + " Weekly: " + weeklySalDb);
+				}
+				String cur = String.valueOf(rES.getString(20).charAt(0));
+				String dailySal = cur + String.valueOf(dailySalDb);
+				String weeklySal = cur + String.valueOf(weeklySalDb);
+				
+				//System.out.println("Daily: " + dailySal + " Weekly: " + weeklySal);
+				
+				es.addES(rES.getInt(1), rES.getString(2), rES.getString(11), rES.getString(13), rES.getInt(17), rES.getString(18), rES.getString(20), rES.getString(21), rES.getString(23), rES.getString(24), dailySal, weeklySal);
+			}
+			json = gson.toJson(es, EmployeeSchedulesInfo.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 	
 }
