@@ -24,6 +24,8 @@
         var checkedRoomsIDs = [];
         var linksToPost = [];
         
+        var hotelID = -1;
+        
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
     	}
@@ -130,15 +132,15 @@
         			
         			if(checkedRoomsIDs.length == 0) {
         				linksToPost.forEach(function (url, index, array) {
-        					fetch(url, {
-                                method: 'POST',
-                            }).then(() => {
-                            	alert(url);
-                            	if(index === array.length - 1) {
-                            		alert("The guests were successfully checked-in.");
-                                    cancel();
-                            	}
-                            })
+        					$.post(url, 
+        							{hotelID: hotelID},
+        							function(){
+        								alert(url);
+        								if(index === array.length - 1) {
+                                    		alert("The guests were successfully checked-in.");
+                                            cancel();
+                                    	}
+        							});
         				});
         			}
         		}
@@ -241,6 +243,7 @@
             														data.region + ", " +
             														"Hotel " + '"' +
             														data.name + '"';
+            	hotelID = data.hotelID;
             	$('#selectedNumberOfRooms').html("Please select " + selectedNumberOfRooms + " room(s) to check-in.");
             });
         })
