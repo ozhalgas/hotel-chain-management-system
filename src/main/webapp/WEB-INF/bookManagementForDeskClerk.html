@@ -32,6 +32,26 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/checkout' + auth;
     	}
         
+        function toEnsureCheckinPossibility(x) {
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
+        		var roomTypes = data.roomTypeNames;
+        		var guestIDs = data.guestIDs
+        		var checkInDates = data.CIDs;
+        		var checkOutDates = data.CODs;
+        		
+        		for(let i = 0; i < guestIDs.length; i++) {
+        			if(roomTypes[i] == bookings.roomTypes[x] &&
+        			   guestIDs[i] == bookings.guestIDs[x] &&
+        			   checkInDates[i] == bookings.checkInDates[x] &&
+        			   checkOutDates[i] == bookings.checkOutDates[x]) {
+        				 $('#c' + x.toString()).after("<p>Checked-in</p>");
+        				 $('#c' + x.toString()).remove();
+        				 return;
+        			}
+        		}
+        	});
+        }
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/bookings" + auth, function (data) {
             	bookings.guestIDs = data.guestIDs;
@@ -56,6 +76,8 @@
                         "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
                         "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
                         "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
+                    
+                    toEnsureCheckinPossibility(i);
                 }
 
                 table = $('#book-table').DataTable();
