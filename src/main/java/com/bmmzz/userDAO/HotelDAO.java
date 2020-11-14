@@ -171,11 +171,15 @@ public class HotelDAO {
 		List<String> roomN = new ArrayList<>();
 		List<Integer> roomF = new ArrayList<>();
 		List<Integer> gID = new ArrayList<>();
+		List<String> gFN = new ArrayList<>();
+		List<String> gMPN = new ArrayList<>();
 				
 		//guestIDs that will be full-filled into hotelRooms
 		List<Integer> roomGuestID = new ArrayList<>();
 		List<String> roomCID = new ArrayList<>();
 		List<String> roomCOD = new ArrayList<>();
+		List<String> roomGuestFN = new ArrayList<>();
+		List<String> roomGuestMPN = new ArrayList<>();
 		
 		String todayStr = java.time.LocalDate.now().toString();
 		Date todayDate = new Date();
@@ -189,7 +193,7 @@ public class HotelDAO {
 		int hID = EmployeeDAO.getHotelID(auth);
 		try {
 			//select single stays only in hotel, where clerk works
-			ResultSet resSS = UserDAO.executeQuery("SELECT * FROM mydb.single_stay where mydb.single_stay.HotelID='" + hID + "';");
+			ResultSet resSS = UserDAO.executeQuery("SELECT * FROM mydb.single_stay, mydb.guest where mydb.single_stay.HotelID='" + hID + "' and mydb.single_stay.GuestID=mydb.guest.GuestID;");
 			while(resSS.next()) {
 				Date tempCheckOutDate = new Date();
 				try {
@@ -204,6 +208,8 @@ public class HotelDAO {
 					roomN.add(resSS.getString(4));
 					roomF.add(resSS.getInt(5));
 					gID.add(resSS.getInt(6));
+					gFN.add(resSS.getString(10));
+					gMPN.add(resSS.getString(15));
 				}
 			}
 		} catch (SQLException e) {
@@ -222,6 +228,8 @@ public class HotelDAO {
 						roomGuestID.add(gID.get(i));
 						roomCID.add(checkInD.get(i));
 						roomCOD.add(checkOutD.get(i));
+						roomGuestFN.add(gFN.get(i));
+						roomGuestMPN.add(gMPN.get(i));
 						exists = true;
 						break;
 					}
@@ -230,8 +238,10 @@ public class HotelDAO {
 					roomGuestID.add(-1);
 					roomCID.add(null);
 					roomCOD.add(null);
+					roomGuestFN.add(null);
+					roomGuestMPN.add(null);
 				}
-				hotelRooms.addRoom( resultSet.getString(25), resultSet.getInt(26), resultSet.getInt(27), resultSet.getInt(28), resultSet.getInt(29), resultSet.getString(30), resultSet.getInt(31), resultSet.getNString(33), roomGuestID.get(ind), roomCID.get(ind), roomCOD.get(ind), resultSet.getInt(39));
+				hotelRooms.addRoom( resultSet.getString(25), resultSet.getInt(26), resultSet.getInt(27), resultSet.getInt(28), resultSet.getInt(29), resultSet.getString(30), resultSet.getInt(31), resultSet.getNString(33), roomGuestID.get(ind), roomCID.get(ind), roomCOD.get(ind), resultSet.getInt(39), roomGuestFN.get(ind), roomGuestMPN.get(ind));
 				++ind;
 			}
 			json = gson.toJson(hotelRooms, HotelRoomsInfo.class);

@@ -17,8 +17,10 @@ public class HotelRoomsInfo {
     private ArrayList<String> CIDs = new ArrayList<>();
     private ArrayList<String> CODs = new ArrayList<>();
     private ArrayList<Integer> capacities = new ArrayList<>();
+    private ArrayList<String> guestFNs = new ArrayList<>();
+    private ArrayList<String> guestMPNs = new ArrayList<>();
 
-    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName, int guestID, String CID, String COD, int capacity) {
+    public void addRoom(String roomNumber, int roomFloor, int cleaned, int occupied, int numberOfOccupants, String roomTypeName, int hotelID, String hotelName, int guestID, String CID, String COD, int capacity, String guestFN, String guestMPN) {
         roomNumbers.add(roomNumber);
         roomFloors.add(roomFloor);
         hotelIDs.add(hotelID);
@@ -31,6 +33,8 @@ public class HotelRoomsInfo {
         CIDs.add(CID);
         CODs.add(COD);
         capacities.add(capacity);
+        guestFNs.add(guestFN);
+        guestMPNs.add(guestMPN);
     }
 
     public ArrayList<String> roomNumbers() {
