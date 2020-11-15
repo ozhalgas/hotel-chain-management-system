@@ -159,13 +159,23 @@ public class EmployeeDAO {
 					weeklySalDb = dailySalDb * numDays.getInt(1);
 					System.out.println("Daily: " + dailySalDb + " Weekly: " + weeklySalDb);
 				}
+
 				String cur = String.valueOf(rES.getString(20).charAt(0));
 				String dailySal = cur + String.valueOf(dailySalDb);
 				String weeklySal = cur + String.valueOf(weeklySalDb);
 				
 				//System.out.println("Daily: " + dailySal + " Weekly: " + weeklySal);
 				
-				es.addES(rES.getInt(1), rES.getString(2), rES.getString(11), rES.getString(13), rES.getInt(17), rES.getString(18), rES.getString(20), rES.getString(21), rES.getString(23), rES.getString(24), dailySal, weeklySal);
+				
+				ResultSet workingDays = UserDAO.executeQuery("SELECT D.Day_of_the_Week " +
+						   									 "FROM mydb.day_of_the_week D " +
+						   									 "Where D.EmployeeID='" + rES.getInt(1)+ "' and D.HotelID='" + rES.getInt(17) + "';");
+				String wDays = new String();
+				while(workingDays.next()) {
+					wDays += workingDays.getString(1);
+				}
+				
+				es.addES(rES.getInt(1), rES.getString(2), rES.getString(11), rES.getString(13), rES.getInt(17), rES.getString(18), rES.getString(20), rES.getString(21), rES.getString(23), rES.getString(24), dailySal, weeklySal, wDays);
 			}
 			json = gson.toJson(es, EmployeeSchedulesInfo.class);
 		} catch (SQLException e) {

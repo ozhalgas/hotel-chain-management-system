@@ -25,8 +25,9 @@ public class EmployeeSchedulesInfo {
 	//Where D.EmployeeID='0' and D.HotelID='0';
 	private List<String> empDailySalaries = new ArrayList<>();//no column
 	private List<String> empWeeklySalaries = new ArrayList<>();//no column
+	private List<String> empWorkingDays = new ArrayList<>();
 	
-	public void addES(int ID, String FN, String EA, String MPN, int hID, String pos, String PR, String SD, String ST, String ET, String DS, String WS) {
+	public void addES(int ID, String FN, String EA, String MPN, int hID, String pos, String PR, String SD, String ST, String ET, String DS, String WS, String WD) {
 		empIDs.add(ID);
 		empFullNames.add(FN);
 		empEmailAddresses.add(EA);
@@ -39,5 +40,6 @@ public class EmployeeSchedulesInfo {
 		empEndTimes.add(ET);
 		empDailySalaries.add(DS);
 		empWeeklySalaries.add(WS);
+		empWorkingDays.add(WD);
 	}
 }
