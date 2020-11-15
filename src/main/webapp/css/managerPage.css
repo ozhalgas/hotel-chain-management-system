@@ -16,7 +16,7 @@ td{
 
 .profile-info{
     width: 500px;
-    float: left;
+    height: 740px;
 }
 
 
@@ -50,11 +50,10 @@ td{
     padding: 10px 15px;
     position: relative;
 }
+
 .review-table{
-    position: absolute;
-    top: 33%;
-    left: 60%;
-    width: 400px;
+    position: relative;
+    width: 1234px;
 }
 
 #header-img {

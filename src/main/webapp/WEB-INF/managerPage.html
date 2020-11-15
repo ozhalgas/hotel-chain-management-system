@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Insert title here</title>
+    <title>Profile</title>
     <style>
       th {
         width: 200px;
@@ -25,6 +25,10 @@
       var link = window.location.href.toString();
     var auth = link.substring(65, link.length)
 
+    function logout() {
+    	window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
+    }
+    
 	  function getRegisterURL() {
 		$('#regnewempl').on('click', function() {
 			console.log('clicked')
@@ -92,10 +96,17 @@
             tablerev = $('#review-table').DataTable(
                     {
                       columns: [
-                        { width: '25%' },
-                        { width: '25%' },
-                        { width: '25%' },
-                        { width: '25%' }
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' },
+                        { width: '9%' }
                       ]
                     }
             );
@@ -105,8 +116,6 @@
             tablerev.destroy();
           }
         });
-
-        $("#breaks").html("<br>".repeat(40));
       });
 
     </script>
@@ -186,10 +195,17 @@
       <table class="cell-border" id="review-table" style="display: none; width: 100%" >
         <thead>
         <tr>
-          <th>Name</th>
+          <th>Employee ID</th>
+          <th>Full Name</th>
           <th>Email</th>
-          <th>Working days</th>
+          <th>Mobile Phone Numbers</th>
+          <th>Hotel Name</th>
           <th>Position</th>
+          <th>Employee started to work</th>
+          <th>Working hours</th>
+          <th>Working days</th>
+          <th>Daily salaries</th>
+          <th>Weekly salaries</th>
         </tr>
         </thead>
         <tbody>
@@ -197,6 +213,13 @@
           <td>Paul Vanger</td>
           <td>PaulVanger@gmail.com</td>
           <td>M-F: 9am - 5pm</td>
+          <td>Manager</td>
+          <td>Manager</td>
+          <td>Manager</td>
+          <td>Manager</td>
+          <td>Manager</td>
+          <td>Manager</td>
+          <td>Manager</td>
           <td>Manager</td>
         </tr>
         </tbody>
@@ -206,10 +229,7 @@
 	<div id="breaks"></div>
     <button id="regnewempl">Register new desk clerk</button>
     <button id="review">Review schedules</button>
-    <form
-      action="http://localhost:8080/HotelChainManagementSystem/"
-      style="display: inline">
-      <input type="submit" value="Logout" />
+    <button class="cancelbtn" id="logout" onclick=logout();>Logout</button>
     </form><br><br><br>
   </body>
 </html>
