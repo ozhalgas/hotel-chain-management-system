@@ -20,6 +20,24 @@
             w.close();
         }
         
+        function send_email() {
+        	var receipt = "Final Bill%0A" + 
+        		"Check-In Date:%09" + $("#check-in-date").text() + "%0A" +
+        		"Check-Out Date:%09" + $("#check-out-date").text() + "%0A" +
+        		"Final Bill:%09%09%09" + $("#final-bill").text() + "%0A" +
+        		"Room Number:%09" + $("#room-number").text() + "%0A" +
+        		"Floor:%09%09%09" + $("#floor").text() + "%0A" +
+        		"Guest ID:%09%09%09" + $("#guest-id").text() + "%0A" +
+        		"Guest Full Name:%09" + $("#guest-full-name").text() + "%0A" +
+        		"Guest Document:%09" + $("#guest-id-number").text() + "%0A" +
+        		"Hotel ID:%09%09%09" + $("#hotel-id").text() + "%0A" +
+        		"Hotel Name:%09%09" + $("#hotel-name").text() + "%0A" +
+        		"Hotel Region:%09%09" + $("#hotel-region").text() + "%0A" +
+        		"Hotel Address:%09" + $("#hotel-address").text()
+          
+    		window.location='mailto:abc@example.com?subject=Receipt&body=' + receipt;
+    	}
+        
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile?' + auth;
     	}
@@ -100,7 +118,7 @@
         <td id="guest-full-name">null</td>
       </tr>
       <tr>
-        <th>Guest ID Number</th>
+        <th>Guest Document</th>
         <td id="guest-id-number">null</td>
       </tr>
       <tr>
@@ -125,6 +143,9 @@
 <div id="breakAfterTable"></div>
 
 <input type="button" onclick="printDiv('print-content')" value="Print"/>
+
+<input type="button" onclick=send_email() value="Send as Email"/>
+
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 </body>
 </html>

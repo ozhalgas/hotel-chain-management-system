@@ -117,7 +117,7 @@
                  		occupied.checkInDates[i] + "</td> <td>" +
                  		occupied.checkOutDates[i] + "</td> <td>";
                 	
-                	if(diff > 0 && checkInDate.getTime() <= now.getTime()) {
+                	if(diff > 0 && checkInDate.getTime() <= now.getTime() && occupied.occupieds[i] > 0) {
                 		 $('#table-body').append(row +
                              	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
                              	"Not Available" + "</td> </tr>");
