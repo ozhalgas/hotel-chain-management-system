@@ -41,6 +41,42 @@
     		})
     	}
         
+		function get_new_date() {
+        	year = '2020'
+        	month = '12'
+        	day = '30'
+        	
+        	date = year + ':' + month + ':' + day;
+			
+			return date
+    	}
+        
+		function edit(id, date) {
+        	
+        	//let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/edit/' +
+        	//occupied.guestIDs[id].toString() + '-' +
+        	//occupied.roomTypes[id] + '-' +
+        	//occupied.roomNumbers[id] + '-' +
+        	//occupied.roomFloors[id].toString() + '-' +
+        	//occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + '-' +
+        	//occupied.checkOutDates[id].substring(0, 4) + ":" + occupied.checkOutDates[id].substring(5, 7) + ':' + occupied.checkOutDates[id].substring(8, 10) + '-' +
+            //date + 
+            //auth;
+        	
+        	url = "http://localhost:8080/HotelChainManagementSystem/services/checkout/edit/1-Single-10-1-2020:11:16-2020:11:25-2020:12:31?auth=eGF2aWVyOnhhdmllcg==";
+		
+        	console.log(url)
+        	
+    		$.post(url, 
+    				{}, function(r) {
+    			if(r == null) 
+    				window.location.href = "http://localhost:8080/HotelChainManagementSystem";
+    			else {
+    				window.location.href = link;
+    			}
+    		})
+    	}
+        
  		function show_final_bill(id) {
         	
         	let url = 'http://localhost:8080/HotelChainManagementSystem/services/bill/' +
@@ -60,8 +96,7 @@
         
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
-            	
-            	
+            		
             	occupied.roomNumbers = data.roomNumbers; 
             	occupied.roomFloors = data.roomFloors;
             	
@@ -119,14 +154,17 @@
                 	
                 	if(diff > 0 && checkInDate.getTime() <= now.getTime() && occupied.occupieds[i] > 0) {
                 		 $('#table-body').append(row +
+                				"<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
                              	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
                              	"Not Available" + "</td> </tr>");
                 	} else if(diff <= 0 && checkInDate.getTime() <= now.getTime()) {
                 		$('#table-body').append(row +
+                				"Not Available" + "</td> <td>" +
                              	"Checked-Out" + "</td> <td>" +
                              	"<button class='final-bill' id=" + i.toString() + "> Show Final Bill </button>" + "</td> </tr>");
                 	} else {
                 		$('#table-body').append(row +
+                				"Not Available" + "</td> <td>" +
                              	"Not Available" + "</td> <td>" +
                              	"Not Available" + "</td> </tr>");
                 	}
@@ -142,6 +180,17 @@
                     let id = parseInt(this.id);
                     
                     checkout(id)
+                })
+                
+                // "{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}"
+                $('.edit').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id.substr(1, this.id.length));
+                    console.log(id)
+                    
+                    date = get_new_date()
+                    edit(id, date)
                 })
                 
                 $('.final-bill').on('click', function () {
@@ -182,6 +231,7 @@
             <th>Floor</th>
             <th>Check In Date</th>
             <th>Check Out Date</th>
+            <th>Edit</th>
             <th>Check Out</th>
             <th>Final Bill</th>
         </tr>

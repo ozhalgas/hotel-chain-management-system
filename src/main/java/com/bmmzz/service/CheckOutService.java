@@ -53,7 +53,7 @@ public class CheckOutService {
 	@Path("/edit/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}-{oldCheckOutDate}-{newCheckOutDate}")
 	public Response checkOutEdit(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
-			@PathParam("roomtype") String roomType,
+			@PathParam("roomType") String roomType,
 			@PathParam("roomNumber") String roomNumber,
 			@PathParam("floor") int floor,
 			@PathParam("checkInDate") String checkInDate,
