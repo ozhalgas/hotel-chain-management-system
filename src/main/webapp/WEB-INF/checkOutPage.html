@@ -59,19 +59,34 @@
     	}
         
         $(document).ready(function () {
-            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkout/occupied" + auth, function (data) {
-            	occupied.guestIDs = data.guestIDs;
-            	occupied.guestFullNames = data.guestFullNames;
-            	occupied.guestMobilePhoneNumbers = data.guestMobilePhoneNumbers;
-            	occupied.roomTypes = data.roomTypeNames;
-            	occupied.checkInDates = data.checkInDates;
-            	occupied.checkOutDates = data.checkOutDates;
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
+            	
+            	
             	occupied.roomNumbers = data.roomNumbers; 
-            	occupied.roomFloors = data.roomFloors; 
+            	occupied.roomFloors = data.roomFloors;
+            	
             	occupied.hotelIDs = data.hotelIDs;
             	occupied.hotelNames = data.hotelNames;
+            	
+            	occupied.roomTypes = data.roomTypeNames;
+            	
+            	occupied.occupieds = data.occupieds;
+            	occupied.cleaneds = data.cleaneds;
+            	
+            	occupied.numbersOfOccupants = data.numbersOfOccupants;
+            	occupied.capacities = data.capacities;
+            	
+            	occupied.guestIDs = data.guestIDs;
+            	
+            	occupied.checkInDates = data.CIDs;
+            	occupied.checkOutDates = data.CODs;
+
+            	occupied.guestFullNames = data.guestFNs;
+            	occupied.guestMobilePhoneNumbers = data.guestMPNs;           	
 
                 for (let i = 0; i < occupied.guestFullNames.length; i++) {
+                	
+                	if(occupied.guestIDs[i] === -1) continue;
                 	
                 	str = occupied.checkOutDates[i];
                 	
@@ -81,35 +96,39 @@
                 			parseInt(str.substr(8, 2)),
                 			0, 0, 0, 0);
                 	
+                	str = occupied.checkInDates[i];
+                	const checkInDate = new Date(parseInt(str.substr(0, 4)),
+                			parseInt(str.substr(5, 2) - 1),
+                			parseInt(str.substr(8, 2)),
+                			0, 0, 0, 0);
+                	
                 	var diff = checkOutDate.getTime() - now.getTime();
                 	
                 	console.log(checkOutDate);
                 	console.log(diff);
                 	
-                	if(diff > 0) {
-                		 $('#table-body').append("<tr> <td>" +
-                             	occupied.guestIDs[i] + "</td> <td>" +
-                             	occupied.guestFullNames[i] + "</td> <td>" +
-                             	occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
-                             	occupied.roomTypes[i] + "</td> <td>" +
-                             	occupied.roomNumbers[i] + "</td> <td>" +
-                             	occupied.roomFloors[i] + "</td> <td>" +
-                             	occupied.checkInDates[i] + "</td> <td>" +
-                             	occupied.checkOutDates[i] + "</td> <td>" +
+                	row = "<tr> <td>" +
+                 		occupied.guestIDs[i] + "</td> <td>" +
+                 		occupied.guestFullNames[i] + "</td> <td>" +
+                 		occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                 		occupied.roomTypes[i] + "</td> <td>" +
+                 		occupied.roomNumbers[i] + "</td> <td>" +
+                 		occupied.roomFloors[i] + "</td> <td>" +
+                 		occupied.checkInDates[i] + "</td> <td>" +
+                 		occupied.checkOutDates[i] + "</td> <td>";
+                	
+                	if(diff > 0 && checkInDate.getTime() <= now.getTime()) {
+                		 $('#table-body').append(row +
                              	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
                              	"Not Available" + "</td> </tr>");
-                	} else {
-                		$('#table-body').append("<tr> <td>" +
-                             	occupied.guestIDs[i] + "</td> <td>" +
-                             	occupied.guestFullNames[i] + "</td> <td>" +
-                             	occupied.guestMobilePhoneNumbers[i] + "</td> <td>" +
-                             	occupied.roomTypes[i] + "</td> <td>" +
-                             	occupied.roomNumbers[i] + "</td> <td>" +
-                             	occupied.roomFloors[i] + "</td> <td>" +
-                             	occupied.checkInDates[i] + "</td> <td>" +
-                             	occupied.checkOutDates[i] + "</td> <td>" +
+                	} else if(diff <= 0 && checkInDate.getTime() <= now.getTime()) {
+                		$('#table-body').append(row +
                              	"Checked-Out" + "</td> <td>" +
                              	"<button class='final-bill' id=" + i.toString() + "> Show Final Bill </button>" + "</td> </tr>");
+                	} else {
+                		$('#table-body').append(row +
+                             	"Not Available" + "</td> <td>" +
+                             	"Not Available" + "</td> </tr>");
                 	}
                 	       
                 }
