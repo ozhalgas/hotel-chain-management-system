@@ -42,9 +42,9 @@
     	}
         
 		function get_new_date() {
-        	year = '2020'
-        	month = '12'
-        	day = '30'
+        	year = $("#year").val()
+        	month = $("#month").val()
+        	day = $("#day").val()
         	
         	date = year + ':' + month + ':' + day;
 			
@@ -52,29 +52,42 @@
     	}
         
 		function edit(id, date) {
+			
+			const fdate = new Date(parseInt(date.substr(0, 4)),
+        			parseInt(date.substr(5, 2) - 1),
+        			parseInt(date.substr(8, 2)),
+        			0, 0, 0, 0);
+			
+			const fcheckoutdate = new Date(parseInt(occupied.checkOutDates[id].substr(0, 4)),
+        			parseInt(occupied.checkOutDates[id].substr(5, 2) - 1),
+        			parseInt(occupied.checkOutDates[id].substr(8, 2)),
+        			0, 0, 0, 0);
+			
+			if(fdate.getTime() < fcheckoutdate.getTime()) {
+				$("#warning").html("Incorrect date chosen. Please try again!");
+			} else {
         	
-        	//let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/edit/' +
-        	//occupied.guestIDs[id].toString() + '-' +
-        	//occupied.roomTypes[id] + '-' +
-        	//occupied.roomNumbers[id] + '-' +
-        	//occupied.roomFloors[id].toString() + '-' +
-        	//occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + '-' +
-        	//occupied.checkOutDates[id].substring(0, 4) + ":" + occupied.checkOutDates[id].substring(5, 7) + ':' + occupied.checkOutDates[id].substring(8, 10) + '-' +
-            //date + 
-            //auth;
-        	
-        	url = "http://localhost:8080/HotelChainManagementSystem/services/checkout/edit/1-Single-10-1-2020:11:16-2020:11:25-2020:12:31?auth=eGF2aWVyOnhhdmllcg==";
-		
-        	console.log(url)
-        	
-    		$.post(url, 
-    				{}, function(r) {
-    			if(r == null) 
-    				window.location.href = "http://localhost:8080/HotelChainManagementSystem";
-    			else {
-    				window.location.href = link;
-    			}
-    		})
+	        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkout/edit/' +
+	        	occupied.guestIDs[id].toString() + '-' +
+	        	occupied.roomTypes[id] + '-' +
+	        	occupied.roomNumbers[id] + '-' +
+	        	occupied.roomFloors[id].toString() + '-' +
+	        	occupied.checkInDates[id].substring(0, 4) + ":" + occupied.checkInDates[id].substring(5, 7) + ':' + occupied.checkInDates[id].substring(8, 10) + '-' +
+	        	occupied.checkOutDates[id].substring(0, 4) + ":" + occupied.checkOutDates[id].substring(5, 7) + ':' + occupied.checkOutDates[id].substring(8, 10) + '-' +
+	            date + 
+	            auth;
+			
+	        	console.log(url)
+	        	
+	    		$.post(url, 
+	    				{}, function(r) {
+	    			if(r == null) 
+	    				$("#warning").html("Incorrect date chosen. Please try again!");
+	    			else {
+	    				window.location.href = link;
+	    			}
+	    		})
+			}
     	}
         
  		function show_final_bill(id) {
@@ -239,6 +252,18 @@
         <tbody id="table-body">
         </tbody>
 </table>
+
+<h3 id="check-out-new-info">Update the following values if you want to update Check-Out Date</h3><br>
+
+<form>
+         Year:<br> <input type="text" name="year" id="year">
+         <br>
+         Month:<br> <input type="text" name="month" id="month">
+         <br>
+         Day:<br> <input type="text" name="day" id="day">
+</form>
+
+<h4 id="warning" style="color:red"></h4><br>
 
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 </body>

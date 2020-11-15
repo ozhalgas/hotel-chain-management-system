@@ -26,7 +26,7 @@ public class FinalBillService {
     @Produces({MediaType.TEXT_HTML})
     public InputStream get( @DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
-			@PathParam("roomtype") String roomType,
+			@PathParam("roomType") String roomType,
 			@PathParam("roomNumber") String roomNumber,
 			@PathParam("floor") int floor,
 			@PathParam("checkInDate") String checkInDate ) {
