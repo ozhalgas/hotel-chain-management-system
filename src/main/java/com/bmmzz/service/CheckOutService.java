@@ -57,8 +57,8 @@ public class CheckOutService {
 			@PathParam("roomNumber") String roomNumber,
 			@PathParam("floor") int floor,
 			@PathParam("checkInDate") String checkInDate,
-			@PathParam("newCheckInDate") String newCheckOutDate,
-			@PathParam("oldCheckInDate") String oldCheckOutDate) {
+			@PathParam("newCheckOutDate") String newCheckOutDate,
+			@PathParam("oldCheckOutDate") String oldCheckOutDate) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
 		checkInDate = checkInDate.replace(':', '-');
