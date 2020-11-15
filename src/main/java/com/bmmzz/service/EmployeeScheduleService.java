@@ -24,7 +24,6 @@ public class EmployeeScheduleService {
 	}
 	
 	@GET
-	@Path("/schedules")
 	public Response employeeSchedulesInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
 		if(!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
