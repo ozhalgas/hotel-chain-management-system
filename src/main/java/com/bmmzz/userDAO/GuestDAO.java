@@ -123,7 +123,6 @@ public class GuestDAO {
 	}
 
 	public static void removeBooking(int guestID, int hotelID, String startDate, String endDate, String typeName) {		
-		
 		try {			
 			startDate = startDate.replace(':', '-');
 			endDate = endDate.replace(':', '-');

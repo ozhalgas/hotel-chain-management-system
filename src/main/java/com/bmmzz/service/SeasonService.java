@@ -1,6 +1,7 @@
 package com.bmmzz.service;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -49,6 +50,19 @@ public class SeasonService {
 		//SeasonDAO.createTimePeriod();
 		//SeasonDAO.createInitialPrice();
 		//SeasonDAO.createOperatesDuring();
+		return Response.ok().build();
+	}
+	
+	@DELETE
+	@Path("/delete/{seasonName}-{start}-{end}")
+	public Response deleteSeason(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("seasonName") String seasonName,
+			@PathParam("start") String start,
+			@PathParam("end") String end) {
+		if (!UserDAO.getRole(auth).equals("manager")) {
+			return null;
+		}
+		SeasonDAO.deleteSeason(auth, seasonName, start, end);
 		return Response.ok().build();
 	}
 }

@@ -26,4 +26,17 @@ public class SeasonDAO {
 		}
 		return json;
 	}
+	
+	public static void deleteSeason(String auth, String seasonName, String start, String end) {
+		try {
+			UserDAO.executeUpdate("Delete from mydb.operates_during Where seasonname='" + seasonName + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+			UserDAO.executeUpdate("Delete from mydb.initial_price Where seasonname='" + seasonName + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+			ResultSet result = UserDAO.executeQuery("Select * From mydb.operates_during Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
+			if (!result.next()) {
+				UserDAO.executeUpdate("Delete from mydb.time_period Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
