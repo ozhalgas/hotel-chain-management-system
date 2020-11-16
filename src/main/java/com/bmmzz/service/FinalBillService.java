@@ -10,10 +10,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
 
-@Path("/bill/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
+@Path("/bill")
 public class FinalBillService {
 
 	@Context ServletContext servletContext;
@@ -24,12 +26,7 @@ public class FinalBillService {
 	
 	@GET
     @Produces({MediaType.TEXT_HTML})
-    public InputStream get( @DefaultValue("") @QueryParam("auth") String auth,
-			@PathParam("guestID") int guestID,
-			@PathParam("roomType") String roomType,
-			@PathParam("roomNumber") String roomNumber,
-			@PathParam("floor") int floor,
-			@PathParam("checkInDate") String checkInDate ) {
+    public InputStream get( @DefaultValue("") @QueryParam("auth") String auth) {
         if(!UserDAO.checkAuth(auth))
             return Helper.getPage(servletContext, "accessDeniedPage.html");
         switch( UserDAO.getRole(auth) ) {
@@ -39,4 +36,20 @@ public class FinalBillService {
                 return Helper.getPage(servletContext, "accessDeniedPage.html");
         }
     }
+	
+	@GET
+	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
+	public Response finalBill(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("guestID") int guestID,
+			@PathParam("roomType") String roomType,
+			@PathParam("roomNumber") String roomNumber,
+			@PathParam("floor") int floor,
+			@PathParam("checkInDate") String checkInDate) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;
+		checkInDate = checkInDate.replace(':', '-');
+		roomType = roomType.replace(':', '-');
+		String json = RoomDAO.finalBill(auth, guestID, roomType, roomNumber, floor, checkInDate);
+		return Response.ok(json).build();
+	}
 }

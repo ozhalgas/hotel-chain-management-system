@@ -64,6 +64,7 @@ public class CheckOutService {
 		checkInDate = checkInDate.replace(':', '-');
 		oldCheckOutDate = oldCheckOutDate.replace(':', '-');
 		newCheckOutDate = newCheckOutDate.replace(':', '-');
+		roomType = roomType.replace(':', '-');
 		boolean result = RoomDAO.checkOutEdit(auth, guestID, roomType, roomNumber, floor, checkInDate, oldCheckOutDate, newCheckOutDate);
 		return Response.ok(result).build();
 	}
@@ -72,29 +73,15 @@ public class CheckOutService {
 	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}")
 	public Response checkOut(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("guestID") int guestID,
-			@PathParam("roomtype") String roomType,
+			@PathParam("roomType") String roomType,
 			@PathParam("roomNumber") String roomNumber,
 			@PathParam("floor") int floor,
 			@PathParam("checkInDate") String checkInDate) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
 		checkInDate = checkInDate.replace(':', '-');
+		roomType = roomType.replace(':', '-');
 		RoomDAO.checkOut(auth, guestID, roomType, roomNumber, floor, checkInDate);
 		return Response.ok().build();
-	}
-	
-	@GET
-	@Path("/{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}/bill")
-	public Response finalBill(@DefaultValue("") @QueryParam("auth") String auth,
-			@PathParam("guestID") int guestID,
-			@PathParam("roomtype") String roomType,
-			@PathParam("roomNumber") String roomNumber,
-			@PathParam("floor") int floor,
-			@PathParam("checkInDate") String checkInDate) {
-		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
-			return null;
-		checkInDate = checkInDate.replace(':', '-');
-		String json = RoomDAO.finalBill(auth, guestID, roomType, roomNumber, floor, checkInDate);
-		return Response.ok(json).build();
 	}
 }

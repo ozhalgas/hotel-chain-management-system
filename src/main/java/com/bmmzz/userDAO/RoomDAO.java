@@ -197,8 +197,8 @@ public class RoomDAO {
 		String checkOutDate = java.time.LocalDate.now().toString();
 		double finalBill = 0;
 		try {
-			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
-			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
+			Date outDate = new SimpleDateFormat("yyyy-MM-dd").parse(checkOutDate);
+			Date inDate = new SimpleDateFormat("yyyy-MM-dd").parse(checkInDate);
 			finalBill = getInitialPrice(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -222,25 +222,18 @@ public class RoomDAO {
 		Gson gson = new Gson();
 		BillInfo bill = new BillInfo();
 		String json = "";
-		double finalBill = 0;
 		try {
-			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkOutDate);
-			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(checkInDate);
-			finalBill = getInitialPrice(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType);
 			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and mydb.single_stay.checkindate='" + checkInDate + "' and mydb.single_stay.roomnumber='" + roomNumber + "' and mydb.single_stay.roomfloor='" + floor + "' and mydb.single_stay.guestid='" + guestID + "' and mydb.guest.guestID='" + guestID + "'");
 			if (result.next()) {
 				bill.add(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), result.getInt(6), result.getString(15), result.getString(16), result.getString(17), result.getInt(9), result.getString(10), result.getString(11), result.getString(12), result.getString(13));
 				json = gson.toJson(bill, BillInfo.class);
 			}
-		} catch (ParseException | SQLException e) {
-			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return json;
 	}
-	
-	
+		
 	public static boolean checkOutEdit(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate, String oldCheckOutDate, String newCheckOutDate) {
 		try {
 			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(newCheckOutDate);
