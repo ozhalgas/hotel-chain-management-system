@@ -224,6 +224,7 @@
         else {
           $('#review-table').css('display', 'none')
           tablerev.destroy();
+          cancelEdit();
         }
 		
 		$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/schedule" + auth, function(r) {
