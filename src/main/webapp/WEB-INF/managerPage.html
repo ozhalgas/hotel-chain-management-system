@@ -22,21 +22,23 @@
     ></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 	<script type="text/javascript">
-      var link = window.location.href.toString();
-    var auth = link.substring(65, link.length)
+    var link = window.location.href.toString();
+    var auth = link.substring(65, link.length);	
+    var emp = {};
+    var hotelName = "";
 
     function logout() {
     	window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
     }
     
-	  function getRegisterURL() {
+	function getRegisterURL() {
 		$('#regnewempl').on('click', function() {
 			console.log('clicked')
 			window.location.href = 
 			"http://localhost:8080/HotelChainManagementSystem/services/employee-registration"+
 			auth
 		})
-	  }
+	}
 
     function gotoBook() {
 		$('#booking').on('click', function() {
@@ -47,7 +49,7 @@
 		})
 	}
 
-      function getProfileName() {
+    function getProfileName() {
         $.ajax({
           url:
             link.substring(0, 65) + "/info/" + link.substring(65, link.length),
@@ -81,18 +83,14 @@
             $("#salary").html(r["Payrate"]);
             $("#start-date").html(r.StartDate);
             $("#hotel-name").html(r.HotelName);
+            hotelName = r.HotelName;
           },
         });
-      }
-
-      $(document).ready(function () {
-        var tablerev;
-        getProfileName();
-        gotoBook();
-        getRegisterURL();
-        $('#review').on('click', function () {
-          if($('#review-table').css('display') == 'none') {
-            $('#review-table').css('display', 'block');
+    }
+      
+	function showSchedule() {
+		if($('#review-table').css('display') == 'none') {
+          	$('#review-table').css('display', 'block');
             tablerev = $('#review-table').DataTable(
                     {
                       columns: [
@@ -110,15 +108,75 @@
                         { width: '8%' }
                       ]
                     }
-            );
-          }
-          else {
-            $('#review-table').css('display', 'none')
-            tablerev.destroy();
-          }
-        });
-      });
+        );
+        }
+        else {
+          $('#review-table').css('display', 'none')
+          tablerev.destroy();
+        }
+    	  
+		$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/schedule" + auth, function(r) {
+			    emp.employeeIDs = r.empIDs;
+			    emp.fullNames = r.empFullNames;
+			    emp.emailAdress = r.empEmailAddresses;
+			    emp.mobilePhoneNumbers = r.empMobPhoneNumbers;
+			    emp.hotelIDs = r.hotelIDs;
+			    emp.positions = r.empPositions;
+			    emp.payRates = r.empPayRates;
+			    emp.startDates = r.empStartDates;
+			    emp.startTimes = r.empStartTimes;
+			    emp.endTimes = r.empEndTimes;
+			    emp.dailySalaries = r.empDailySalaries;
+			    emp.weeklySalaries = r.empWeeklySalaries;
+			    emp.workingDays = r.empWorkingDays;
+			    
+			    emp.employeeIDs.forEach(function (element, i, array) {
+					var workingHours = emp.startTimes[i].substring(0,5) + "-" + emp.endTimes[i].substring(0,5);
+					var workingDays = "";
+					if( emp.workingDays[i].includes("M") )
+						workingDays += "Mon ";
+					if( emp.workingDays[i].includes("T") )
+						workingDays += "Tue ";
+					if( emp.workingDays[i].includes("W") )
+						workingDays += "Wed ";
+					if( emp.workingDays[i].includes("R") )
+						workingDays += "Thu ";
+					if( emp.workingDays[i].includes("F") )
+						workingDays += "Fri ";
+					if( emp.workingDays[i].includes("S") )
+						workingDays += "Sat ";
+					if( emp.workingDays[i].includes("H") )
+						workingDays += "Sun ";
+					
+				    $('#review-table').append( "<tbody>" + 
+										        "<tr>" + 
+										          "<td>" + emp.employeeIDs[i] + "</td>" + 
+										          "<td>" + emp.fullNames[i] + "</td>" + 
+										          "<td>" + emp.emailAdress[i] + "</td>" + 
+										          "<td>" + emp.mobilePhoneNumbers[i] + "</td>" + 
+										          "<td>" + hotelName + "</td>" + 
+										          "<td>" + emp.positions[i][0].toUpperCase() + emp.positions[i].slice(1) + "</td>" + 
+										          "<td>" + emp.startDates[i] + "</td>" + 
+										          "<td>" + workingHours + "</td>" + 
+										          "<td>" + workingDays + "</td>" + 
+										          "<td>" + emp.dailySalaries[i] + "</td>" + 
+										          "<td>" + emp.weeklySalaries[i] + "</td>" + 
+										          "<button class='edit' id=" + i.toString() + "> Edit </button>" + 
+										        "</tr>" + 
+										        "</tbody>");
+				});
+		});
+	}
 
+	$(document).ready(function () {
+		var tablerev;
+		getProfileName();
+		gotoBook();
+		getRegisterURL();
+		$('#review').on('click', function () {
+			showSchedule();
+		  });
+	});
     </script>
   </head>
   <body>

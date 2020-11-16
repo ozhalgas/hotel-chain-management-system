@@ -42,5 +42,4 @@ public class EmployeeScheduleService {
 		EmployeeDAO.editEmployeeSchedule(auth, employeeID, startTime, endTime);
 		return Response.ok().build();
 	}
-	
 }
