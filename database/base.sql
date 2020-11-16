@@ -649,24 +649,3 @@ insert into mydb.additional_feature values('VIP Lunch', 75.0, '12:00:00.0', '15:
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 0);
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 1);
 insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
-
-insert mydb.guest values(1, 'Guest One', 'ID', '24234234', '8th Avenue', '4234324', '32423423', 'guest1', 'pass');
-insert mydb.guest values(2, 'Guest Two', 'ID', '89532343', '13th Street', '7567456', '9849324', 'guest2', 'pass');
-
-insert into mydb.occupies values('12', 1, 1, '2020-09-10', '2020-11-11',1, 'Single');
-insert into mydb.occupies values('12', 1, 1, '2020-11-23', '2020-11-29',1, 'Single');
-
-insert into mydb.occupies values('13', 1, 2, '2020-09-10', '2020-11-11',0, 'Double');
-insert into mydb.occupies values('12', 1, 2, '2020-11-30', '2020-12-10',1, 'Single');
-insert into mydb.occupies values('15', 1, 2, '2020-10-23', '2020-10-25',2, 'Double');
-
-insert into mydb.cleans values(0, 3, 'desk-clerk', '10', 1, 'Single');
-insert into mydb.cleans values(1, 4, 'desk-clerk', '21', 2, 'Single');
-insert into mydb.cleans values(2, 5, 'desk-clerk', '38', 3, 'Luxury');
-
-insert into mydb.guest_belongs_category values('Disabled', 1);
-
-insert into mydb.reserves values('Single', 0, 1, '2021-03-02', '2021-03-24', 1);
-
-insert into mydb.single_stay values('2020-12-26', '2020-12-28', 1000.0, 10, 1, 1, 'Single', 0);
-
