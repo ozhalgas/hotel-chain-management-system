@@ -22,7 +22,7 @@ public class SeasonService {
 	
 	@GET
 	@Path("/all")
-	public Response getOccupied( @DefaultValue("") @QueryParam("auth") String auth ) {
+	public Response getSeasons( @DefaultValue("") @QueryParam("auth") String auth ) {
 		if (!UserDAO.getRole(auth).equals("manager")) {
 			return null;
 		}
