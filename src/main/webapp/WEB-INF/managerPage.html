@@ -114,7 +114,7 @@
           $('#review-table').css('display', 'none')
           tablerev.destroy();
         }
-    	  
+		
 		$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/schedule" + auth, function(r) {
 			    emp.employeeIDs = r.empIDs;
 			    emp.fullNames = r.empFullNames;
@@ -129,42 +129,44 @@
 			    emp.dailySalaries = r.empDailySalaries;
 			    emp.weeklySalaries = r.empWeeklySalaries;
 			    emp.workingDays = r.empWorkingDays;
-			    
-			    emp.employeeIDs.forEach(function (element, i, array) {
-					var workingHours = emp.startTimes[i].substring(0,5) + "-" + emp.endTimes[i].substring(0,5);
-					var workingDays = "";
-					if( emp.workingDays[i].includes("M") )
-						workingDays += "Mon ";
-					if( emp.workingDays[i].includes("T") )
-						workingDays += "Tue ";
-					if( emp.workingDays[i].includes("W") )
-						workingDays += "Wed ";
-					if( emp.workingDays[i].includes("R") )
-						workingDays += "Thu ";
-					if( emp.workingDays[i].includes("F") )
-						workingDays += "Fri ";
-					if( emp.workingDays[i].includes("S") )
-						workingDays += "Sat ";
-					if( emp.workingDays[i].includes("H") )
-						workingDays += "Sun ";
-					
-				    $('#review-table').append( "<tbody>" + 
-										        "<tr>" + 
-										          "<td>" + emp.employeeIDs[i] + "</td>" + 
-										          "<td>" + emp.fullNames[i] + "</td>" + 
-										          "<td>" + emp.emailAdress[i] + "</td>" + 
-										          "<td>" + emp.mobilePhoneNumbers[i] + "</td>" + 
-										          "<td>" + hotelName + "</td>" + 
-										          "<td>" + emp.positions[i][0].toUpperCase() + emp.positions[i].slice(1) + "</td>" + 
-										          "<td>" + emp.startDates[i] + "</td>" + 
-										          "<td>" + workingHours + "</td>" + 
-										          "<td>" + workingDays + "</td>" + 
-										          "<td>" + emp.dailySalaries[i] + "</td>" + 
-										          "<td>" + emp.weeklySalaries[i] + "</td>" + 
-										          "<button class='edit' id=" + i.toString() + "> Edit </button>" + 
-										        "</tr>" + 
-										        "</tbody>");
-				});
+				
+			    if(emp.employeeIDs.length > 0) {
+			    	$('#review-table-body').empty();
+			    	
+				    emp.employeeIDs.forEach(function (element, i, array) {
+						var workingHours = emp.startTimes[i].substring(0,5) + "-" + emp.endTimes[i].substring(0,5);
+						var workingDays = "";
+						if( emp.workingDays[i].includes("M") )
+							workingDays += "Mon ";
+						if( emp.workingDays[i].includes("T") )
+							workingDays += "Tue ";
+						if( emp.workingDays[i].includes("W") )
+							workingDays += "Wed ";
+						if( emp.workingDays[i].includes("R") )
+							workingDays += "Thu ";
+						if( emp.workingDays[i].includes("F") )
+							workingDays += "Fri ";
+						if( emp.workingDays[i].includes("S") )
+							workingDays += "Sat ";
+						if( emp.workingDays[i].includes("H") )
+							workingDays += "Sun ";
+							
+						$('#review-table-body').append(  "<tr>" + 
+											          "<td>" + emp.employeeIDs[i] + "</td>" + 
+											          "<td>" + emp.fullNames[i] + "</td>" + 
+											          "<td>" + emp.emailAdress[i] + "</td>" + 
+											          "<td>" + emp.mobilePhoneNumbers[i] + "</td>" + 
+											          "<td>" + hotelName + "</td>" + 
+											          "<td>" + emp.positions[i][0].toUpperCase() + emp.positions[i].slice(1) + "</td>" + 
+											          "<td>" + emp.startDates[i] + "</td>" + 
+											          "<td>" + workingHours + "</td>" + 
+											          "<td>" + workingDays + "</td>" + 
+											          "<td>" + emp.dailySalaries[i] + "</td>" + 
+											          "<td>" + emp.weeklySalaries[i] + "</td>" + 
+											          "<td>" + "<button class='edit' id=" + i.toString() + "> Edit </button>" + "</td>" + 
+											        "</tr>");
+					});
+			    }
 		});
 	}
 
@@ -268,21 +270,7 @@
           <th>To edit</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-          <td>Paul Vanger</td>
-          <td>PaulVanger@gmail.com</td>
-          <td>M-F: 9am - 5pm</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Manager</td>
-          <td>Button</td>
-        </tr>
+        <tbody id=review-table-body>
         </tbody>
       </table>
     </div>
