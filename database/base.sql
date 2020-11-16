@@ -487,7 +487,6 @@ insert into mydb.additional_feature values('VIP Lunch', 75.0, '12:00:00.0', '15:
 
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 0);
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 1);
-<<<<<<< HEAD
 insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
 
 insert mydb.guest values(1, 'Guest One', 'ID', '24234234', '8th Avenue', '4234324', '32423423', 'guest1', 'pass');
@@ -527,9 +526,3 @@ insert into mydb.single_stay values('2021-01-25', '2021-01-28', 450.0, '12', 1, 
 insert into mydb.occupies values('11', 1, 2, '2020-11-25', '2020-11-28',0, 'Single');
 insert into mydb.occupies values('22', 2, 2, '2020-12-25', '2020-12-28',1, 'Single');
 insert into mydb.occupies values('12', 1, 2, '2021-01-25', '2021-01-28',2, 'Double');
-
-
-
-=======
-insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
->>>>>>> 96903036593e90ca00b2f650b0f67ec201152662
