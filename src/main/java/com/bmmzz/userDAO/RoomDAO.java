@@ -203,9 +203,24 @@ public class RoomDAO {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		UserDAO.executeUpdate("Update mydb.reserves " + 
-			"Set checkoutdate = '" + checkOutDate + "' " + 
-			"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+		try {
+			ResultSet result = UserDAO.executeQuery("Select numberofrooms, checkoutdate From mydb.reserves Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+			result.next();
+			if ( !checkOutDate.equals(result.getString(2)) ) {
+				if (result.getInt(1) > 1) {
+					UserDAO.executeUpdate("Update mydb.reserves " + 
+							"Set numberofrooms = '" + (result.getInt(1) - 1) + "' " + 
+							"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+					reserveRoomType(roomType, EmployeeDAO.getHotelID(auth), guestID, checkInDate, checkOutDate, 1);				
+				} else {
+					UserDAO.executeUpdate("Update mydb.reserves " + 
+							"Set checkoutdate = '" + checkOutDate + "' " + 
+							"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		UserDAO.executeUpdate("Update mydb.single_stay " + 
 			"Set checkoutdate = '"  + checkOutDate + "', finalbill = '" + finalBill + "' " + 
 			"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
@@ -233,11 +248,11 @@ public class RoomDAO {
 		}
 		return json;
 	}
-		
+	
 	public static boolean checkOutEdit(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate, String oldCheckOutDate, String newCheckOutDate) {
 		try {
-			Date outDate = new SimpleDateFormat("yyyy-mm-dd").parse(newCheckOutDate);
-			Date inDate = new SimpleDateFormat("yyyy-mm-dd").parse(oldCheckOutDate);
+			Date outDate = new SimpleDateFormat("yyyy-MM-dd").parse(newCheckOutDate);
+			Date inDate = new SimpleDateFormat("yyyy-MM-dd").parse(oldCheckOutDate);
 			inDate = new Date(inDate.getTime() + 86400000);
 			if (getNumberOfAvailableRooms(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType) > 0) {
 				UserDAO.executeUpdate("Update mydb.reserves " + 
