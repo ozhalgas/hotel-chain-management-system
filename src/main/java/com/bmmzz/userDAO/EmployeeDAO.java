@@ -108,6 +108,12 @@ public class EmployeeDAO {
 							"Where employeeID='" + employeeID + "' and hotelid='" + getHotelID(auth) + "' and position<>'Manager'");
 	}
 	
+	public static void editEmployeePayRate(String auth, int employeeID, String payRate) {
+		UserDAO.executeUpdate("Update mydb.schedule " + 
+							"Set PayRate='" + payRate + "' " +
+							"Where employeeID='" + employeeID + "' and hotelid='" + getHotelID(auth) + "' and position<>'Manager'");
+	}
+	
 	public static String getSchedules(String auth) {
 		Gson gson = new Gson();
 		EmployeeSchedulesInfo es = new EmployeeSchedulesInfo();
