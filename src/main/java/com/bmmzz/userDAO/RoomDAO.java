@@ -255,9 +255,21 @@ public class RoomDAO {
 			Date inDate = new SimpleDateFormat("yyyy-MM-dd").parse(oldCheckOutDate);
 			inDate = new Date(inDate.getTime() + 86400000);
 			if (getNumberOfAvailableRooms(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType) > 0) {
-				UserDAO.executeUpdate("Update mydb.reserves " + 
-						"Set checkoutdate = '" + newCheckOutDate + "' " + 
+				ResultSet resultSet = UserDAO.executeQuery("Select NumberOfRooms from mydb.reserves " + 
 						"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+				resultSet.next();
+				
+				if(resultSet.getInt(1) > 1) {
+					UserDAO.executeUpdate("Update mydb.reserves " + 
+							"Set NumberOfRooms = " + (resultSet.getInt(1) - 1 ) +
+							" Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+					reserveRoomType(roomType, EmployeeDAO.getHotelID(auth), guestID, checkInDate, newCheckOutDate, 1);
+				} else {
+					UserDAO.executeUpdate("Update mydb.reserves " + 
+							"Set checkoutdate = '" + newCheckOutDate + "' " + 
+							"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+				}
+				
 				UserDAO.executeUpdate("Update mydb.single_stay " + 
 						"Set checkoutdate = '"  + newCheckOutDate + "' " +
 						"Where checkindate='" + checkInDate + "' and roomNumber='" + roomNumber + "' and roomfloor='" + floor + "' and guestid='" + guestID + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
@@ -266,7 +278,7 @@ public class RoomDAO {
 						"Where roomNumber='" + roomNumber + "' and floor='" + floor + "' and checkindate='" + checkInDate + "' and hotelID='" + EmployeeDAO.getHotelID(auth) + "'");
 				return true;
 			}
-		} catch (ParseException e) {
+		} catch (ParseException | SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
