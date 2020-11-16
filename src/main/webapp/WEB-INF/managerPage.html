@@ -117,11 +117,25 @@
     		return;
     	}
     	
+    	if(!/^\d{1,9}$/.test( $('#payRateEdit').val() ) || parseInt( $('#payRateEdit').val() ) <= 0) {
+    		alert("Error! Invalid pay rate.");
+    		return;
+    	} 
+    	
     	$.post('http://localhost:8080/HotelChainManagementSystem/services/schedule/edit/' + emp.employeeIDs[i] + '-' + startTime + '-' +  endTime + auth, {}, function() {
-    		alert("Working hours has been edited successfully!");
     	}).fail( function() {
     		alert("Error! Failed to update working hours!")
+    		return;
     	});
+    	
+    	$.post('http://localhost:8080/HotelChainManagementSystem/services/schedule/edit/' + emp.employeeIDs[i] + '-$' + $('#payRateEdit').val() + auth, {}, function() {
+    		cancelEdit();
+        	updateSchedule();
+    		alert("Working hours and pay rate have been edited successfully!");
+    	}).fail( function() {
+    		alert("Error! Failed to update pay rate!");
+    		return;
+    	})
     }
     
     function cancelEdit() {
@@ -134,16 +148,26 @@
     	$('#time-select').append("<label for=\"startTime\">Start Time:</label>" + 
     	    					 "<input autocomplete=\"off\" type=\"text\" id=\"startTime\" name=\"startTime\" placeholder=\"Start Time\">&emsp;" + 
     	    					 "<label for=\"endTime\">End Time:</label>" + 
-    	    					 "<input autocomplete=\"off\" type=\"text\" id=\"endTime\" name=\"endTime\" placeholder=\"End Time\">&emsp;<br>" + 
+    	    					 "<input autocomplete=\"off\" type=\"text\" id=\"endTime\" name=\"endTime\" placeholder=\"End Time\">&emsp;" +
+    	    					 "<label for=\"payRateEdit\">Pay Rate ($):</label>" + 
+    	    					 "<input autocomplete=\"off\" type=\"text\" id=\"payRateEdit\" name=\"payRateEdit\" placeholder=\"Pay Rate\" value=\"" + emp.payRates[i].substring(1) + "\">&emsp;<br>" + 
     	    					 "<button id=\"saveEdit\" onclick=saveEdit(" + i + ");>Save</button>" +
     	    					 "<button class=\"cancelbtn\" id=\"cancelEdit\" onclick=cancelEdit();>Cancel</button><br>");
+    	
+    	$('#payRateEdit').html(emp.payRates[i].substring(1));
+    	
+    	var startTime = emp.startTimes[i].substring(0,5);
+    	var endTime = emp.endTimes[i].substring(0,5);
+    	alert(startTime);
+    	alert(endTime);
+    	
     	
     	$('#startTime').timepicker({
     	    timeFormat: 'HH:mm',
     	    interval: 60,
     	    minTime: '06:00',
     	    maxTime: '23:00',
-    	    defaultTime: '11:00',
+    	    defaultTime: startTime,
     	    startTime: '06:00',
     	    dynamic: false,
     	    dropdown: true,
@@ -151,23 +175,31 @@
     	    change: function(time) {
     	    	$('#endTime').timepicker('option', 'minTime', $('#startTime').val());
     	    	$('#endTime').timepicker('option', 'startTime', $('#startTime').val());
-    	    	$('#endTime').val( $('startTime').val() );
+    	    	
+    	    	if($('#startTime').val().localeCompare(endTime) > 0) {
+        	    	$('#endTime').val( $('startTime').val() );
+    	    	}
     		}
     	});
     	
     	$('#endTime').timepicker({
     	    timeFormat: 'HH:mm',
     	    interval: 60,
-    	    minTime: '06:00',
+    	    minTime: startTime,
     	    maxTime: '23:00',
-    	    defaultTime: '11:00',
-    	    startTime: '06:00',
+    	    defaultTime: endTime,
+    	    startTime: startTime,
     	    dynamic: false,
     	    dropdown: true,
     	    scrollbar: false
     	});
     }
-      
+    
+    function updateSchedule() {
+    	showSchedule();
+    	showSchedule();
+    }
+    
 	function showSchedule() {
 		if($('#review-table').css('display') == 'none') {
           	$('#review-table').css('display', 'block');
@@ -258,6 +290,8 @@
 		getProfileName();
 		gotoBook();
 		getRegisterURL();
+		
+		updateSchedule();
 		$('#review').on('click', function () {
 			showSchedule();
 		});
