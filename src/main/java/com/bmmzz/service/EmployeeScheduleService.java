@@ -33,13 +33,24 @@ public class EmployeeScheduleService {
 	
 	@POST
 	@Path("/edit/{employeeID}-{newStartTime}-{newEndTime}")
-	public Response checkOut(@DefaultValue("") @QueryParam("auth") String auth,
+	public Response adjustHours(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("employeeID") int employeeID,
 			@PathParam("newStartTime") String startTime,
 			@PathParam("newEndTime") String endTime) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
 		EmployeeDAO.editEmployeeSchedule(auth, employeeID, startTime, endTime);
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/edit/{employeeID}-{newPayRate}")
+	public Response editPayRate(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("employeeID") int employeeID,
+			@PathParam("newPayRate") String payRate) {
+		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
+			return null;
+		EmployeeDAO.editEmployeePayRate(auth, employeeID, payRate);
 		return Response.ok().build();
 	}
 }
