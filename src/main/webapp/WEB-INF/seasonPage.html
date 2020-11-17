@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+    <title>Check-Out Page</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" charset="utf8" 
+    	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+	    var link = window.location.href.toString();
+		const params = new URLSearchParams(window.location.search);
+		var auth = "?auth=" + params.get('auth');
+        var season = {}
+        var table;
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
+        $(document).ready(function () {
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/all" + auth, function (data) {
+            		
+            	season.weekDay = data.weekDay;
+            	season.seasonName = data.seasonName;
+            	season.start = data.start;
+            	season.end = data.end;
+            	
+            	season.roomType = data.roomType;
+            	season.price = data.price;
+            	season.hotelID = data.hotelID;
+            	season.hotelName = data.hotelName;
+            	
+            	for (let i = 0; i < season.weekDay.length; i++) {
+            		var workingDays = "";
+					if( season.weekDay[i].includes("M") )
+						workingDays += "Mon ";
+					if( season.weekDay[i].includes("T") )
+						workingDays += "Tue ";
+					if( season.weekDay[i].includes("W") )
+						workingDays += "Wed ";
+					if( season.weekDay[i].includes("R") )
+						workingDays += "Thu ";
+					if( season.weekDay[i].includes("F") )
+						workingDays += "Fri ";
+					if( season.weekDay[i].includes("S") )
+						workingDays += "Sat ";
+					if( season.weekDay[i].includes("H") )
+						workingDays += "Sun ";
+					
+					row = "<tr> <td>" +
+             			season.seasonName[i] + "</td> <td>" +
+             			workingDays + "</td> <td>" +
+             			season.start[i] + "</td> <td>" +
+             			season.end[i] + "</td> <td>" +
+             			season.roomType[i] + "</td> <td>" +
+             			season.price[i] + "</td> <td>" +
+             			"<button class='cancel cancelbtn' id=" + i.toString() + "> Cancel </button>" + "</td> </tr>";
+
+            		$('#table-body').append(row);
+            		
+            	}
+
+                table = $('#season-table').DataTable();
+                
+                // "{guestID}-{roomType}-{roomNumber}-{floor}-{checkInDate}"
+                $('.cancel').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    
+                    cancel(id)
+                })
+        });
+            
+        })
+        
+    </script>
+</head>
+<body>
+<h2>
+    Seasonal Discounts
+</h2>
+
+<h3 id="HotelName"></h3>
+
+<table class="cell-border" id="season-table">
+        <thead>
+        <tr>
+        	<th>Season Name</th>
+        	<th>Day of the Week</th>
+        	<th>Start Date</th>
+            <th>End Date</th>
+            <th>Room Type</th>
+            <th>Price</th>
+            <th>Cancel</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+</table>
+
+<h4 id="warning" style="color:red"></h4><br>
+
+<button class="create" id="create" onclick=create();>Create</button>
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+</body>
+</html>

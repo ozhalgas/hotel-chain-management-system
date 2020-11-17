@@ -294,6 +294,10 @@
 		$('#review').on('click', function () {
 			showSchedule();
 		});
+		
+		$('#seasons').on('click', function () {
+			window.location='http://localhost:8080/HotelChainManagementSystem/services/season' + auth;
+		});
 	});
     </script>
   </head>
@@ -396,6 +400,7 @@
 	
     <button id="regnewempl">Register new desk clerk</button>
     <button id="review">Review schedules</button>
+    <button id="seasons">Show seasons</button>
     <button class="cancelbtn" id="logout" onclick=logout();>Logout</button>
     </form><br><br><br><br><br><br><br><br>
   </body>
