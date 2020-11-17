@@ -52,6 +52,17 @@ public class SeasonService {
 		return Response.ok(json).build();
 	}
 	
+	@GET
+	@Path("/{seasonName}")
+	public Response getSeasonPrice(@DefaultValue("") @QueryParam("auth") String auth, 
+			@PathParam("seasonName") String seasonName) {
+		if (!UserDAO.getRole(auth).equals("manager")) {
+			return null;
+		}
+		String json = SeasonDAO.getSeasonPrice(auth, seasonName);
+		return Response.ok(json).build();
+	}
+	
 	@POST
 	@Path("/create/{seasonName}-{startDate}-{endDate}-{roomTypes}-{prices}")
 	public Response createTimePeriod(@DefaultValue("") @QueryParam("auth") String auth,
@@ -78,6 +89,8 @@ public class SeasonService {
 		if (!UserDAO.getRole(auth).equals("manager")) {
 			return null;
 		}
+		start = start.replace(':', '-');
+		end = end.replace(':', '-');
 		SeasonDAO.deleteSeason(auth, seasonName, start, end);
 		return Response.ok().build();
 	}
