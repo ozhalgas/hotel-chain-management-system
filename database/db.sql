@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Time_Period` (
   `SeasonName` VARCHAR(45) NOT NULL,
   `StartDate` DATE NOT NULL,
   `EndDate` DATE NOT NULL,
-  PRIMARY KEY (`DayOfTheWeek`, `SeasonName`))
+  PRIMARY KEY (`DayOfTheWeek`, `SeasonName`, `StartDate`, `EndDate` ))
 ENGINE = InnoDB;
 
 
@@ -285,8 +285,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Initial_Price` (
   `DayOfTheWeek` CHAR(1) NOT NULL,
   `SeasonName` VARCHAR(45) NOT NULL,
   `Amount` DOUBLE NOT NULL,
-  PRIMARY KEY (`RoomTypeName`, `HotelID`, `DayOfTheWeek`, `SeasonName`),
-  INDEX `fk_Room_Type_has_Time_Period_Time_Period1_idx` (`DayOfTheWeek` ASC, `SeasonName` ASC) VISIBLE,
+  `StartDate` DATE NOT NULL,
+  `EndDate` DATE NOT NULL,
+  PRIMARY KEY (`RoomTypeName`, `HotelID`, `DayOfTheWeek`, `SeasonName`, `StartDate`, `EndDate`),
+  INDEX `fk_Room_Type_has_Time_Period_Time_Period1_idx` (`DayOfTheWeek` ASC, `SeasonName` ASC, `StartDate` ASC, `EndDate` ASC) VISIBLE,
   INDEX `fk_Room_Type_has_Time_Period_Room_Type1_idx` (`RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
   CONSTRAINT `fk_Room_Type_has_Time_Period_Room_Type1`
     FOREIGN KEY (`RoomTypeName` , `HotelID`)
@@ -294,8 +296,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Initial_Price` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Room_Type_has_Time_Period_Time_Period1`
-    FOREIGN KEY (`DayOfTheWeek` , `SeasonName`)
-    REFERENCES `mydb`.`Time_Period` (`DayOfTheWeek` , `SeasonName`)
+    FOREIGN KEY (`DayOfTheWeek` , `SeasonName`, `StartDate`, `EndDate`)
+    REFERENCES `mydb`.`Time_Period` (`DayOfTheWeek` , `SeasonName`,`StartDate`, `EndDate` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -310,8 +312,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Operates_During` (
   `HotelID` INT NOT NULL,
   `DayOfTheWeek` CHAR(1) NOT NULL,
   `SeasonName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`HotelID`, `DayOfTheWeek`, `SeasonName`),
-  INDEX `fk_Hotel_has_Time_Period_Time_Period1_idx` (`DayOfTheWeek` ASC, `SeasonName` ASC) VISIBLE,
+  `StartDate` DATE NOT NULL,
+  `EndDate` DATE NOT NULL,
+  PRIMARY KEY (`HotelID`, `DayOfTheWeek`, `SeasonName`, `StartDate`, `EndDate`),
+  INDEX `fk_Hotel_has_Time_Period_Time_Period1_idx` (`DayOfTheWeek` ASC, `SeasonName` ASC, `StartDate` ASC, `EndDate` ASC) VISIBLE,
   INDEX `fk_Hotel_has_Time_Period_Hotel1_idx` (`HotelID` ASC) VISIBLE,
   CONSTRAINT `fk_Hotel_has_Time_Period_Hotel1`
     FOREIGN KEY (`HotelID`)
@@ -319,8 +323,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Operates_During` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Hotel_has_Time_Period_Time_Period1`
-    FOREIGN KEY (`DayOfTheWeek` , `SeasonName`)
-    REFERENCES `mydb`.`Time_Period` (`DayOfTheWeek` , `SeasonName`)
+    FOREIGN KEY (`DayOfTheWeek` , `SeasonName`, `StartDate`, `EndDate`)
+    REFERENCES `mydb`.`Time_Period` (`DayOfTheWeek` , `SeasonName`, `StartDate`, `EndDate`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
