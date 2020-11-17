@@ -1,6 +1,8 @@
 package com.bmmzz.service;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DELETE;
@@ -65,7 +67,7 @@ public class SeasonService {
 	
 	@POST
 	@Path("/create/{seasonName}-{startDate}-{endDate}-{roomTypes}-{prices}")
-	public Response createTimePeriod(@DefaultValue("") @QueryParam("auth") String auth,
+	public Response createSeason(@DefaultValue("") @QueryParam("auth") String auth,
 								     @PathParam("seasonName") String seasonName,
 								     @PathParam("startDate") String startDate,
 								     @PathParam("endDate") String endDate,
@@ -74,9 +76,11 @@ public class SeasonService {
 								     @FormParam("hotelID") int hotelID) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
-		//SeasonDAO.createTimePeriod();
-		//SeasonDAO.createInitialPrice();
-		//SeasonDAO.createOperatesDuring();
+		startDate = startDate.replace(':', '-');
+		endDate = endDate.replace(':', '-');
+		hotelID = EmployeeDAO.getHotelID(auth);
+		List<String> days = Arrays.asList("M", "T", "W", "R", "F", "S", "H");
+		SeasonDAO.createSeason(seasonName, startDate, endDate, roomTypes, prices, days, hotelID);
 		return Response.ok().build();
 	}
 	

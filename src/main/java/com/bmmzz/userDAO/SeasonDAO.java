@@ -2,6 +2,8 @@ package com.bmmzz.userDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
 import com.bmmzz.userDAO.struct.Hotels;
 import com.bmmzz.userDAO.struct.SeasonInfo;
 import com.bmmzz.userDAO.struct.SeasonPriceInfo;
@@ -54,6 +56,35 @@ public class SeasonDAO {
 				UserDAO.executeUpdate("Delete from mydb.time_period Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void createSeason(String seasonName, String startDate, String endDate, String roomTypes, String prices, List<String> days, int hotelID) {
+		ResultSet rs1 = UserDAO.executeQuery("Select count(*) From mydb.time_period T Where T.SeasonName='" + seasonName + "' and T.StartDate='" + startDate + "' and T.EndDate = '" + endDate + "';");
+		try {
+			rs1.next();
+			if(rs1.getInt(1) == 0) {
+				for(String day : days) {
+					UserDAO.executeUpdate("INSERT INTO mydb.time_period VALUES ('"+day+"', '"+seasonName+"', '"+startDate+"', '"+endDate+"');");
+				}
+			}
+			
+			String[] roomTypesArr = roomTypes.split(":");
+			String[] rtPrices = prices.split("-");
+			for(int i = 0; i < roomTypesArr.length; ++i) {
+				String[] pricesArr = rtPrices[i].split(":");
+				int cntr = 0;
+				for(String pr : pricesArr) {
+					UserDAO.executeUpdate("INSERT INTO mydb.initial_price VALUES ('"+roomTypesArr[i]+"', '"+hotelID+"', '"+days.get(cntr)+"', '"+seasonName+"', '"+Double.parseDouble(pr)+"', '"+startDate+"', '"+endDate+"');");
+					++cntr;
+				}
+			}
+			
+			for(String day : days) {
+				UserDAO.executeUpdate("INSERT INTO mydb.operates_during VALUES ('"+hotelID+"', '"+day+"', '"+seasonName+"', '"+startDate+"', '"+endDate+"');");
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
