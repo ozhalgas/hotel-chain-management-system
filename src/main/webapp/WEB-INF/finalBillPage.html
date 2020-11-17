@@ -39,13 +39,19 @@
     	}
         
         function cancel() {
-    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile?' + auth;
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/checkout?' + auth;
     	}
         
         function getReceipt() {
             $.ajax({
               url:
-            	link.substring(0, 57) + "/checkout/" + link.substring(63, link.indexOf('?')) + "/bill?" + auth,
+            	link.substring(0, 57) + "/bill/" +
+            	localStorage["guestID"] + '-' +
+            	localStorage["roomType"] + '-' +
+            	localStorage["roomNumber"] + '-' +
+            	localStorage["roomFloor"] + '-' +
+            	localStorage["checkInDate"] + '?' +
+            	auth,
               dataType: "json",
               success: function (r) {
                 $("#check-in-date").html(r["checkInDate"]);

@@ -74,6 +74,11 @@
                 })
         });
             
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/all" + auth, function (data) {
+            	document.getElementById("HotelName").innerHTML =	"Hotel " + '"' +
+            														data.hotelName[0] + '"';
+            });
+            
         })
         
     </script>
