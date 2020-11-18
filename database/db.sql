@@ -486,6 +486,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Guest_belongs_Category` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `mydb`.`Advertisement` (
+	`Text` TEXT NOT NULL, 
+    `HotelID` INT NOT NULL,
+    PRIMARY KEY(`HotelID`),
+    INDEX `fk_Advertisement_has_Hotel_Hotel1_idx` (`HotelID` ASC) VISIBLE,
+	CONSTRAINT `fk_Advertisement_has_Hotel_Hotel1`
+    FOREIGN KEY (`HotelID`)
+    REFERENCES `mydb`.`Hotel` (`HotelID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
