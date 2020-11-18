@@ -15,8 +15,30 @@
         var season = {}
         var table;
         
-        function cancel() {
+        function leave() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
+		function cancel(id) {
+        	
+        	let url = 'http://localhost:8080/HotelChainManagementSystem/services/season/delete/' +
+        	season.seasonName[id] + '-' +
+        	season.start[id].substring(0, 4) + ":" + 
+        	season.start[id].substring(5, 7) + ':' + 
+        	season.start[id].substring(8, 10) + '-' +
+        	season.end[id].substring(0, 4) + ":" + 
+        	season.end[id].substring(5, 7) + ':' + 
+        	season.end[id].substring(8, 10) +
+        	auth;
+		
+        	console.log(url)
+    		
+    		fetch(url, {
+               	method: 'DELETE',
+            }).then(() => {
+            	window.location.href = link;
+            })
+            
     	}
         
         function hideDetails() {
@@ -107,6 +129,7 @@
                     
                     showDetails(id);
                 })
+                
         });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/all" + auth, function (data) {
@@ -159,10 +182,11 @@
 	<button class="cancelbtn" id="hide" onclick=hideDetails();>Hide details</button>
 </div>
 
-
 <h4 id="warning" style="color:red;display:none"></h4><br>
 
 <button class="create" id="create" onclick=create();>Create</button>
-<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
+<button class="cancelbtn" id="cancel" onclick=leave();>Cancel</button>
+
 </body>
 </html>

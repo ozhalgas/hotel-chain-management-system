@@ -19,7 +19,9 @@ public class SeasonDAO {
 		SeasonInfo seasons = new SeasonInfo();
 		
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.time_period, mydb.hotel h Where h.hotelid='" + EmployeeDAO.getHotelID(auth) + "' group by SeasonName");
+			ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.time_period, mydb.hotel h, mydb.operates_during Where h.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and " +
+					"mydb.operates_during.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and " + 
+					"mydb.operates_during.seasonname=mydb.time_period.seasonname" + " group by mydb.time_period.SeasonName");
 			while(resultSet.next()) {
 				seasons.add(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), EmployeeDAO.getHotelID(auth), resultSet.getString(6));
 			}
