@@ -13,8 +13,9 @@
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
-        var link = window.location.href.toString();
-        var auth = link.substring(73, link.length)
+   		var link = window.location.href.toString();
+		const params = new URLSearchParams(window.location.search);
+		var auth = "?auth=" + params.get('auth');
         var bookings = {}
         var table;
         

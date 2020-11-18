@@ -11,7 +11,8 @@
 <script type="text/javascript">
 
 	var link = window.location.href.toString();
-	var auth = link.substring(65, link.length)
+	const params = new URLSearchParams(window.location.search);
+	var auth = "?auth=" + params.get('auth');
 
 	function getRegisterURL() {
 		$('#regnewempl').on('click', function() {

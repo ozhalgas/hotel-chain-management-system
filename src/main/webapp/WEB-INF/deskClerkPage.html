@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Insert title here</title>
     <style>
       th {
@@ -16,11 +17,15 @@
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="../css/popUp.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <link href="//code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">
+    <script src="//code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
 	<script type="text/javascript">
 	
 	var link = window.location.href.toString();
-    var auth = link.substring(65, link.length)
+	const params = new URLSearchParams(window.location.search);
+	var auth = "?auth=" + params.get('auth');
 
 
     function gotoBook() {
@@ -35,8 +40,7 @@
     function cancel() {
 		$('#cancel').on('click', function() {
 			console.log('clicked')
-			window.location.href = 
-			"http://localhost:8080/HotelChainManagementSystem"
+			window.location.href = "http://localhost:8080/HotelChainManagementSystem";
 		})
 	}
 
@@ -77,8 +81,9 @@
           },
         });
       }
-
+	   
       $(document).ready(function () {
+    	window.location.href = '#popup1';
         getProfileName();
         gotoBook();
         cancel();
@@ -177,6 +182,16 @@
     <button id="cancel" class="cancelbtn">
       Logout
     </button> <br><br><br>
+    
+	<div id="popup1" class="overlay">
+		<div class="popup">
+			<h2>Advisories</h2>
+			<a class="close" href="#">&times;</a>
+			<div class="content">
+			Our hotels are great, believe me! - some random Manager.
+			</div>
+		</div>
+	</div>
     
 </body>
 </html>

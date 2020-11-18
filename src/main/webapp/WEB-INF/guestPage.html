@@ -9,10 +9,12 @@
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="../css/popUp.css">
     <link rel="stylesheet" href="../css/styles.css">
     <script type="text/javascript">
-        var link = window.location.href.toString();
-        var auth = link.substring(65, link.length);
+    	var link = window.location.href.toString();
+		const params = new URLSearchParams(window.location.search);
+		var auth = "?auth=" + params.get('auth');
 
         function getProfileName() {
             $.ajax({
@@ -45,6 +47,7 @@
         }
 
         $(document).ready(function () {
+        	window.location.href = '#popup1';
             $('#book-management').on('click', function () {
                 window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
             })
@@ -105,5 +108,16 @@
 </form>
 <button id="book">Book</button>&nbsp;
 <button id="book-management">My Bookings</button>
+
+<div id="popup1" class="overlay">
+	<div class="popup">
+		<h2>Advisories</h2>
+		<a class="close" href="#">&times;</a>
+		<div class="content">
+		Our hotels are great, believe me! - some random Manager.
+		</div>
+	</div>
+</div>
+
 </body>
 </html>
