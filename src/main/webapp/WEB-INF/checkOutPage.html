@@ -41,7 +41,16 @@
     		})
     	}
         
+        function show() {
+        	document.getElementById("check-out-new-info").style.display = "block";
+        }
+        
+        function hide() {
+        	document.getElementById("check-out-new-info").style.display = "none";
+        }
+        
 		function get_new_date() {
+			
         	year = $("#year").val()
         	month = $("#month").val()
         	day = $("#day").val()
@@ -51,7 +60,10 @@
 			return date
     	}
         
-		function edit(id, date) {
+		function edit() {
+			
+			id = localStorage["id"];
+			date = get_new_date();
 			
 			const fdate = new Date(parseInt(date.substr(0, 4)),
         			parseInt(date.substr(5, 2) - 1),
@@ -105,6 +117,9 @@
     	}
         
         $(document).ready(function () {
+        	
+        	hide();
+        	
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
             		
             	occupied.roomNumbers = data.roomNumbers; 
@@ -197,10 +212,11 @@
                     console.log('clicked')
                     let r = $(this).closest('tr').index()
                     let id = parseInt(this.id.substr(1, this.id.length));
-                    console.log(id)
                     
-                    date = get_new_date()
-                    edit(id, date)
+                    console.log(id)
+                    localStorage["id"] = id;
+                    
+                    show();
                 })
                 
                 $('.final-bill').on('click', function () {
@@ -250,7 +266,8 @@
         </tbody>
 </table>
 
-<h3 id="check-out-new-info">Update the following values if you want to update Check-Out Date</h3><br>
+<div id="check-out-new-info">
+<h3 id="check-out-title">Update the following values if you want to update Check-Out Date</h3><br>
 
 <form>
          Year:<br> <input type="text" name="year" id="year">
@@ -259,6 +276,9 @@
          <br>
          Day:<br> <input type="text" name="day" id="day">
 </form>
+
+<button id="edit-below" onclick=edit();>Edit</button>
+</div>
 
 <h4 id="warning" style="color:red"></h4><br>
 

@@ -31,6 +31,14 @@
 			auth
 		})
 	}
+    
+    function cancel() {
+		$('#cancel').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem"
+		})
+	}
 
       function getProfileName() {
         $.ajax({
@@ -73,19 +81,15 @@
       $(document).ready(function () {
         getProfileName();
         gotoBook();
+        cancel();
         $("#breakAfterTable").html("<br>".repeat(20));		
 	  });
 
     </script>
   </head>
   <body>
-    <h2>
-      <a href="http://localhost:8080/HotelChainManagementSystem/" id="home"
-        >Hotel Chain Management System</a
-      >
-    </h2>
-    <h3 id="welcome">Welcome, manager!</h3>
-    <h4>Profile Information:</h4>
+    <h2 id="welcome">Welcome, manager!</h2>
+    <h3>Profile Information:</h3>
 
     <table id="info" align="left" border="1">
    	  <tr>
@@ -169,11 +173,10 @@
     <button id="booking-manage" style="display: inline">
       Booking Management
     </button>
-    <form
-      action="http://localhost:8080/HotelChainManagementSystem/"
-      style="display: inline"
-    >
-      <input type="submit" value="Logout" />
-    </form><br><br><br>
-  </body>
+    
+    <button id="cancel" class="cancelbtn">
+      Logout
+    </button> <br><br><br>
+    
+</body>
 </html>
