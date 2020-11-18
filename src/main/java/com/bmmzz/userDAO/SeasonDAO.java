@@ -100,12 +100,12 @@ public class SeasonDAO {
 			if (UserDAO.getRole(auth).equals("manager")) {
 				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and h.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
 				while(resultSet.next()) {
-					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(3));
+					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(2));
 				}
 			} else if (UserDAO.getRole(auth).equals("guest")) {
 				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
 				while(resultSet.next()) {
-					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(3));
+					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(2));
 				}
 			}
 			json = gson.toJson(seasonAds, SeasonAdsInfo.class);
@@ -113,5 +113,21 @@ public class SeasonDAO {
 			e.printStackTrace();
 		}
 		return json;
+	}
+
+	public static void deleteAd(int hotelID, String adTxt) {
+		UserDAO.executeUpdate("Delete from mydb.advertisement Where HotelID='" + hotelID + "' and Text='" + adTxt + "';"); 
+	}
+	
+	public static void updateAd(int hotelID, String adTxt) {
+		ResultSet rs = UserDAO.executeQuery("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "' and Text='" + adTxt + "';");
+		try {
+			rs.next();
+			if(rs.getInt(1) == 1) 
+				SeasonDAO.deleteAd(hotelID, adTxt);
+			UserDAO.executeUpdate("INSERT INTO mydb.advertisement VALUES ('" + hotelID + "', '" + adTxt + "');");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
