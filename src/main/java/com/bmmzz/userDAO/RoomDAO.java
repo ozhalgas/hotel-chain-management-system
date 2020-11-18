@@ -72,7 +72,7 @@ public class RoomDAO {
 				char dayOfTheWeek = getDayOfTheWeek(date);
 				
 				ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.time_period WHERE "
-						+ "DayOfTheWeek= '" + dayOfTheWeek + "';");
+						+ "DayOfTheWeek= '" + dayOfTheWeek + "' and SeasonName <> 'regular';");
 				
 				// Finding the corresponding season of the specific day (startDay)
 				while(resultSet.next()) {
@@ -83,6 +83,7 @@ public class RoomDAO {
 						break;
 					}
 				}
+				if(seasonName.equals("")) seasonName = "regular";
 				
 				resultSet = UserDAO.executeQuery("SELECT Amount FROM mydb.initial_price WHERE "
 						+ "RoomTypeName = BINARY '" + typeName + "' AND HotelID = " + hotelID + " AND "

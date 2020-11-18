@@ -142,21 +142,6 @@ public class HotelDAO {
 				"Where RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
 	}
 	
-	/*public static void setGuestInRoom(int roomNumber, int guestID) {
-		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
-		hotelRooms.setGuestInRoom(roomNumber, guestID);
-	}
-	
-	public static void setCID(int roomNumber, String CID) {
-		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
-		hotelRooms.setCID(roomNumber, CID);
-	}
-	
-	public static void setCOD(int roomNumber, String COD) {
-		HotelRoomsInfo hotelRooms = new HotelRoomsInfo();
-		hotelRooms.setCOD(roomNumber, COD);
-	}*/
-	
 	//hotelID and roomTypeNames should be considered
 	public static String getHotelRooms(String auth) {
 		Gson gson = new Gson();
