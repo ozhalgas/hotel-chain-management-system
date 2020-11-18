@@ -55,14 +55,13 @@ public class SeasonAdsService {
 	}
 	
 	@DELETE
-	@Path("/delete/{adTxt}")
+	@Path("/delete")
 	public Response deleteAd(@DefaultValue("") @QueryParam("auth") String auth,
-								     @PathParam("adTxt") String adTxt,
-								     @FormParam("hotelID") int hotelID) {
+								     		   @FormParam("hotelID") int hotelID) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
 		hotelID = EmployeeDAO.getHotelID(auth);
-		SeasonDAO.deleteAd(hotelID, adTxt);
+		SeasonDAO.deleteAd(hotelID);
 		return Response.ok().build();
 	}
 	

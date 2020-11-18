@@ -115,17 +115,19 @@ public class SeasonDAO {
 		return json;
 	}
 
-	public static void deleteAd(int hotelID, String adTxt) {
-		UserDAO.executeUpdate("Delete from mydb.advertisement Where HotelID='" + hotelID + "' and Text='" + adTxt + "';"); 
+	public static void deleteAd(int hotelID) {
+		UserDAO.executeUpdate("Delete from mydb.advertisement Where HotelID='" + hotelID + "';"); 
 	}
 	
 	public static void updateAd(int hotelID, String adTxt) {
 		ResultSet rs = UserDAO.executeQuery("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "' and Text='" + adTxt + "';");
 		try {
 			rs.next();
-			if(rs.getInt(1) == 1) 
-				SeasonDAO.deleteAd(hotelID, adTxt);
-			UserDAO.executeUpdate("INSERT INTO mydb.advertisement VALUES ('" + hotelID + "', '" + adTxt + "');");
+			if(rs.getInt(1) == 1) {
+				UserDAO.executeUpdate("UPDATE mydb.advertisement SET Text='" + adTxt + "' WHERE HotelID='" + hotelID + "';");
+			}else {
+				UserDAO.executeUpdate("INSERT INTO mydb.advertisement VALUES ('" + hotelID + "', '" + adTxt + "');");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
