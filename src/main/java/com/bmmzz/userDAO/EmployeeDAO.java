@@ -124,9 +124,6 @@ public class EmployeeDAO {
 		ResultSet rES = UserDAO.executeQuery("Select * From mydb.employee E, mydb.schedule S " +
 											"Where S.HotelID='" + hID + "' and " +
 											"E.EmployeeID=S.EmployeeID and S.Position<>'Manager';");
-		//System.out.println("Select * From mydb.employee E, mydb.schedule S " +
-		//		"Where S.HotelID='" + hID + "' and " +
-		//		"E.EmployeeID=S.EmployeeID and S.Position<>'Manager';");
 		try {
 			while(rES.next()) {
 				Date startTime = new Date();
@@ -144,9 +141,8 @@ public class EmployeeDAO {
 				//checking for right hours
 				int startH = Integer.parseInt(rES.getString(23).substring(0, 2));
 				int endH = Integer.parseInt(rES.getString(24).substring(0, 2));
-				//System.out.println(startH + " " + endH);
+				
 				if(endH < startH) hours += 24;
-				//System.out.println(hours);
 				
 				double hourlyWage = Double.parseDouble(rES.getString(20).substring(1, rES.getString(20).length()));
 				double dailySalDb = hours * hourlyWage;
@@ -156,22 +152,14 @@ public class EmployeeDAO {
 													   "FROM mydb.day_of_the_week D " +
 													   "Where D.EmployeeID='" + rES.getInt(1)+ "' and D.HotelID='" + rES.getInt(17) + "';");
 				
-				//System.out.println("SELECT count(*) " +
-				//		   "FROM mydb.day_of_the_week D " +
-				//		   "Where D.EmployeeID='" + rES.getInt(1)+ "' and D.HotelID='" + rES.getInt(17) + "';");
-				
 				double weeklySalDb = 0;
 				if(numDays.next()) {
 					weeklySalDb = dailySalDb * numDays.getInt(1);
-					System.out.println("Daily: " + dailySalDb + " Weekly: " + weeklySalDb);
 				}
 
 				String cur = String.valueOf(rES.getString(20).charAt(0));
 				String dailySal = cur + String.valueOf(dailySalDb);
 				String weeklySal = cur + String.valueOf(weeklySalDb);
-				
-				//System.out.println("Daily: " + dailySal + " Weekly: " + weeklySal);
-				
 				
 				ResultSet workingDays = UserDAO.executeQuery("SELECT D.Day_of_the_Week " +
 						   									 "FROM mydb.day_of_the_week D " +
