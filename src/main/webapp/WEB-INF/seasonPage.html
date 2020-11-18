@@ -19,47 +19,74 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
     	}
         
+        function hideDetails() {
+        	$('#details-table-body').empty();
+        	$('#details-div').attr("style", "display:none");
+        }
+        
+        function showDetails(i) {        	
+        	$('#details-div').attr("style", "display:run-in");
+        	
+        	$('#details-season').html("'" + season.seasonName[i][0].toUpperCase() + season.seasonName[i].substring(1) + "' season. From " + season.start[i] + " to " + season.end[i] + ". Prices:");
+        	
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/" + season.seasonName[i] + auth, function(data) {
+        		season.weekDay = data.weekDay;
+        		season.roomType = data.roomType;
+        		season.price = data.price;
+        		
+        		$('#details-table-body').empty();
+        		for (let j = 0; j < (season.weekDay.length/7); j++) {
+        			var roomType = season.roomType[j*7];
+        			var price = {};
+        			
+        			for (let k = j*7; k < j*7 + 7; k++) {
+        				if(season.weekDay[k] == "M")
+        					price.mon = season.price[k];
+        				if(season.weekDay[k] == "T")
+        					price.tue = season.price[k];
+        				if(season.weekDay[k] == "W")
+        					price.wed = season.price[k];
+        				if(season.weekDay[k] == "R")
+        					price.thu = season.price[k];
+        				if(season.weekDay[k] == "F")
+        					price.fri = season.price[k];
+        				if(season.weekDay[k] == "S")
+        					price.sat = season.price[k];
+        				if(season.weekDay[k] == "H")
+        					price.sun = season.price[k];
+        			}
+        			
+        			var row = "<tr> <td>" +
+ 							roomType + "</td> <td>" +
+ 							"$" + price.mon + "</td> <td>" +
+ 							"$" + price.tue + "</td> <td>" +
+ 							"$" + price.wed + "</td> <td>" +
+ 							"$" + price.thu + "</td> <td>" +
+ 							"$" + price.fri + "</td> <td>" +
+ 							"$" + price.sat + "</td> <td>" +
+ 							"$" + price.sun + "</td> <tr>";
+ 					$('#details-table-body').append(row);
+        		}
+        	});
+        	
+        	
+        }
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/all" + auth, function (data) {
             		
-            	season.weekDay = data.weekDay;
             	season.seasonName = data.seasonName;
             	season.start = data.start;
             	season.end = data.end;
             	
-            	season.roomType = data.roomType;
-            	season.price = data.price;
-            	season.hotelID = data.hotelID;
-            	season.hotelName = data.hotelName;
-            	
-            	for (let i = 0; i < season.weekDay.length; i++) {
-            		var workingDays = "";
-					if( season.weekDay[i].includes("M") )
-						workingDays += "Mon ";
-					if( season.weekDay[i].includes("T") )
-						workingDays += "Tue ";
-					if( season.weekDay[i].includes("W") )
-						workingDays += "Wed ";
-					if( season.weekDay[i].includes("R") )
-						workingDays += "Thu ";
-					if( season.weekDay[i].includes("F") )
-						workingDays += "Fri ";
-					if( season.weekDay[i].includes("S") )
-						workingDays += "Sat ";
-					if( season.weekDay[i].includes("H") )
-						workingDays += "Sun ";
-					
-					row = "<tr> <td>" +
+            	for (let i = 0; i < season.seasonName.length; i++) {
+					var row = "<tr> <td>" +
              			season.seasonName[i] + "</td> <td>" +
-             			workingDays + "</td> <td>" +
              			season.start[i] + "</td> <td>" +
              			season.end[i] + "</td> <td>" +
-             			season.roomType[i] + "</td> <td>" +
-             			season.price[i] + "</td> <td>" +
+             			"<button class='details' id=d" + i.toString() + "> Details </button>" + "</td> <td>" +
              			"<button class='cancel cancelbtn' id=" + i.toString() + "> Cancel </button>" + "</td> </tr>";
-
             		$('#table-body').append(row);
-            		
             	}
 
                 table = $('#season-table').DataTable();
@@ -70,7 +97,15 @@
                     let r = $(this).closest('tr').index()
                     let id = parseInt(this.id);
                     
-                    cancel(id)
+                    cancel(id);
+                })
+                
+                $('.details').on('click', function () {
+                    console.log('clicked details')
+                    let r = $(this).closest('tr').index();
+                    let id = parseInt(this.id.substring(1));
+                    
+                    showDetails(id);
                 })
         });
             
@@ -78,7 +113,6 @@
             	document.getElementById("HotelName").innerHTML =	"Hotel " + '"' +
             														data.hotelName[0] + '"';
             });
-            
         })
         
     </script>
@@ -94,19 +128,39 @@
         <thead>
         <tr>
         	<th>Season Name</th>
-        	<th>Day of the Week</th>
         	<th>Start Date</th>
             <th>End Date</th>
-            <th>Room Type</th>
-            <th>Price</th>
-            <th>Cancel</th>
+            <th>Show details</th>
+            <th>Cancel Season</th>
         </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
 </table>
 
-<h4 id="warning" style="color:red"></h4><br>
+<div id="details-div" style="display:none">
+	<h3 id="details-season"></h3>
+	<table class="details-cell-border" id="details">
+        <thead>
+        <tr>
+        	<th>Room type</th>
+        	<th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+        </tr>
+        </thead>
+        <tbody id="details-table-body">
+        </tbody>
+	</table>
+	<button class="cancelbtn" id="hide" onclick=hideDetails();>Hide details</button>
+</div>
+
+
+<h4 id="warning" style="color:red;display:none"></h4><br>
 
 <button class="create" id="create" onclick=create();>Create</button>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
