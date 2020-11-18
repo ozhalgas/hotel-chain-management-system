@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Insert title here</title>
+    <title>Guest profile</title>
     <link rel="stylesheet" href="../css/guestPage.css">
     <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -47,12 +47,11 @@
         }
 
         $(document).ready(function () {
-        	window.location.href = '#popup1';
             $('#book-management').on('click', function () {
                 window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
             })
             getProfileName();
-            $("#breakAfterTable").html("<br>".repeat(20));
+            $("#breakAfterTable").html("<br>".repeat(24));
 
             $('#book').on('click', function () {
                     window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/room-booking" +
@@ -100,12 +99,7 @@
     </table>
 </div>
 <div id="breakAfterTable"></div>
-<form
-        action="http://localhost:8080/HotelChainManagementSystem/"
-        method="POST"
-        style="display: inline">
-    <input type="submit" value="Log Out"/>
-</form>
+<button onclick="window.location.href = 'http://localhost:8080/HotelChainManagementSystem'">Log out</button>&nbsp;
 <button id="book">Book</button>&nbsp;
 <button id="book-management">My Bookings</button>
 
