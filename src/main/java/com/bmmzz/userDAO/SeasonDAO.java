@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.bmmzz.userDAO.struct.Hotels;
+import com.bmmzz.userDAO.struct.SeasonAdsInfo;
 import com.bmmzz.userDAO.struct.SeasonInfo;
 import com.bmmzz.userDAO.struct.SeasonPriceInfo;
 import com.google.gson.Gson;
@@ -89,5 +90,28 @@ public class SeasonDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getAds(String auth) {
+		Gson gson = new Gson();
+		String json = "";
+		SeasonAdsInfo seasonAds = new SeasonAdsInfo();
+		try {
+			if (UserDAO.getRole(auth).equals("manager")) {
+				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and h.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+				while(resultSet.next()) {
+					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(3));
+				}
+			} else if (UserDAO.getRole(auth).equals("guest")) {
+				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
+				while(resultSet.next()) {
+					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(3));
+				}
+			}
+			json = gson.toJson(seasonAds, SeasonAdsInfo.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 }
