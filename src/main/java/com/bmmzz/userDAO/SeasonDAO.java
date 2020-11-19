@@ -73,7 +73,7 @@ public class SeasonDAO {
 			}
 			
 			String[] roomTypesArr = roomTypes.split(":");
-			String[] rtPrices = prices.split("-");
+			String[] rtPrices = prices.split("%");
 			for(int i = 0; i < roomTypesArr.length; ++i) {
 				String[] pricesArr = rtPrices[i].split(":");
 				int cntr = 0;

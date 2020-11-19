@@ -71,13 +71,12 @@ public class SeasonService {
 								     @PathParam("startDate") String startDate,
 								     @PathParam("endDate") String endDate,
 								     @PathParam("roomTypes") String roomTypes,
-								     @PathParam("prices") String prices,
-								     @FormParam("hotelID") int hotelID) {
+								     @PathParam("prices") String prices) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
 		startDate = startDate.replace(':', '-');
 		endDate = endDate.replace(':', '-');
-		hotelID = EmployeeDAO.getHotelID(auth);
+		int hotelID = EmployeeDAO.getHotelID(auth);
 		List<String> days = Arrays.asList("M", "T", "W", "R", "F", "S", "H");
 		SeasonDAO.createSeason(seasonName, startDate, endDate, roomTypes, prices, days, hotelID);
 		return Response.ok().build();
