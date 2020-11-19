@@ -110,6 +110,9 @@ Insert into mydb.employee values (8, 'Amir El-Masry', 'Male', '1992-10-21', 'ID'
 Insert into mydb.employee values (9, 'Margulan Kazikhan', 'Male', '1992-10-21', 'ID', '95034', 'UAE', '9042302', '10th Street', '120139', 'kazikhan@mail.com', '9480293', '873294232', 'margulan', 'password');
 Insert into mydb.employee values (10, 'Bakdauren Narbayev', 'Male', '1995-11-30', 'Passport', '0012213', 'Spain', '9023243', '11th Avenue', '423423', 'narbayev@mail.com', '90420434', '87904214', 'bakdauren', 'password');
 Insert into mydb.employee values (11, 'Zhansaya Bagdauletkyzy', 'Female', '1998-12-21', 'ID', '403242', 'USA', '4234234', '13th Street', '5435434', 'zhansaya@mail.com', '352342', '870321030', 'zhansaya', 'password');
+Insert into mydb.employee values (12, 'Madiyar Galymgereyev', 'Male', '1999-10-21', 'ID', '0342323', 'UAE', '341421', 'Emirates Street', '5230324', 'madiyar@mail.com', '6043035', '873248934', 'madiyar', 'password');
+Insert into mydb.employee values (13, 'Zhalgas Oryntayev', 'Male', '1997-11-30', 'Passport', '023123', 'Spain', '4124124', 'Las Palmas, 13', '940124', 'zhalgas@mail.com', '423423', '870123823', 'zhalgas', 'password');
+Insert into mydb.employee values (14, 'Soohyun Kim', 'Male', '1988-02-16', 'ID', '349230', 'USA', '8932443', 'Rodeo Drive, 18', '9043242', 'soohyun@mail.com', '867875', '004382492', 'soohyun', 'password');
 
 Insert into mydb.schedule values (0, 0, 'Manager', 'Full-time', '$20', '2018-06-24', null, '09:00', '18:00');
 Insert into mydb.schedule values (1, 1, 'Manager', 'Full-time', '$25', '2016-02-04', null, '09:00', '18:00');
@@ -123,6 +126,9 @@ Insert into mydb.schedule values (8, 2, 'desk-clerk', 'Full-time', '$10', '2015-
 Insert into mydb.schedule values (9, 2, 'Cleaner', 'Full-time', '$10', '2018-02-24', null, '08:00', '18:00');
 Insert into mydb.schedule values (10, 0, 'Cleaner', 'Full-time', '$12', '2013-02-12', null, '08:00', '18:00');
 Insert into mydb.schedule values (11, 1, 'Cleaner', 'Full-time', '$13', '2019-02-14', null, '08:00', '18:00');
+Insert into mydb.schedule values (12, 2, 'Cleaner', 'Full-time', '$10', '2013-02-24', null, '08:00', '18:00');
+Insert into mydb.schedule values (13, 0, 'Cleaner', 'Full-time', '$12', '2017-02-12', null, '08:00', '18:00');
+Insert into mydb.schedule values (14, 1, 'Cleaner', 'Full-time', '$13', '2018-02-14', null, '08:00', '18:00');
 
 Insert into mydb.category values ('None', 0, 0);
 Insert into mydb.category values ('VIP', 0.05, 0);
@@ -536,6 +542,23 @@ insert into mydb.day_of_the_week values ('M', 0, 10,'Cleaner');
 insert into mydb.day_of_the_week values('T',0,10,'Cleaner');
 insert into mydb.day_of_the_week values('W', 0, 10, 'Cleaner');
 insert into mydb.day_of_the_week values('R', 0, 10, 'Cleaner');
+
+
+
+insert into mydb.day_of_the_week values ('F', 2, 12,'Cleaner');
+insert into mydb.day_of_the_week values('S',2,12,'Cleaner');
+insert into mydb.day_of_the_week values('H', 2, 12, 'Cleaner');
+insert into mydb.day_of_the_week values('M', 2, 12, 'Cleaner');
+
+insert into mydb.day_of_the_week values ('F', 1, 14,'Cleaner');
+insert into mydb.day_of_the_week values('S',1,14,'Cleaner');
+insert into mydb.day_of_the_week values('H', 1, 14, 'Cleaner');
+insert into mydb.day_of_the_week values('M', 1, 14, 'Cleaner');
+
+insert into mydb.day_of_the_week values ('F', 0, 13,'Cleaner');
+insert into mydb.day_of_the_week values('S',0,13,'Cleaner');
+insert into mydb.day_of_the_week values('H', 0, 13, 'Cleaner');
+insert into mydb.day_of_the_week values('M', 0, 13, 'Cleaner');
 
 insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 0);
 insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 1);
