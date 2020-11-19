@@ -19,6 +19,53 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
     	}
         
+        function create() {
+        	
+        	seasonName = $("#season-name").val();
+        	startDate = $("#start-date").val();
+        	endDate = $("#end-date").val();
+        	
+        	roomType = $("#room-type").val();
+        	price1 = $("#price-1").val();
+        	price2 = $("#price-2").val();
+        	price3 = $("#price-3").val();
+        	price4 = $("#price-4").val();
+        	price5 = $("#price-5").val();
+        	price6 = $("#price-6").val();
+        	price7 = $("#price-7").val();
+        	
+        	style = document.getElementById("update").style.display;
+        	
+        	if(style === 'none') {
+        		$('#update').attr("style", "display:block");
+        	} else {
+        		let url = 'http://localhost:8080/HotelChainManagementSystem/services/season/create/' +
+            	seasonName + '-' +
+            	startDate + '-' +
+            	endDate + '-' +
+            	roomType + '-' +
+            	price1 + ':' + 
+            	price2 + ':' + 
+            	price3 + ':' + 
+            	price4 + ':' + 
+            	price5 + ':' + 
+            	price6 + ':' + 
+            	price7 +
+                auth;
+    		
+            	console.log(url)
+            	
+        		$.post(url, 
+        				{}, function(r) {
+        			if(r == null) 
+        				$("#warning").html("Incorrect date written. Please try again!");
+        			else {
+        				window.location.href = link;
+        			}
+        		})
+        	}
+    	}
+        
 		function cancel(id) {
         	
         	let url = 'http://localhost:8080/HotelChainManagementSystem/services/season/delete/' +
@@ -95,6 +142,9 @@
         }
         
         $(document).ready(function () {
+        	
+        	$('#update').attr("style", "display:none");
+        	
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/all" + auth, function (data) {
             		
             	season.seasonName = data.seasonName;
@@ -180,6 +230,34 @@
         </tbody>
 	</table>
 	<button class="cancelbtn" id="hide" onclick=hideDetails();>Hide details</button>
+</div>
+
+<div id="update">
+<h3 id="update-title">Create a new season</h3><br>
+
+<form>
+		 Season Name:<br> <input type="text" name="season-name" id="season-name">
+         <br>
+         Start Date:<br> <input type="text" name="start-date" id="start-date">
+         <br>
+         End Date:<br> <input type="text" name="end-date" id="end-date">
+         <br>
+         Room Type:<br> <input type="text" name="room-type" id="room-type">
+         <br>
+         Price on Monday:<br> <input type="text" name="price-1" id="price-1">
+         <br>
+         Price on Tuesday:<br> <input type="text" name="price-2" id="price-2">
+         <br>
+         Price on Wednesday:<br> <input type="text" name="price-3" id="price-3">
+         <br>
+         Price on Thursday:<br> <input type="text" name="price-4" id="price-4">
+         <br>
+         Price on Friday:<br> <input type="text" name="price-5" id="price-5">
+         <br>
+         Price on Saturday:<br> <input type="text" name="price-6" id="price-6">
+         <br>
+         Price on Sunday:<br> <input type="text" name="price-7" id="price-7">
+</form>
 </div>
 
 <h4 id="warning" style="color:red;display:none"></h4><br>

@@ -435,33 +435,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Day_of_the_Week` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`Cleans`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Cleans` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`Cleans` (
-  `HotelID` INT NOT NULL,
-  `EmployeeID` INT NOT NULL,
-  `Position` VARCHAR(45) NOT NULL,
-  `RoomNumber` VARCHAR(5) NOT NULL,
-  `Floor` INT NOT NULL,
-  `RoomTypeName` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`HotelID`, `EmployeeID`, `Position`, `RoomNumber`, `Floor`, `RoomTypeName`),
-  INDEX `fk_Schedule_has_Room_Room1_idx` (`RoomNumber` ASC, `Floor` ASC, `RoomTypeName` ASC, `HotelID` ASC) VISIBLE,
-  INDEX `fk_Schedule_has_Room_Schedule1_idx` (`HotelID` ASC, `EmployeeID` ASC, `Position` ASC) VISIBLE,
-  CONSTRAINT `fk_Schedule_has_Room_Schedule1`
-    FOREIGN KEY (`HotelID` , `EmployeeID` , `Position`)
-    REFERENCES `mydb`.`Schedule` (`HotelID` , `EmployeeID` , `Position`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Schedule_has_Room_Room1`
-    FOREIGN KEY (`RoomNumber` , `Floor` , `RoomTypeName` , `HotelID`)
-    REFERENCES `mydb`.`Room` (`RoomNumber` , `Floor` , `RoomTypeName` , `HotelID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Guest_belongs_Category`
