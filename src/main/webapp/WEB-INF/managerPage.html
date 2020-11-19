@@ -34,6 +34,15 @@
     	window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
     }
     
+    function ad() {
+    	$('#ad').on('click', function() {
+			console.log('clicked')
+			window.location.href = 
+			"http://localhost:8080/HotelChainManagementSystem/services/ads" +
+			auth
+		})
+    }
+    
 	function getRegisterURL() {
 		$('#regnewempl').on('click', function() {
 			console.log('clicked')
@@ -266,6 +275,7 @@
 		var tablerev;
 		getProfileName();
 		gotoBook();
+		ad();
 		getRegisterURL();
 		
 		updateSchedule();
@@ -379,6 +389,7 @@
     <button id="regnewempl">Register new desk clerk</button>
     <button id="review">Review schedules</button>
     <button id="seasons">Show seasons</button>
+    <button id="ad">Manage advertisement</button>
     <button class="cancelbtn" id="logout" onclick=logout();>Logout</button>
     </form><br><br><br><br><br><br><br><br>
   </body>

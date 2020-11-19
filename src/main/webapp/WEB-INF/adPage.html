@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+    <title>Check-Out Page</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" charset="utf8" 
+    	src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+   		var link = window.location.href.toString();
+		const params = new URLSearchParams(window.location.search);
+		var auth = "?auth=" + params.get('auth');
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
+    	}
+        
+        function show() {
+        	
+        	$('#update-text-new').attr("style", "display:none");
+        	
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/ads/get" + auth, function (data) {
+            	if(data.text === null) {
+            		$('#ad-div').attr("style", "display:none");
+            	}
+            	else {
+            		$('#ad-div').attr("style", "display:block");
+            		document.getElementById("ad-text").innerHTML = 	data.text;
+            	}
+            });
+    	}
+        
+        function update() {
+        	
+        	text = $("#update-text").val();
+        	style = document.getElementById("update-text-new").style.display;
+        	
+        	if(style === 'none') {
+        		$('#update-text-new').attr("style", "display:block");
+        	} else {
+        		let url = 'http://localhost:8080/HotelChainManagementSystem/services/ads/update/' +
+            	text + 
+                auth;
+    		
+            	console.log(url)
+            	
+        		$.post(url, 
+        				{}, function(r) {
+        			if(r == null) 
+        				$("#warning").html("Incorrect date written. Please try again!");
+        			else {
+        				window.location.href = link;
+        			}
+        		})
+        	}
+    	}
+        
+		function erase() {
+			let url = 'http://localhost:8080/HotelChainManagementSystem/services/ads/delete/' +
+        	auth;
+		
+        	console.log(url)
+    		
+    		fetch(url, {
+               	method: 'DELETE',
+            }).then(() => {
+            	window.location.href = link;
+            })
+    	}
+        
+        $(document).ready(function () {
+        	show();
+        });
+        
+    </script>
+</head>
+<body>
+<h2>
+    Advertisement Management
+</h2>
+
+<div class='ad-div'>
+<h3>
+    Advertisement Text
+</h3>
+
+<form>
+	<p id='ad-text'>
+	</p>
+</form>
+</div>
+
+<div id="update-text-new">
+<h3 id="update-text-title">Update the text to be included as an advertisement of the whole hotel.</h3><br>
+
+<form>
+New text:
+<br>
+<textarea rows=10 cols=50 name="update-text" id="update-text">
+</textarea>
+</form>
+</div>
+
+<h4 id="warning" style="color:red"></h4><br>
+
+<button id="update" onclick=update()>Update</button>
+<button class="cancelbtn" id="erase" onclick=erase()>Delete</button>
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
+</body>
+</html>

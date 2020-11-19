@@ -38,9 +38,9 @@ public class SeasonAdsService {
             return Helper.getPage(servletContext, "accessDeniedPage.html");
         switch( UserDAO.getRole(auth) ) {
             case "manager":
-                return Helper.getPage(servletContext, "BahaPishiSuda.html");
+                return Helper.getPage(servletContext, "adPage.html");
             default:
-                return Helper.getPage(servletContext, "A suda dlya vseh drugih mojesh dat'.html");
+                return Helper.getPage(servletContext, "accessDeniedPage.html");
         }
     }
 	
@@ -51,7 +51,7 @@ public class SeasonAdsService {
 		return Response.ok(json).build();
 	}
 	
-	@GET
+	@DELETE
 	@Path("/delete")
 	public Response deleteAd(@DefaultValue("") @QueryParam("auth") String auth) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
@@ -61,7 +61,7 @@ public class SeasonAdsService {
 		return Response.ok().build();
 	}
 	
-	@GET
+	@POST
 	@Path("/update/{adTxt}")
 	public Response updateAd(@DefaultValue("") @QueryParam("auth") String auth,
 								     @PathParam("adTxt") String adTxt) {
