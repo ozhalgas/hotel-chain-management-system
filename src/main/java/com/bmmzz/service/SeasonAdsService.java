@@ -40,39 +40,34 @@ public class SeasonAdsService {
             case "manager":
                 return Helper.getPage(servletContext, "BahaPishiSuda.html");
             default:
-                return Helper.getPage(servletContext, "A suda dlya gesta mojesh dat'.html");
+                return Helper.getPage(servletContext, "A suda dlya vseh drugih mojesh dat'.html");
         }
     }
 	
 	@GET
 	@Path("/get")
 	public Response getAds( @DefaultValue("") @QueryParam("auth") String auth ) {
-		if (!UserDAO.getRole(auth).equals("manager") || !UserDAO.getRole(auth).equals("guest")) {
-			return null;
-		}
 		String json = SeasonDAO.getAds(auth);
 		return Response.ok(json).build();
 	}
 	
-	@DELETE
+	@GET
 	@Path("/delete")
-	public Response deleteAd(@DefaultValue("") @QueryParam("auth") String auth,
-								     		   @FormParam("hotelID") int hotelID) {
+	public Response deleteAd(@DefaultValue("") @QueryParam("auth") String auth) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
-		hotelID = EmployeeDAO.getHotelID(auth);
+		int hotelID = EmployeeDAO.getHotelID(auth);
 		SeasonDAO.deleteAd(hotelID);
 		return Response.ok().build();
 	}
 	
-	@POST
+	@GET
 	@Path("/update/{adTxt}")
 	public Response updateAd(@DefaultValue("") @QueryParam("auth") String auth,
-								     @PathParam("adTxt") String adTxt,
-								     @FormParam("hotelID") int hotelID) {
+								     @PathParam("adTxt") String adTxt) {
 		if (!UserDAO.checkRoleAndAuth(auth, "manager"))
 			return null;
-		hotelID = EmployeeDAO.getHotelID(auth);
+		int hotelID = EmployeeDAO.getHotelID(auth);
 		SeasonDAO.updateAd(hotelID, adTxt);
 		return Response.ok().build();
 	}

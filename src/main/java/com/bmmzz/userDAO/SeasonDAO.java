@@ -3,7 +3,6 @@ package com.bmmzz.userDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
 import com.bmmzz.userDAO.struct.Hotels;
 import com.bmmzz.userDAO.struct.SeasonAdsInfo;
 import com.bmmzz.userDAO.struct.SeasonInfo;
@@ -100,12 +99,12 @@ public class SeasonDAO {
 			if (UserDAO.getRole(auth).equals("manager")) {
 				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and h.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
 				while(resultSet.next()) {
-					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(2));
+					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
 				}
-			} else if (UserDAO.getRole(auth).equals("guest")) {
+			} else if (UserDAO.getRole(auth).equals("guest") || UserDAO.getRole(auth).equals("desk-clerk")) {
 				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
 				while(resultSet.next()) {
-					seasonAds.add(resultSet.getInt(1), resultSet.getString(4), resultSet.getString(2));
+					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
 				}
 			}
 			json = gson.toJson(seasonAds, SeasonAdsInfo.class);
@@ -120,13 +119,13 @@ public class SeasonDAO {
 	}
 	
 	public static void updateAd(int hotelID, String adTxt) {
-		ResultSet rs = UserDAO.executeQuery("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "' and Text='" + adTxt + "';");
+		ResultSet rs = UserDAO.executeQuery("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "';");
 		try {
 			rs.next();
 			if(rs.getInt(1) == 1) {
 				UserDAO.executeUpdate("UPDATE mydb.advertisement SET Text='" + adTxt + "' WHERE HotelID='" + hotelID + "';");
 			}else {
-				UserDAO.executeUpdate("INSERT INTO mydb.advertisement VALUES ('" + hotelID + "', '" + adTxt + "');");
+				UserDAO.executeUpdate("INSERT INTO mydb.advertisement VALUES ('" + adTxt + "', '" + hotelID + "');");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

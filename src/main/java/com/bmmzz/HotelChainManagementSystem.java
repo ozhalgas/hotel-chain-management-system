@@ -16,6 +16,7 @@ import com.bmmzz.service.FinalBillService;
 import com.bmmzz.service.ProfileService;
 import com.bmmzz.service.RegistrationService;
 import com.bmmzz.service.RoomBookingService;
+import com.bmmzz.service.SeasonAdsService;
 import com.bmmzz.service.SeasonService;
 
 @ApplicationPath("/services")
@@ -36,6 +37,7 @@ public class HotelChainManagementSystem extends Application {
 		singletons.add(new FinalBillService());
 		singletons.add(new EmployeeScheduleService());
 		singletons.add(new SeasonService());
+		singletons.add(new SeasonAdsService());
 	}
 	
 	public Set<Class<?>> getClasses() {
