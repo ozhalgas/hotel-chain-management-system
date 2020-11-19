@@ -13,6 +13,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.bmmzz.userDAO.EmployeeDAO;
 import com.bmmzz.userDAO.GuestDAO;
 import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.RoomDAO;
@@ -166,4 +168,16 @@ public class BookManagementService {
 		return Response.ok().build();
 	}
 	
+	@POST
+	@Path("/add-feature/{guestID}-{roomNumber}-{featureName}")
+	public Response addFeature(@DefaultValue("") @QueryParam("auth") String auth,
+														   @PathParam("guestID") int guestID,
+														   @PathParam("featureName") String featureName,
+														   @PathParam("featureName") String roomNumber) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+			return null;
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		RoomDAO.addFeature(hotelID, guestID, featureName, roomNumber);
+		return Response.ok().build();
+	}
 }

@@ -284,4 +284,36 @@ public class RoomDAO {
 		}
 		return false;
 	}
+
+	public static void addFeature(int hotelID, int guestID, String featureName, String roomNumber) {
+		ResultSet rs = UserDAO.executeQuery("SELECT * FROM mydb.single_stay WHERE GuestID='" + guestID + "' and RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
+		try {
+			while(rs.next()) {
+				String todayStr = java.time.LocalDate.now().toString();
+				Date todayDate = new Date();
+				Date tempCheckOutDate = new Date();
+				try {
+					todayDate = new SimpleDateFormat("yyyy-mm-dd").parse(todayStr);
+					tempCheckOutDate = new SimpleDateFormat("yyyy-mm-dd").parse(rs.getString(2));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				if(todayDate.before(tempCheckOutDate) || todayDate.equals(tempCheckOutDate)) {
+					ResultSet check = UserDAO.executeQuery("SELECT * FROM mydb.single_stay_with_feature "+
+							   							   "WHERE FeatureName='"+featureName+"' and CheckInDate='"+rs.getString(1)+"' "+
+							   							   "and RoomNumber='"+roomNumber+"' and Floor='"+rs.getInt(5)+"' and GuestID='"+guestID+"';");
+					if(check.next()) {
+						int newNum = check.getInt(6) + 1;
+						UserDAO.executeUpdate("UPDATE mydb.single_stay_with_feature SET NumberOfUsage='"+newNum+"' "+
+											  "WHERE FeatureName='"+featureName+"' and CheckInDate='"+rs.getString(1)+"' "+
+											  "and RoomNumber='"+roomNumber+"' and Floor='"+rs.getInt(5)+"' and GuestID='"+guestID+"';");
+					}else {
+						UserDAO.executeUpdate("INSERT INTO mydb.single_stay_with_feature VALUES ('"+featureName+"', '"+rs.getString(1)+"', '"+roomNumber+"', '"+rs.getInt(5)+"', '"+guestID+"', '1');");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
