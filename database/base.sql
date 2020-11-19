@@ -3,8 +3,11 @@ Insert into mydb.hotel values (1, 'Exclusive', 'USA', 'New York', 'Wall street 2
 Insert into mydb.hotel values (2, 'Luxury', 'UAE', 'Dubai', 'Sheikh 7');
 
 Insert into mydb.phone_number values ('100', 0);
+Insert into mydb.phone_number values ('001', 0);
 Insert into mydb.phone_number values ('101', 1);
+Insert into mydb.phone_number values ('002', 1);
 Insert into mydb.phone_number values ('102', 2);
+Insert into mydb.phone_number values ('003', 2);
 
 Insert into mydb.room_type values ('Single', 26.0, 1, 5, 5, 0);
 Insert into mydb.room_type values ('Double', 32.0, 2, 5, 5, 0);
