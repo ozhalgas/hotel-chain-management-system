@@ -4,7 +4,6 @@
 <meta charset="ISO-8859-1">
 <title>Room Booking</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<link rel="stylesheet" href="../css/styles.css">
 <script>
 	var link = window.location.href.toString();
 	const params = new URLSearchParams(window.location.search);
@@ -50,7 +49,7 @@
 	        	var list = r["availableRoomsInfo"];
 	        	
 	        	$("#info").empty();
-	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m^3)</th><th>Initial Price($)</th><th>Number of Available Rooms</th></tr>');
+	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m²)</th><th>Initial Price($)</th><th>Number of Available Rooms</th></tr>');
 	        	$("#choosingRooms").empty();
 	        	typeNames.length = 0;
 	        	numAvailRooms.length = 0;
