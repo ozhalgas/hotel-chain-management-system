@@ -604,10 +604,6 @@ insert into mydb.occupies values('23', 2, 1, '2020-12-25', '2020-12-28',1, 'Sing
 insert into mydb.occupies values('10', 1, 1, '2021-01-25', '2021-01-28',2, 'Double');
 
 
-insert into mydb.cleans values(0, 3, 'desk-clerk', '10', 1, 'Single');
-insert into mydb.cleans values(1, 4, 'desk-clerk', '21', 2, 'Single');
-insert into mydb.cleans values(2, 5, 'desk-clerk', '38', 3, 'Luxury');
-
 
 insert into mydb.reserves values('Single', 0, 2, '2020-11-25', '2020-11-28', 1);
 insert into mydb.reserves values('Single', 1, 2, '2020-12-25', '2020-12-28', 1);
