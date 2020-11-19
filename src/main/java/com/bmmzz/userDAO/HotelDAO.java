@@ -78,8 +78,11 @@ public class HotelDAO {
 			while(resultSet.next()) {
 				hotelInfo.set(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
 			}
+			ResultSet resultSet2 =  UserDAO.executeQuery("SELECT phonenumber FROM mydb.phone_number WHERE HotelID = " + hotelID + ";" );
+			while(resultSet2.next()) {
+				hotelInfo.addPhone(resultSet2.getString(1));
+			}
 			json = gson.toJson(hotelInfo, HotelInfo.class);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
