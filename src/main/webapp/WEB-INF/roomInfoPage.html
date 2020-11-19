@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Room Cleaning Info</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+    ></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+    	var link = window.location.href.toString();
+		const params = new URLSearchParams(window.location.search);
+		var auth = "?auth=" + params.get('auth');
+        var rooms = {}
+        var table;
+        
+        function cancel() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
+    	}
+        
+        $(document).ready(function () {
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
+            	
+            	rooms.roomNumbers = data.roomNumbers;
+            	rooms.roomFloors = data.roomFloors;
+            	rooms.hotelNames = data.hotelNames;
+            	rooms.roomTypes = data.roomTypeNames;
+            	
+            	rooms.occupieds = data.occupieds;
+            	rooms.cleaneds = data.cleaneds;
+            	
+            	rooms.numberOfOccupants = data.numberOfOccupants;
+            	rooms.guestIDs = data.guestIDs;
+            	rooms.guestFullNames = data.guestFNs;
+            	rooms.guestMobilePhoneNumbers = data.guestMPNs;
+            	
+            	rooms.checkInDates = data.CIDs;
+            	rooms.checkOutDates = data.CODs;
+                
+
+                for (let i = 0; i < rooms.guestFullNames.length; i++) {
+                    $('#table-body').append("<tr> <td>" +
+                    	rooms.roomNumbers[i] + "</td> <td>" +
+                    	rooms.roomFloors[i] + "</td> <td>" +
+                    	rooms.roomTypes[i] + "</td> <td>" +
+                    	rooms.guestIDs[i] + "</td> <td>" +
+                    	rooms.guestFullNames[i] + "</td> <td>" +
+                    	rooms.guestMobilePhoneNumbers[i] + "</td> <td>" + 
+                    	rooms.guestMobilePhoneNumbers[i] + "</td> <td>" + 
+                    	rooms.checkInDates[i] + "</td> <td>" + 
+                    	rooms.checkOutDates[i] + "</td> <td>" + 
+                    	rooms.occupieds[i] + "</td> <td>" + 
+                    	rooms.cleaneds[i] + "</td> </tr>");
+                }
+
+                table = $('#book-table').DataTable();
+                
+            });
+            
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+            	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+            														data.region + ", " +
+            														"Hotel " + '"' +
+            														data.name + '"';
+            });
+            
+        })
+        
+    </script>
+</head>
+<body>
+
+<h2>
+    Room Cleaning Info
+</h2>
+
+<h3 id="HotelName"></h3>
+
+<table class="cell-border" id="book-table">
+        <thead>
+        <tr>
+        	<th>Room Number</th>
+        	<th>Room Floor</th>
+        	<th>Room Type</th>
+        	<th>Guest ID</th>
+        	<th>Full Name</th>
+        	<th>Mobile Phone Number</th>
+        	<th>Number of Occupants</th>   
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
+            <th>Occupied</th>
+            <th>Cleaned</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+</table>
+
+<button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
+
+</body>
+</html>

@@ -43,6 +43,20 @@ public class BookManagementService {
 	}
 	
 	@GET
+	@Path("/rooms")
+	@Produces({MediaType.TEXT_HTML})
+	public InputStream get_rooms( @DefaultValue("") @QueryParam("auth") String auth ) {
+		if(!UserDAO.checkAuth(auth))
+			return Helper.getPage(servletContext, "accessDeniedPage.html");
+		switch( UserDAO.getRole(auth) ) {
+			case "desk-clerk":
+				return Helper.getPage(servletContext, "roomInfoPage.html");
+			default:
+				return Helper.getPage(servletContext, "accessDeniedPage.html");
+		}
+	}
+	
+	@GET
 	@Path("/hotel-choosing-info")
 	public Response destinationInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
 		if(!UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin"))

@@ -33,6 +33,10 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/checkout' + auth;
     	}
         
+        function show_rooms() {
+    		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management/rooms' + auth;
+    	}
+        
         function toEnsureCheckinPossibility(x) {
         	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
         		var roomTypes = data.roomTypeNames;
@@ -176,6 +180,7 @@
 
 <button class="main-check-in" id="main-check-in" onclick=check_in();>Check-In</button>
 <button class="main-check-out" id="main-check-out" onclick=check_out();>Check-Out</button>
+<button class="rooms" id="rooms" onclick=show_rooms();>Show rooms</button>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 
 </body>
