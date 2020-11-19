@@ -205,6 +205,15 @@ public class RoomDAO {
 			e.printStackTrace();
 		}
 		try {
+			ResultSet resultFeatures = UserDAO.executeQuery("SELECT w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
+					+ checkInDate + "' and w.roomnumber='" + roomNumber + "' and w.floor='" + floor + "' and w.guestid='" + guestID + "' and w.featurename=f.featurename");
+			while(resultFeatures.next()) {
+				finalBill = finalBill + (resultFeatures.getInt(1) * resultFeatures.getDouble(2));
+			}
+			ResultSet resultDiscount = UserDAO.executeQuery("SELECT discount FROM mydb.guest_belongs_category b, mydb.category c Where b.CategoryName=c.TypeName and c.HotelID='" 
+					+ EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "'");
+			resultDiscount.next();
+			finalBill = finalBill * (1 - resultDiscount.getDouble(1));
 			ResultSet result = UserDAO.executeQuery("Select numberofrooms, checkoutdate From mydb.reserves Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
 			result.next();
 			if ( !checkOutDate.equals(result.getString(2)) ) {
@@ -239,10 +248,20 @@ public class RoomDAO {
 		BillInfo bill = new BillInfo();
 		String json = "";
 		try {
-			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and mydb.single_stay.checkindate='" + checkInDate + "' and mydb.single_stay.roomnumber='" + roomNumber + "' and mydb.single_stay.roomfloor='" + floor + "' and mydb.single_stay.guestid='" + guestID + "' and mydb.guest.guestID='" + guestID + "'");
+			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest, mydb.guest_belongs_category, mydb.category Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + 
+					"' and mydb.single_stay.checkindate='" + checkInDate + "' and mydb.single_stay.roomnumber='" + roomNumber + "' and mydb.single_stay.roomfloor='" + floor + 
+					"' and mydb.single_stay.guestid='" + guestID + "' and mydb.guest.guestID='" + guestID + "' and mydb.guest_belongs_category.guestid='" + guestID + 
+					"' and mydb.guest_belongs_category.categoryname=mydb.category.typename and mydb.category.hotelid=" + EmployeeDAO.getHotelID(auth) + "'");
 			if (result.next()) {
-				bill.add(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), result.getInt(6), result.getString(15), result.getString(16), result.getString(17), result.getInt(9), result.getString(10), result.getString(11), result.getString(12), result.getString(13));
+				bill.add(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), 
+						result.getInt(6), result.getString(15), result.getString(16), result.getString(17), result.getDouble(26) * 100, result.getString(23),
+						result.getInt(9), result.getString(10), result.getString(11), result.getString(12), result.getString(13));
 				json = gson.toJson(bill, BillInfo.class);
+			}
+			ResultSet resultFeatures = UserDAO.executeQuery("SELECT w.featurename, w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
+					+ checkInDate + "' and w.roomnumber='" + roomNumber + "' and w.floor='" + floor + "' and w.guestid='" + guestID + "' and w.featurename=f.featurename");
+			while(resultFeatures.next()) {
+				bill.addFeatures(resultFeatures.getString(1), resultFeatures.getInt(2), resultFeatures.getDouble(3));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
