@@ -251,7 +251,7 @@ public class RoomDAO {
 			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest, mydb.guest_belongs_category, mydb.category Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + 
 					"' and mydb.single_stay.checkindate='" + checkInDate + "' and mydb.single_stay.roomnumber='" + roomNumber + "' and mydb.single_stay.roomfloor='" + floor + 
 					"' and mydb.single_stay.guestid='" + guestID + "' and mydb.guest.guestID='" + guestID + "' and mydb.guest_belongs_category.guestid='" + guestID + 
-					"' and mydb.guest_belongs_category.categoryname=mydb.category.typename and mydb.category.hotelid=" + EmployeeDAO.getHotelID(auth) + "'");
+					"' and mydb.guest_belongs_category.categoryname=mydb.category.typename and mydb.category.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
 			if (result.next()) {
 				bill.add(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), 
 						result.getInt(6), result.getString(15), result.getString(16), result.getString(17), result.getDouble(26) * 100, result.getString(23),
