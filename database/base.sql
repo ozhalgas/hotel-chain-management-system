@@ -3,8 +3,11 @@ Insert into mydb.hotel values (1, 'Exclusive', 'USA', 'New York', 'Wall street 2
 Insert into mydb.hotel values (2, 'Luxury', 'UAE', 'Dubai', 'Sheikh 7');
 
 Insert into mydb.phone_number values ('100', 0);
+Insert into mydb.phone_number values ('001', 0);
 Insert into mydb.phone_number values ('101', 1);
+Insert into mydb.phone_number values ('002', 1);
 Insert into mydb.phone_number values ('102', 2);
+Insert into mydb.phone_number values ('003', 2);
 
 Insert into mydb.room_type values ('Single', 26.0, 1, 5, 5, 0);
 Insert into mydb.room_type values ('Double', 32.0, 2, 5, 5, 0);
@@ -603,10 +606,6 @@ insert into mydb.occupies values('10', 1, 1, '2020-11-25', '2020-11-28',0, 'Sing
 insert into mydb.occupies values('23', 2, 1, '2020-12-25', '2020-12-28',1, 'Single');
 insert into mydb.occupies values('10', 1, 1, '2021-01-25', '2021-01-28',2, 'Double');
 
-
-insert into mydb.cleans values(0, 3, 'desk-clerk', '10', 1, 'Single');
-insert into mydb.cleans values(1, 4, 'desk-clerk', '21', 2, 'Single');
-insert into mydb.cleans values(2, 5, 'desk-clerk', '38', 3, 'Luxury');
 
 
 insert into mydb.reserves values('Single', 0, 2, '2020-11-25', '2020-11-28', 1);
