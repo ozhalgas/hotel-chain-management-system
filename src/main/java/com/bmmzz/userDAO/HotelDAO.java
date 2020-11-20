@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.sql.RowSet;
 
 import com.bmmzz.userDAO.struct.HotelBookings;
 import com.bmmzz.userDAO.struct.HotelChoosingInfo;
+import com.bmmzz.userDAO.struct.HotelFeaturesInfo;
 import com.bmmzz.userDAO.struct.HotelInfo;
 import com.bmmzz.userDAO.struct.HotelOccupied;
 import com.bmmzz.userDAO.struct.HotelRoomsInfo;
@@ -233,6 +236,38 @@ public class HotelDAO {
 				++ind;
 			}
 			json = gson.toJson(hotelRooms, HotelRoomsInfo.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	public static String getHotelFeaturesInfo(String auth) {
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		
+		Gson gson = new Gson();
+		HotelFeaturesInfo hotelFeaturesInfo = new HotelFeaturesInfo();
+		String json = "";
+		
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.additional_feature WHERE HotelID = " + hotelID + ";");
+			while(resultSet.next()) {
+				String[] startTime = resultSet.getString(3).split(":");
+				String[] endTime = resultSet.getString(4).split(":");
+				String[] now = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).split(":");
+				
+				boolean insideTimePeriod = false;
+				if(Integer.parseInt(startTime[0]) <= Integer.parseInt(now[0]) && Integer.parseInt(endTime[0]) >= Integer.parseInt(now[0])) {
+					insideTimePeriod = true;
+				} else if(Integer.parseInt(startTime[1]) <= Integer.parseInt(now[1]) && Integer.parseInt(endTime[1]) >= Integer.parseInt(now[1])) {
+					insideTimePeriod = true;
+				}
+				
+				if(insideTimePeriod) 
+					hotelFeaturesInfo.addFeature(resultSet.getString(1), resultSet.getDouble(2), resultSet.getString(3), resultSet.getString(4));
+			}
+			json = gson.toJson(hotelFeaturesInfo, HotelFeaturesInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
