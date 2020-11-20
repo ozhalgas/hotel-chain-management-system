@@ -3,13 +3,13 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Booking Management</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
     <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
     ></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <script type="text/javascript">
     	var link = window.location.href.toString();
 		const params = new URLSearchParams(window.location.search);
@@ -35,7 +35,28 @@
         
         function show_rooms() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management/rooms' + auth;
-    	}
+    	} 
+        
+        function add_feature(id) {
+        	guestID = $("#guest-id-feature").val();
+        	roomNumber = $("#room-number-feature").val();
+        	featureName = $("#feature-name-feature").val();
+        	
+            let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/add-feature/' +
+       		guestID + '-' +
+       		roomNumber + '-' +
+            'SPA' +
+        	auth;
+          
+            $.post(url, 
+    				{}, function(r) {
+    			if(r == null) 
+    				$("#warning").html("Incorrect date written. Please try again!");
+    			else {
+    				window.location.href = link;
+    			}
+    		})
+        }
         
         function toEnsureCheckinPossibility(x) {
         	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
@@ -84,6 +105,7 @@
                         bookings.numberOfRooms[i] + "</td> <td>" + 
                         "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
                         "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                        "<button class='add-features' id=f" + i.toString() + "> Add features </button>" + "</td> <td>" +
                         "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
                     
                     toEnsureCheckinPossibility(i);
@@ -107,6 +129,15 @@
                         table.row(r).remove().draw();
                     })
 
+                })
+                
+                ///book-management/add-feature/{guestID}-{roomNumber}-{featureName}
+                $('.add-features').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id.substring(1));
+                    
+                    add_feature(id);
                 })
                 
                 // {roomTypeName}-{hotelID}-{guestID}-{checkInDate}-{checkOutDate}-{numOfRooms}
@@ -171,12 +202,31 @@
             <th>Number of Rooms</th>
             <th>Check-In</th>
             <th>Edit</th>
+            <th>Add Features</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
 </table>
+
+<div id='info-fature-div'>
+<div id='info-div'>
+	<p id="info-text">Fill out the necessary information:</p>
+</div>
+
+<form>
+		 <div id='guest-id-div'>
+		 Guest ID:<br> <input type="text" name="guest-id" id="guest-id-feature">
+         <br></div>
+         <div id='room-number-div'>
+         Room Number:<br> <input type="text" name="room-number" id="room-number-feature">
+         <br></div>
+         <div id='feature-name-div'>
+         Feature Name:<br> <input type="text" name="feature-name" id="feature-name-feature">
+         <br></div>
+</form>
+</div>
 
 <button class="main-check-in" id="main-check-in" onclick=check_in();>Check-In</button>
 <button class="main-check-out" id="main-check-out" onclick=check_out();>Check-Out</button>
