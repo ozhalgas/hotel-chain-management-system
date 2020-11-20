@@ -20,6 +20,28 @@
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
     	}
+        
+        function add_feature(id) {
+        	guestID = rooms.guestIDs[id];
+        	roomNumber = rooms.roomNumbers[id];
+        	featureName = $("#feature-name-feature").val();
+        	
+            let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/add-feature/' +
+       		guestID + '-' +
+       		roomNumber + '-' +
+            featureName +
+        	auth;
+          
+            $.post(url, 
+    				{}, function(r) {
+    			if(r == null) 
+    				$("#warning").html("Incorrect date written. Please try again!");
+    			else {
+    				window.location.href = link;
+    			}
+    		})
+        }
+        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
 
@@ -41,7 +63,7 @@
 
 
                 for (let i = 0; i < rooms.guestFullNames.length; i++) {
-                    $('#table-body').append("<tr> <td>" +
+                    row = "<tr> <td>" +
                         rooms.roomNumbers[i] + "</td> <td>" +
                         rooms.roomFloors[i] + "</td> <td>" +
                         rooms.roomTypes[i] + "</td> <td>" +
@@ -53,8 +75,18 @@
                         rooms.checkOutDates[i] + "</td> <td>" +
                         rooms.occupieds[i] + "</td> <td>" +
                         rooms.cleaneds[i] + "</td> <td>" +
-                        "<button class='cleans'> Clean/Dirty" +
-                        "</button></td> </tr>");
+                        "<button class='cleans'> Clean/Dirty" + "</button>" + "</td>";
+                    
+                    if(rooms.occupieds[i] === 1) {
+                    	row += " <td> <button class='add-features' id=f" + 
+                    			i.toString() + "> Add feature </button>" +
+                        		"</td> </tr>";
+                    } else {
+                    	row += "<td> Not available" +
+                		"</td> </tr>";
+                    }
+                    
+                    $('#table-body').append(row);
                 }
 
                 table = $('#book-table').DataTable();
@@ -80,6 +112,14 @@
                         })
 
                     })
+                    
+                    $('.add-features').on('click', function () {
+	                    console.log('clicked')
+	                    let r = $(this).closest('tr').index()
+	                    let id = parseInt(this.id.substring(1));
+	                    
+	                    add_feature(id);
+                	})
 
                 });
             
@@ -116,12 +156,25 @@
             <th>Check Out Date</th>
             <th>Occupied</th>
             <th>Cleaned</th>
-            <th>       </th>
+            <th>Clean/Dirty</th>
+            <th>Add feature</th>
         </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
 </table>
+
+<div id='info-feature-div'>
+<div id='info-div'>
+	<p id="info-text">Fill out the necessary information:</p>
+</div>
+
+<form>
+         <div id='feature-name-div'>
+         Feature Name:<br> <input type="text" name="feature-name" id="feature-name-feature">
+         <br></div>
+</form>
+</div>
 
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 

@@ -37,27 +37,6 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management/rooms' + auth;
     	} 
         
-        function add_feature(id) {
-        	guestID = $("#guest-id-feature").val();
-        	roomNumber = $("#room-number-feature").val();
-        	featureName = $("#feature-name-feature").val();
-        	
-            let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/add-feature/' +
-       		guestID + '-' +
-       		roomNumber + '-' +
-            'SPA' +
-        	auth;
-          
-            $.post(url, 
-    				{}, function(r) {
-    			if(r == null) 
-    				$("#warning").html("Incorrect date written. Please try again!");
-    			else {
-    				window.location.href = link;
-    			}
-    		})
-        }
-        
         function toEnsureCheckinPossibility(x) {
         	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
         		var roomTypes = data.roomTypeNames;
@@ -105,7 +84,6 @@
                         bookings.numberOfRooms[i] + "</td> <td>" + 
                         "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
                         "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
-                        "<button class='add-features' id=f" + i.toString() + "> Add features </button>" + "</td> <td>" +
                         "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
                     
                     toEnsureCheckinPossibility(i);
@@ -202,31 +180,12 @@
             <th>Number of Rooms</th>
             <th>Check-In</th>
             <th>Edit</th>
-            <th>Add Features</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
 </table>
-
-<div id='info-fature-div'>
-<div id='info-div'>
-	<p id="info-text">Fill out the necessary information:</p>
-</div>
-
-<form>
-		 <div id='guest-id-div'>
-		 Guest ID:<br> <input type="text" name="guest-id" id="guest-id-feature">
-         <br></div>
-         <div id='room-number-div'>
-         Room Number:<br> <input type="text" name="room-number" id="room-number-feature">
-         <br></div>
-         <div id='feature-name-div'>
-         Feature Name:<br> <input type="text" name="feature-name" id="feature-name-feature">
-         <br></div>
-</form>
-</div>
 
 <button class="main-check-in" id="main-check-in" onclick=check_in();>Check-In</button>
 <button class="main-check-out" id="main-check-out" onclick=check_out();>Check-Out</button>
