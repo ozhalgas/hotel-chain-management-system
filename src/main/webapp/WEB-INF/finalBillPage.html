@@ -22,22 +22,24 @@
         
         function send_email() {
         	var receipt = "Final Bill%0A" +
-        		"Check-In Date:%09%09" + $("#check-in-date").text() + "%0A" +
-        		"Check-Out Date:%09%09" + $("#check-out-date").text() + "%0A" +
-        		"Final Bill:%09%09%09%09" + $("#final-bill").text() + "%0A" +
+	        	"Guest ID:%09%09%09%09" + $("#guest-id").text() + "%0A" +
+	    		"Guest Full Name:%09%09" + $("#guest-full-name").text() + "%0A" +
+	    		"Guest Document:%09%09" + $("#guest-id-number").text() + "%0A" +
+	    		"Guest Category:%09%09" + $("#guest-category").text() + "%0A" +
+	    		"Hotel ID:%09%09%09%09" + $("#hotel-id").text() + "%0A" +
+        		"Hotel Name:%09%09%09" + $("#hotel-name").text() + "%0A" +
+        		"Hotel Region:%09%09%09" + $("#hotel-region").text() + "%0A" +
+        		"Hotel Address:%09%09" + $("#hotel-address").text() + "%0A" +
         		"Room Type:%09%09%09" + localStorage['roomType'] + "%0A" +
         		"Room Number:%09%09" + $("#room-number").text() + "%0A" +
         		"Floor:%09%09%09%09" + $("#floor").text() + "%0A" +
-        		"Guest ID:%09%09%09%09" + $("#guest-id").text() + "%0A" +
-        		"Guest Full Name:%09%09" + $("#guest-full-name").text() + "%0A" +
-        		"Guest Document:%09%09" + $("#guest-id-number").text() + "%0A" +
-        		"Guest Category:%09%09" + $("#guest-category").text() + "%0A" +
+        		"Check-In Date:%09%09" + $("#check-in-date").text() + "%0A" +
+        		"Check-Out Date:%09%09" + $("#check-out-date").text() + "%0A" +
+        		"Used Features:%09" + $("#feature-names").text() + "%0A" +
+        		"Used Times:%09%09%09" + $("#feature-times").text() + "%0A" +
+        		"Features Costs:%09" + $("#feature-costs").text() + "%0A" +
         		"Category Discount:%09" + $("#category-discount").text() + "%0A" +
-        		"Hotel ID:%09%09%09%09" + $("#hotel-id").text() + "%0A" +
-        		"Hotel Name:%09%09%09" + $("#hotel-name").text() + "%0A" +
-        		"Hotel Region:%09%09%09" + $("#hotel-region").text() + "%0A" +
-        		"Hotel Address:%09%09" + $("#hotel-address").text()
-          
+        		"Final Bill:%09%09%09%09" + $("#final-bill").text()
     		window.location='mailto:abc@example.com?subject=Receipt&body=' + receipt;
     	}
         
@@ -66,6 +68,9 @@
                 $("#guest-id").html(r["guestID"]);
                 $("#guest-full-name").html(r["guestFullName"]);
                 $("#guest-category").html(r["categoryName"]);
+                $("#feature-names").html(r["usedFeatures"].toString());
+                $("#feature-times").html(r["usedFeaturesTimes"].toString());
+                $("#feature-costs").html(r["usedFeaturesCost"].toString());
                 $("#category-discount").html(r["categoryDiscount"] +'%');
                 $("#hotel-id").html(r["hotelID"]);
                 $("#hotel-name").html(r["hotelName"]);
@@ -80,7 +85,7 @@
         
         $(document).ready(function () {   	
             getReceipt();
-            $("#breakAfterTable").html("<br>".repeat(20));		
+            $("#breakAfterTable").html("<br>".repeat(24));		
     	  });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info?" + auth, function (data) {
@@ -102,30 +107,6 @@
 <div id="print-content">
 <table id="info" align="left" border="1">
       <tr>
-        <th>Check-In Date</th>
-        <td id="check-in-date">null</td>
-      </tr>
-      <tr>
-        <th>Check-Out Date</th>
-        <td id="check-out-date">null</td>
-      </tr>
-      <tr>
-        <th>Final Bill</th>
-        <td id="final-bill">null</td>
-      </tr>
-      <tr>
-        <th>Room Type</th>
-        <td id="room-type">null</td>
-      </tr>
-      <tr>
-        <th>Room Number</th>
-        <td id="room-number">null</td>
-      </tr>
-      <tr>
-        <th>Floor</th>
-        <td id="floor">null</td>
-      </tr>
-      <tr>
         <th>Guest ID</th>
         <td id="guest-id">null</td>
       </tr>
@@ -142,10 +123,6 @@
         <td id="guest-category">null</td>
       </tr>
       <tr>
-        <th>Category Discount</th>
-        <td id="category-discount">null</td>
-      </tr>
-      <tr>
         <th>Hotel ID</th>
         <td id="hotel-id">null</td>
       </tr>
@@ -160,6 +137,46 @@
       <tr>
         <th>Hotel Address</th>
         <td id="hotel-address">null</td>
+      </tr>
+            <tr>
+        <th>Room Type</th>
+        <td id="room-type">null</td>
+      </tr>
+      <tr>
+        <th>Room Number</th>
+        <td id="room-number">null</td>
+      </tr>
+      <tr>
+        <th>Floor</th>
+        <td id="floor">null</td>
+      </tr>
+      <tr>
+        <th>Check-In Date</th>
+        <td id="check-in-date">null</td>
+      </tr>
+      <tr>
+        <th>Check-Out Date</th>
+        <td id="check-out-date">null</td>
+      </tr>
+      <tr>
+        <th>Used Features</th>
+        <td id="feature-names">null</td>
+      </tr>
+      <tr>
+        <th>Used Times</th>
+        <td id="feature-times">null</td>
+      </tr>
+      <tr>
+        <th>Features Costs</th>
+        <td id="feature-costs">null</td>
+      </tr>
+      <tr>
+        <th>Category Discount</th>
+        <td id="category-discount">null</td>
+      </tr>
+      <tr>
+        <th>Final Bill</th>
+        <td id="final-bill">null</td>
       </tr>
   </table>
 </div>
