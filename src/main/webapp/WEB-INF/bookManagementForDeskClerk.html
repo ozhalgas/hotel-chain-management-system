@@ -42,7 +42,7 @@
         	roomNumber = $("#room-number-feature").val();
         	featureName = $("#feature-name-feature").val();
         	
-            let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/add-feature/' +
+            let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/add-feature/' +
        		guestID + '-' +
        		roomNumber + '-' +
             'SPA' +
@@ -131,7 +131,7 @@
 
                 })
                 
-                ///book-management/add-feature/{guestID}-{roomNumber}-{featureName}
+                ///checkin/add-feature/{guestID}-{roomNumber}-{featureName}
                 $('.add-features').on('click', function () {
                     console.log('clicked')
                     let r = $(this).closest('tr').index()

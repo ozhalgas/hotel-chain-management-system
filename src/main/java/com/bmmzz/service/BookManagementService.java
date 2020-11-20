@@ -168,16 +168,4 @@ public class BookManagementService {
 		return Response.ok().build();
 	}
 	
-	@POST
-	@Path("/add-feature/{guestID}-{roomNumber}-{featureName}")
-	public Response addFeature(@DefaultValue("") @QueryParam("auth") String auth,
-														   @PathParam("guestID") int guestID,
-														   @PathParam("roomNumber") String roomNumber,
-														   @PathParam("featureName") String featureName) {
-		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
-			return null;
-		int hotelID = EmployeeDAO.getHotelID(auth);
-		RoomDAO.addFeature(hotelID, guestID, featureName, roomNumber);
-		return Response.ok().build();
-	}
 }
