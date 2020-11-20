@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
@@ -50,7 +51,13 @@ public class RoomDAO {
 				
 				double initialPrice = getInitialPrice(hotelID, startDate, endDate, resultSet.getString(1) );
 				
-				availableRoomsInfo.add(resultSet.getString(1), resultSet.getDouble(2), resultSet.getInt(3), initialPrice, availableRoomNum);
+				ArrayList<String> features = new ArrayList<String>();
+				ResultSet resultSetOfFeatures = UserDAO.executeQuery("SELECT FeatureName FROM mydb.feature WHERE RoomTypeName = '" + resultSet.getString(1) + "' AND HotelID = " + hotelID + ";");
+				while(resultSetOfFeatures.next()) {
+					features.add(resultSetOfFeatures.getString(1));
+				}
+				
+				availableRoomsInfo.add(resultSet.getString(1), resultSet.getDouble(2), resultSet.getInt(3), initialPrice, availableRoomNum, features);
 			}
 			
 			json = gson.toJson(availableRoomsInfo, AvailableRoomsInfo.class);
