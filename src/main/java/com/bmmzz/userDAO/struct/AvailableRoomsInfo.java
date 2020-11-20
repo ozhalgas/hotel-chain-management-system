@@ -6,8 +6,8 @@ public class AvailableRoomsInfo {
 	private ArrayList<SingleRoomType> availableRoomsInfo = new ArrayList<SingleRoomType>();
 	
 	public void add(String typeName, double size, int occupancy,
-			  		double initialPrice, int numberOfAvailableRooms) {
-		availableRoomsInfo.add(new SingleRoomType(typeName, size, occupancy, initialPrice, numberOfAvailableRooms));
+			  		double initialPrice, int numberOfAvailableRooms, ArrayList<String> features) {
+		availableRoomsInfo.add(new SingleRoomType(typeName, size, occupancy, initialPrice, numberOfAvailableRooms, features));
 		return;
 	}
 	
@@ -17,14 +17,16 @@ public class AvailableRoomsInfo {
 		private int occupancy;
 		private double initialPrice;
 		private int numberOfAvailableRooms;
+		private ArrayList<String> features;
 		
 		public SingleRoomType(String typeName, double size, int occupancy,
-							  double initialPrice, int numberOfAvailableRooms) {
+							  double initialPrice, int numberOfAvailableRooms, ArrayList<String> features) {
 			this.typeName = typeName;
 			this.size = size;
 			this.occupancy = occupancy;
 			this.initialPrice = initialPrice;
 			this.numberOfAvailableRooms = numberOfAvailableRooms;
+			this.features = features;
 		}
 	}
 }
