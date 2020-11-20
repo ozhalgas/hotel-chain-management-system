@@ -58,6 +58,15 @@ public class CheckInService {
 		return Response.ok(json).build();
 	}
 	
+	@GET
+	@Path("/hotel-features")
+	public Response getHotelFeatures( @DefaultValue("") @QueryParam("auth") String auth) {
+		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
+			return null;
+		String json = HotelDAO.getHotelFeaturesInfo(auth);
+		return Response.ok(json).build();
+	}
+	
 	@POST
 	@Path("/{guestID}-{roomTypeName}-{roomNumber}-{roomFloor}-{checkInDate}-{checkOutDate}-{occupants}")
 	//@Path("/test")

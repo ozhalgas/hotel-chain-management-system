@@ -172,8 +172,8 @@ public class BookManagementService {
 	@Path("/add-feature/{guestID}-{roomNumber}-{featureName}")
 	public Response addFeature(@DefaultValue("") @QueryParam("auth") String auth,
 														   @PathParam("guestID") int guestID,
-														   @PathParam("featureName") String featureName,
-														   @PathParam("featureName") String roomNumber) {
+														   @PathParam("roomNumber") String roomNumber,
+														   @PathParam("featureName") String featureName) {
 		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
 			return null;
 		int hotelID = EmployeeDAO.getHotelID(auth);
