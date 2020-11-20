@@ -342,4 +342,9 @@ public class RoomDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void changeCleanState(String auth, String roomNumber, int floor, String roomType) {
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		UserDAO.executeUpdate("UPDATE mydb.room SET Cleaned=IF(Cleaned = 0, 1, 0) WHERE HotelID = " + hotelID + " AND RoomNumber = '" + roomNumber + "' AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "';");
+	}
 }

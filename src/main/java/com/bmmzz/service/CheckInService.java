@@ -52,10 +52,22 @@ public class CheckInService {
 	@GET
 	@Path("/rooms")
 	public Response hotelRoomsInfo( @DefaultValue("") @QueryParam("auth") String auth ) {
-		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk"))
+		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
 			return null;
 		String json = HotelDAO.getHotelRooms(auth);
 		return Response.ok(json).build();
+	}
+	
+	@POST
+	@Path("/clean/{roomNumber}-{floor}-{roomType}")
+	public Response clean( @DefaultValue("") @QueryParam("auth") String auth,
+						   @PathParam("roomNumber") String roomNumber,
+						   @PathParam("floor") int floor,
+						   @PathParam("roomType") String roomType) {
+		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
+			return null;
+		RoomDAO.changeCleanState(auth, roomNumber, floor, roomType);
+		return Response.ok().build();
 	}
 	
 	@GET
