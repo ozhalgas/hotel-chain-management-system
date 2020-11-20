@@ -624,3 +624,4 @@ insert into mydb.occupies values('12', 1, 2, '2021-01-25', '2021-01-28',2, 'Doub
 insert into mydb.advertisement values('Register and get a chance to win a trip to Spain!', 0);
 insert into mydb.advertisement values('Warm and cozy boots at low prices!', 1);
 insert into mydb.advertisement values('Buy two and get the third item for free!', 2);
+
