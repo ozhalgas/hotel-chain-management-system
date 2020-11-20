@@ -45,8 +45,23 @@
                 },
             });
         }
-
+		
+        function loadAds() {
+      	  $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/ads/get" + auth, function(data) {
+      		  if(data.hotelID.length == 0) {
+      			  $('#popup1').remove();
+      			  return;
+      		  }
+      		  
+      		  for(let i = 0; i < data.hotelID.length; i++) {
+      			  $('.content').append("<p>" + data.text[i] + "</p>");
+      		  }
+      	  });
+        }
+        
         $(document).ready(function () {
+        	loadAds();
+        	
             $('#book-management').on('click', function () {
                 window.location.href = 'http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
             })
@@ -107,11 +122,7 @@
 	<div class="popup">
 		<h2>Advisories</h2>
 		<a class="close" href="#">&times;</a>
-		<div class="content">
-		<p>The hotel "Regula" now have unbelievably generous discounts for rooms! Christmas season begins! Up to 25% discounts!</p>
-		<p>The hotel "Exclusive" now have unbelievably bad marketing strategy! Christmas season has began but prices are becoming only bigger and bigger(</p>
-		<p>The hotel "Luxury" declares a start of christmas season... I guess...</p>
-		</div>
+		<div class="content"></div>
 	</div>
 </div>
 
