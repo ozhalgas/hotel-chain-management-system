@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-    <title>Check-Out Page</title>
+    <title>Seasons Page</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -19,50 +19,190 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/profile' + auth;
     	}
         
+        function get_max() {
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/" + season.seasonName[0] + auth, function(data) {
+        		localStorage['n'] = (data.roomType.length / 7).toString();
+        	});
+        }
+        
+        function show_season_details() {
+        	$('#update').attr("style", "display:block");
+    		
+    		$('#season-name-div').attr("style", "display:none");
+    		$('#start-date-div').attr("style", "display:none");
+    		$('#end-date-div').attr("style", "display:none");
+    		
+    		$('#room-type-div').attr("style", "display:block");
+    
+    		$('#price-1-div').attr("style", "display:block");
+    		$('#price-2-div').attr("style", "display:block");
+    		$('#price-3-div').attr("style", "display:block");
+    		$('#price-4-div').attr("style", "display:block");
+    		$('#price-5-div').attr("style", "display:block");
+    		$('#price-6-div').attr("style", "display:block");
+    		$('#price-7-div').attr("style", "display:block");
+        }
+        
+        function show_season_name() {
+        	$('#update').attr("style", "display:block");
+    		
+    		$('#season-name-div').attr("style", "display:block");
+    		$('#start-date-div').attr("style", "display:block");
+    		$('#end-date-div').attr("style", "display:block");
+    		
+    		$('#room-type-div').attr("style", "display:none");
+            
+    		$('#price-1-div').attr("style", "display:none");
+    		$('#price-2-div').attr("style", "display:none");
+    		$('#price-3-div').attr("style", "display:none");
+    		$('#price-4-div').attr("style", "display:none");
+    		$('#price-5-div').attr("style", "display:none");
+    		$('#price-6-div').attr("style", "display:none");
+    		$('#price-7-div').attr("style", "display:none");
+        }
+        
         function create() {
-        	
-        	seasonName = $("#season-name").val();
-        	startDate = $("#start-date").val();
-        	endDate = $("#end-date").val();
-        	
-        	roomType = $("#room-type").val();
-        	price1 = $("#price-1").val();
-        	price2 = $("#price-2").val();
-        	price3 = $("#price-3").val();
-        	price4 = $("#price-4").val();
-        	price5 = $("#price-5").val();
-        	price6 = $("#price-6").val();
-        	price7 = $("#price-7").val();
-        	
+               	
         	style = document.getElementById("update").style.display;
         	
-        	if(style === 'none') {
-        		$('#update').attr("style", "display:block");
+        	if(style === 'none') {        
+        		show_season_name();
+        		
+        		get_max();
+        		
+        		n = parseInt(localStorage['n']);
+        		
+        		console.log(n);
+        		
+        		localStorage['idx'] = '0';
+        		localStorage['roomTypes'] = '';
+        		localStorage['prices'] = '';
         	} else {
-        		let url = 'http://localhost:8080/HotelChainManagementSystem/services/season/create/' +
-            	seasonName + '-' +
-            	startDate + '-' +
-            	endDate + '-' +
-            	roomType + '-' +
-            	price1 + ':' + 
-            	price2 + ':' + 
-            	price3 + ':' + 
-            	price4 + ':' + 
-            	price5 + ':' + 
-            	price6 + ':' + 
-            	price7 +
-                auth;
-    		
-            	console.log(url)
-            	
-        		$.post(url, 
-        				{}, function(r) {
-        			if(r == null) 
-        				$("#warning").html("Incorrect date written. Please try again!");
-        			else {
-        				window.location.href = link;
-        			}
-        		})
+        		if(localStorage['idx'] === '0') {
+        			console.log('here 1');
+        			console.log(localStorage['idx']);
+        			
+                	seasonName = $("#season-name").val();
+                	startDate = $("#start-date").val();
+                	endDate = $("#end-date").val();
+                	
+                	localStorage['seasonName'] = seasonName;
+        			localStorage['startDate'] = startDate;
+        			localStorage['endDate'] = endDate;
+        			
+        			console.log(seasonName);
+        			console.log(startDate);
+        			console.log(endDate);
+        			
+                	localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
+                	
+                	show_season_details();
+        		} else if(parseInt(localStorage['idx']) < n) {
+        			console.log('here 2');
+        			console.log(localStorage['idx']);
+        			
+        			show_season_details();
+        			
+                	roomType = $("#room-type").val();
+                	
+                	price1 = $("#price-1").val();
+                	price2 = $("#price-2").val();
+                	price3 = $("#price-3").val();
+                	price4 = $("#price-4").val();
+                	price5 = $("#price-5").val();
+                	price6 = $("#price-6").val();
+                	price7 = $("#price-7").val();
+                	
+                	if(localStorage['idx'] === '1') {
+                		console.log('here 2-1');
+                		console.log(localStorage['idx']);
+                		
+                		localStorage['roomTypes'] += roomType;
+                		localStorage['prices'] += 	price1 + ':' +
+                									price2 + ':' +
+                									price3 + ':' +
+                									price4 + ':' +
+                									price5 + ':' +
+                									price6 + ':' +
+                									price7;
+                    	
+                		localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
+                	} else {
+                		console.log('here 2-2');
+                		console.log(localStorage['idx']);
+                		
+                		localStorage['roomTypes'] += ':' + roomType;
+                		localStorage['prices'] += 'X' + price1 + ':' +
+														price2 + ':' +
+														price3 + ':' +
+														price4 + ':' +
+														price5 + ':' +
+														price6 + ':' +
+														price7;
+                		
+            			console.log(localStorage['idx']);
+            			
+            			localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
+                	}
+        		} else {
+        			console.log('here 2');
+        			console.log(localStorage['idx']);
+        			
+        			show_season_details();
+        			
+                	roomType = $("#room-type").val();
+                	
+                	price1 = $("#price-1").val();
+                	price2 = $("#price-2").val();
+                	price3 = $("#price-3").val();
+                	price4 = $("#price-4").val();
+                	price5 = $("#price-5").val();
+                	price6 = $("#price-6").val();
+                	price7 = $("#price-7").val();
+                	
+        			console.log('here 2-2');
+            		console.log(localStorage['idx']);
+            		
+            		localStorage['roomTypes'] += ':' + roomType;
+            		localStorage['prices'] += 'X' + price1 + ':' +
+													price2 + ':' +
+													price3 + ':' +
+													price4 + ':' +
+													price5 + ':' +
+													price6 + ':' +
+													price7;
+            		
+        			console.log(localStorage['idx']);
+        			
+        			localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
+        			
+        			roomTypes = localStorage['roomTypes'];
+        			prices = localStorage['prices'];
+        			seasonName = localStorage['seasonName'];
+        			startDate = localStorage['startDate'];
+        			endDate = localStorage['endDate'];
+        			
+            		let url = 'http://localhost:8080/HotelChainManagementSystem/services/season/create/' +
+                	seasonName + '-' +
+                	startDate + '-' +
+                	endDate + '-' +
+                	roomTypes + '-' +
+                	prices +
+                    auth;
+        		
+                	console.log(url)
+                	
+                	localStorage['idx'] = 0;
+                	
+            		$.post(url, 
+            				{}, function(r) {
+            			if(r == null) 
+            				$("#warning").html("Incorrect date written. Please try again!");
+            			else {
+            				window.location.href = link;
+            			}
+            		})
+        		}
         	}
     	}
         
@@ -233,30 +373,45 @@
 </div>
 
 <div id="update">
-<h3 id="update-title">Create a new season</h3><br>
+<h3 id="update-title">Create a new season</h3>
+<h4>Please list room types and corresponding prices using ':' as a delimiter.</h4>
+<h4>Similarly, for the dates.</h4>
+
 
 <form>
+		 <div id='season-name-div'>
 		 Season Name:<br> <input type="text" name="season-name" id="season-name">
-         <br>
+         <br></div>
+         <div id='start-date-div'>
          Start Date:<br> <input type="text" name="start-date" id="start-date">
-         <br>
+         <br></div>
+         <div id='end-date-div'>
          End Date:<br> <input type="text" name="end-date" id="end-date">
-         <br>
+         <br></div>
+         <div id='room-type-div'>
          Room Type:<br> <input type="text" name="room-type" id="room-type">
-         <br>
+         <br></div>
+         <div id='price-1-div'>
          Price on Monday:<br> <input type="text" name="price-1" id="price-1">
-         <br>
+         <br></div>
+         <div id='price-2-div'>
          Price on Tuesday:<br> <input type="text" name="price-2" id="price-2">
-         <br>
+         <br></div>
+         <div id='price-3-div'>
          Price on Wednesday:<br> <input type="text" name="price-3" id="price-3">
-         <br>
+         <br></div>
+         <div id='price-4-div'>
          Price on Thursday:<br> <input type="text" name="price-4" id="price-4">
-         <br>
+         <br></div>
+         <div id='price-5-div'>
          Price on Friday:<br> <input type="text" name="price-5" id="price-5">
-         <br>
+         <br></div>
+         <div id='price-6-div'>
          Price on Saturday:<br> <input type="text" name="price-6" id="price-6">
-         <br>
+         <br></div>
+         <div id='price-7-div'>
          Price on Sunday:<br> <input type="text" name="price-7" id="price-7">
+         </div>
 </form>
 </div>
 
