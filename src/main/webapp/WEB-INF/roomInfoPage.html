@@ -20,45 +20,68 @@
         function cancel() {
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
     	}
-        
         $(document).ready(function () {
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
-            	
-            	rooms.roomNumbers = data.roomNumbers;
-            	rooms.roomFloors = data.roomFloors;
-            	rooms.hotelNames = data.hotelNames;
-            	rooms.roomTypes = data.roomTypeNames;
-            	
-            	rooms.occupieds = data.occupieds;
-            	rooms.cleaneds = data.cleaneds;
-            	
-            	rooms.numberOfOccupants = data.numberOfOccupants;
-            	rooms.guestIDs = data.guestIDs;
-            	rooms.guestFullNames = data.guestFNs;
-            	rooms.guestMobilePhoneNumbers = data.guestMPNs;
-            	
-            	rooms.checkInDates = data.CIDs;
-            	rooms.checkOutDates = data.CODs;
-                
+
+                rooms.roomNumbers = data.roomNumbers;
+                rooms.roomFloors = data.roomFloors;
+                rooms.hotelNames = data.hotelNames;
+                rooms.roomTypes = data.roomTypeNames;
+
+                rooms.occupieds = data.occupieds;
+                rooms.cleaneds = data.cleaneds;
+
+                rooms.numberOfOccupants = data.numberOfOccupants;
+                rooms.guestIDs = data.guestIDs;
+                rooms.guestFullNames = data.guestFNs;
+                rooms.guestMobilePhoneNumbers = data.guestMPNs;
+
+                rooms.checkInDates = data.CIDs;
+                rooms.checkOutDates = data.CODs;
+
 
                 for (let i = 0; i < rooms.guestFullNames.length; i++) {
                     $('#table-body').append("<tr> <td>" +
-                    	rooms.roomNumbers[i] + "</td> <td>" +
-                    	rooms.roomFloors[i] + "</td> <td>" +
-                    	rooms.roomTypes[i] + "</td> <td>" +
-                    	rooms.guestIDs[i] + "</td> <td>" +
-                    	rooms.guestFullNames[i] + "</td> <td>" +
-                    	rooms.guestMobilePhoneNumbers[i] + "</td> <td>" + 
-                    	rooms.guestMobilePhoneNumbers[i] + "</td> <td>" + 
-                    	rooms.checkInDates[i] + "</td> <td>" + 
-                    	rooms.checkOutDates[i] + "</td> <td>" + 
-                    	rooms.occupieds[i] + "</td> <td>" + 
-                    	rooms.cleaneds[i] + "</td> </tr>");
+                        rooms.roomNumbers[i] + "</td> <td>" +
+                        rooms.roomFloors[i] + "</td> <td>" +
+                        rooms.roomTypes[i] + "</td> <td>" +
+                        rooms.guestIDs[i] + "</td> <td>" +
+                        rooms.guestFullNames[i] + "</td> <td>" +
+                        rooms.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                        rooms.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                        rooms.checkInDates[i] + "</td> <td>" +
+                        rooms.checkOutDates[i] + "</td> <td>" +
+                        rooms.occupieds[i] + "</td> <td>" +
+                        rooms.cleaneds[i] + "</td> <td>" +
+                        "<button class='cleans'> Clean/Dirty" +
+                        "</button></td> </tr>");
                 }
 
                 table = $('#book-table').DataTable();
-                
-            });
+                    $('#book-table').on('click',  '.cleans' , function () {
+                        let r = $(this).closest('tr').index();
+                        let page = table.page.info().page
+                        let count = table.page.info().length
+                        let url = 'http://localhost:8080/HotelChainManagementSystem/services/checkin/clean/' +
+                            rooms.roomNumbers[r+page*count] + '-' + rooms.roomFloors[r+page*count] + '-' + rooms.roomTypes[r+page*count]
+                            + auth
+                        fetch(url, {
+                            method: 'POST',
+                        }).then(() => {
+                            let val = '0'
+                            if (rooms.cleaneds[r+page*count] == 1) {
+                                val = '0'
+                                rooms.cleaneds[r+page*count] = 0
+                            } else {
+                                val = '1'
+                                rooms.cleaneds[r+page*count] = 1
+                            }
+                            table.cell(r+page*count, 10).data(val).draw(false);
+                        })
+
+                    })
+
+                });
             
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
             	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
@@ -93,6 +116,7 @@
             <th>Check Out Date</th>
             <th>Occupied</th>
             <th>Cleaned</th>
+            <th>       </th>
         </tr>
         </thead>
         <tbody id="table-body">
