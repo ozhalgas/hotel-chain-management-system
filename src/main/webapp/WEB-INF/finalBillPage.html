@@ -21,10 +21,11 @@
         }
         
         function send_email() {
-        	var receipt = "Final Bill%0A" + 
+        	var receipt = "Final Bill%0A" +
         		"Check-In Date:%09%09" + $("#check-in-date").text() + "%0A" +
         		"Check-Out Date:%09%09" + $("#check-out-date").text() + "%0A" +
         		"Final Bill:%09%09%09%09" + $("#final-bill").text() + "%0A" +
+        		"Room Type:%09%09%09" + localStorage['roomType'] + "%0A" +
         		"Room Number:%09%09" + $("#room-number").text() + "%0A" +
         		"Floor:%09%09%09%09" + $("#floor").text() + "%0A" +
         		"Guest ID:%09%09%09%09" + $("#guest-id").text() + "%0A" +
@@ -59,6 +60,7 @@
                 $("#check-in-date").html(r["checkInDate"]);
                 $("#check-out-date").html(r["checkOutDate"]);
                 $("#final-bill").html(r["finalBill"]);
+                $("#room-type").html(localStorage["roomType"]);
                 $("#room-number").html(r["roomNumber"]);
                 $("#floor").html(r["floor"]);
                 $("#guest-id").html(r["guestID"]);
@@ -76,7 +78,7 @@
             });
           }
         
-        $(document).ready(function () {
+        $(document).ready(function () {   	
             getReceipt();
             $("#breakAfterTable").html("<br>".repeat(20));		
     	  });
@@ -110,6 +112,10 @@
       <tr>
         <th>Final Bill</th>
         <td id="final-bill">null</td>
+      </tr>
+      <tr>
+        <th>Room Type</th>
+        <td id="room-type">null</td>
       </tr>
       <tr>
         <th>Room Number</th>
