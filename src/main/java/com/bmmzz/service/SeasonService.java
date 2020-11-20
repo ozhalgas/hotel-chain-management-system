@@ -36,6 +36,7 @@ public class SeasonService {
         if(!UserDAO.checkAuth(auth))
             return Helper.getPage(servletContext, "accessDeniedPage.html");
         switch( UserDAO.getRole(auth) ) {
+        	case "admin":
             case "manager":
                 return Helper.getPage(servletContext, "seasonPage.html");
             default:

@@ -37,6 +37,7 @@ public class SeasonAdsService {
         if(!UserDAO.checkAuth(auth))
             return Helper.getPage(servletContext, "accessDeniedPage.html");
         switch( UserDAO.getRole(auth) ) {
+        	case "admin":
             case "manager":
                 return Helper.getPage(servletContext, "adPage.html");
             default:
@@ -61,6 +62,16 @@ public class SeasonAdsService {
 		return Response.ok().build();
 	}
 	
+	/*@DELETE
+	@Path("/delete/{hotelID}")
+	public Response deleteAd(@DefaultValue("") @QueryParam("auth") String auth,
+													@PathParam("hotelID") int hotelID) {
+		if (!UserDAO.checkRoleAndAuth(auth, "admin"))
+			return null;
+		SeasonDAO.deleteAd(hotelID);
+		return Response.ok().build();
+	}*/
+	
 	@POST
 	@Path("/update/{adTxt}")
 	public Response updateAd(@DefaultValue("") @QueryParam("auth") String auth,
@@ -71,4 +82,15 @@ public class SeasonAdsService {
 		SeasonDAO.updateAd(hotelID, adTxt);
 		return Response.ok().build();
 	}
+	
+	/*@POST
+	@Path("/update/{hotelID}-{adTxt}")
+	public Response updateAd(@DefaultValue("") @QueryParam("auth") String auth,
+								     @PathParam("adTxt") String adTxt,
+								     @PathParam("hotelID") int hotelID) {
+		if (!UserDAO.checkRoleAndAuth(auth, "admin"))
+			return null;
+		SeasonDAO.updateAd(hotelID, adTxt);
+		return Response.ok().build();
+	}*/
 }

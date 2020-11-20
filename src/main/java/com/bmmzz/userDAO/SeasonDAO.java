@@ -101,7 +101,7 @@ public class SeasonDAO {
 				while(resultSet.next()) {
 					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
 				}
-			} else if (UserDAO.getRole(auth).equals("guest") || UserDAO.getRole(auth).equals("desk-clerk")) {
+			} else if (UserDAO.getRole(auth).equals("guest") || UserDAO.getRole(auth).equals("desk-clerk") || UserDAO.getRole(auth).equals("admin")) {
 				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
 				while(resultSet.next()) {
 					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
