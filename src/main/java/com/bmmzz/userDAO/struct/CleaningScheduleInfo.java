@@ -3,7 +3,7 @@ package com.bmmzz.userDAO.struct;
 public class CleaningScheduleInfo {
 	String[] startTimes = new String[20];
 	String[] endTimes = new String[20];
-	String[][] roomNumber = new String[20][2];
+	String[][] roomNumbers = new String[20][2];
 	Integer[][] floors = new Integer[20][2];
 	String[][] roomTypes = new String[20][2];
 	Boolean[] slotOccupied = new Boolean[20]; // False - if not slot is empty (no room to clean in the given slot - 30 min period)
@@ -20,7 +20,7 @@ public class CleaningScheduleInfo {
 	public CleaningScheduleInfo() {
 		for(int i = 0; i < 20; i++) {
 			String str_HH, str_mm;
-			Integer HH = 8 + (i/2);
+			Integer HH = 9 + (i/2);
 			
 			if(HH/10 == 0)
 				str_HH = "0" + HH.toString();
@@ -56,9 +56,9 @@ public class CleaningScheduleInfo {
 		String time;
 		Integer HH = Integer.parseInt(item.getTime().split(":")[0]);
 		
-		if(HH < 8) {
-			time = "8:00";
-		} else if(HH < 18) {
+		if(HH < 9) {
+			time = "9:00";
+		} else if(HH < 19) {
 			time = item.getTime();
 		} else {
 			return;
@@ -69,13 +69,13 @@ public class CleaningScheduleInfo {
 		for(int i = index; i < 20; i++) {
 			if(slotFull[i] == false) {
 				if(slotOccupied[i] == false) {
-					roomNumber[i][0] = item.getRoomNumber();
+					roomNumbers[i][0] = item.getRoomNumber();
 					floors[i][0] = item.getFloor();
 					roomTypes[i][0] = item.getRoomType();
 					
 					slotOccupied[i] = true;
 				} else {
-					roomNumber[i][1] = item.getRoomNumber();
+					roomNumbers[i][1] = item.getRoomNumber();
 					floors[i][1] = item.getFloor();
 					roomTypes[i][1] = item.getRoomType();
 					
@@ -84,5 +84,19 @@ public class CleaningScheduleInfo {
 				break;
 			}
 		}
+	}
+	
+	public int getSlotIndexOfRoom(String roomNumber, int floor, String roomType) {
+		for(int i = 0; i < 20; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(this.roomNumbers[i][j] == roomNumber &&
+						this.floors[i][j] == floor &&
+						this.roomTypes[i][j] == roomType) {
+					return i;
+				}
+			}
+		}
+		
+		return -1;
 	}
 }
