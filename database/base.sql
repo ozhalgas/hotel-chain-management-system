@@ -126,12 +126,12 @@ Insert into mydb.schedule values (5, 2, 'desk-clerk', 'Full-time', '$10', '2015-
 Insert into mydb.schedule values (6, 0, 'desk-clerk', 'Full-time', '$15', '2013-06-24', null, '18:00', '05:00');
 Insert into mydb.schedule values (7, 1, 'desk-clerk', 'Full-time', '$14', '2014-06-24', null, '18:00', '05:00');
 Insert into mydb.schedule values (8, 2, 'desk-clerk', 'Full-time', '$10', '2015-06-24', null, '18:00', '05:00');
-Insert into mydb.schedule values (9, 2, 'Cleaner', 'Full-time', '$10', '2018-02-24', null, '08:00', '18:00');
-Insert into mydb.schedule values (10, 0, 'Cleaner', 'Full-time', '$12', '2013-02-12', null, '08:00', '18:00');
-Insert into mydb.schedule values (11, 1, 'Cleaner', 'Full-time', '$13', '2019-02-14', null, '08:00', '18:00');
-Insert into mydb.schedule values (12, 2, 'Cleaner', 'Full-time', '$10', '2013-02-24', null, '08:00', '18:00');
-Insert into mydb.schedule values (13, 0, 'Cleaner', 'Full-time', '$12', '2017-02-12', null, '08:00', '18:00');
-Insert into mydb.schedule values (14, 1, 'Cleaner', 'Full-time', '$13', '2018-02-14', null, '08:00', '18:00');
+Insert into mydb.schedule values (9, 2, 'Cleaner', 'Full-time', '$10', '2018-02-24', null, '09:00', '19:00');
+Insert into mydb.schedule values (10, 0, 'Cleaner', 'Full-time', '$12', '2013-02-12', null, '09:00', '19:00');
+Insert into mydb.schedule values (11, 1, 'Cleaner', 'Full-time', '$13', '2019-02-14', null, '09:00', '19:00');
+Insert into mydb.schedule values (12, 2, 'Cleaner', 'Full-time', '$10', '2013-02-24', null, '09:00', '19:00');
+Insert into mydb.schedule values (13, 0, 'Cleaner', 'Full-time', '$12', '2017-02-12', null, '09:00', '19:00');
+Insert into mydb.schedule values (14, 1, 'Cleaner', 'Full-time', '$13', '2018-02-14', null, '09:00', '19:00');
 
 Insert into mydb.category values ('None', 0, 0);
 Insert into mydb.category values ('VIP', 0.05, 0);
@@ -535,33 +535,51 @@ insert into mydb.day_of_the_week values ('M', 2, 9,'Cleaner');
 insert into mydb.day_of_the_week values('T',2,9,'Cleaner');
 insert into mydb.day_of_the_week values('W', 2, 9, 'Cleaner');
 insert into mydb.day_of_the_week values('R', 2, 9, 'Cleaner');
+insert into mydb.day_of_the_week values ('F', 2, 9,'Cleaner');
+insert into mydb.day_of_the_week values ('S', 2, 9,'Cleaner');
+insert into mydb.day_of_the_week values ('H', 2, 9,'Cleaner');
 
 insert into mydb.day_of_the_week values ('M', 1, 11,'Cleaner');
 insert into mydb.day_of_the_week values('T',1,11,'Cleaner');
 insert into mydb.day_of_the_week values('W', 1, 11, 'Cleaner');
 insert into mydb.day_of_the_week values('R', 1, 11, 'Cleaner');
+insert into mydb.day_of_the_week values ('F', 1, 11,'Cleaner');
+insert into mydb.day_of_the_week values ('S', 1, 11,'Cleaner');
+insert into mydb.day_of_the_week values ('H', 1, 11,'Cleaner');
 
 insert into mydb.day_of_the_week values ('M', 0, 10,'Cleaner');
 insert into mydb.day_of_the_week values('T',0,10,'Cleaner');
 insert into mydb.day_of_the_week values('W', 0, 10, 'Cleaner');
 insert into mydb.day_of_the_week values('R', 0, 10, 'Cleaner');
+insert into mydb.day_of_the_week values('F', 0, 10, 'Cleaner');
+insert into mydb.day_of_the_week values('S', 0, 10, 'Cleaner');
+insert into mydb.day_of_the_week values('H', 0, 10, 'Cleaner');
 
 
-
+insert into mydb.day_of_the_week values('M', 2, 12, 'Cleaner');
+insert into mydb.day_of_the_week values('T', 2, 12, 'Cleaner');
+insert into mydb.day_of_the_week values('W', 2, 12, 'Cleaner');
+insert into mydb.day_of_the_week values('R', 2, 12, 'Cleaner');
 insert into mydb.day_of_the_week values ('F', 2, 12,'Cleaner');
 insert into mydb.day_of_the_week values('S',2,12,'Cleaner');
 insert into mydb.day_of_the_week values('H', 2, 12, 'Cleaner');
-insert into mydb.day_of_the_week values('M', 2, 12, 'Cleaner');
 
+insert into mydb.day_of_the_week values('M', 1, 14, 'Cleaner');
+insert into mydb.day_of_the_week values('T', 1, 14, 'Cleaner');
+insert into mydb.day_of_the_week values('W', 1, 14, 'Cleaner');
+insert into mydb.day_of_the_week values('R', 1, 14, 'Cleaner');
 insert into mydb.day_of_the_week values ('F', 1, 14,'Cleaner');
 insert into mydb.day_of_the_week values('S',1,14,'Cleaner');
 insert into mydb.day_of_the_week values('H', 1, 14, 'Cleaner');
-insert into mydb.day_of_the_week values('M', 1, 14, 'Cleaner');
 
+insert into mydb.day_of_the_week values('M', 0, 13, 'Cleaner');
+insert into mydb.day_of_the_week values('T', 0, 13, 'Cleaner');
+insert into mydb.day_of_the_week values('W', 0, 13, 'Cleaner');
+insert into mydb.day_of_the_week values('R', 0, 13, 'Cleaner');
 insert into mydb.day_of_the_week values ('F', 0, 13,'Cleaner');
 insert into mydb.day_of_the_week values('S',0,13,'Cleaner');
 insert into mydb.day_of_the_week values('H', 0, 13, 'Cleaner');
-insert into mydb.day_of_the_week values('M', 0, 13, 'Cleaner');
+
 
 insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 0);
 insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59.9', 1);
@@ -586,39 +604,39 @@ insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21
 insert into mydb.additional_feature values('VIP Supper', 90.0, '18:00:00.0', '21:00:00.0', 1);
 insert into mydb.additional_feature values('VIP Supper', 95.0, '18:00:00.0', '21:00:00.0', 2);
 
-insert mydb.guest values(1, 'Guest One', 'ID', '24234234', '8th Avenue', '4234324', '32423423', 'guest1', 'pass');
-insert mydb.guest values(2, 'Guest Two', 'ID', '89532343', '13th Street', '7567456', '9849324', 'guest2', 'pass');
+-- insert mydb.guest values(1, 'Guest One', 'ID', '24234234', '8th Avenue', '4234324', '32423423', 'guest1', 'pass');
+-- insert mydb.guest values(2, 'Guest Two', 'ID', '89532343', '13th Street', '7567456', '9849324', 'guest2', 'pass');
 
 
 
-insert into mydb.guest_belongs_category values('Disabled', 1);
-insert into mydb.guest_belongs_category values('None', 2);
+-- insert into mydb.guest_belongs_category values('Disabled', 1);
+-- insert into mydb.guest_belongs_category values('None', 2);
 
-insert into mydb.reserves values('Single', 0, 1, '2020-11-25', '2020-11-28', 1);
-insert into mydb.reserves values('Single', 1, 1, '2020-12-25', '2020-12-28', 1);
-insert into mydb.reserves values('Double', 2, 1, '2021-01-25', '2021-01-28', 1);
+-- insert into mydb.reserves values('Single', 0, 1, '2020-11-25', '2020-11-28', 1);
+-- insert into mydb.reserves values('Single', 1, 1, '2020-12-25', '2020-12-28', 1);
+-- insert into mydb.reserves values('Double', 2, 1, '2021-01-25', '2021-01-28', 1);
 
-insert into mydb.single_stay values('2020-11-25', '2020-11-28', 157.25, '10', 1, 1, 'Single', 0);
-insert into mydb.single_stay values('2020-12-25', '2020-12-28', 335.75, '23', 2, 1, 'Single', 1);
-insert into mydb.single_stay values('2021-01-25', '2021-01-28', 405.0, '10', 1, 1, 'Double', 2);
+-- insert into mydb.single_stay values('2020-11-25', '2020-11-28', 157.25, '10', 1, 1, 'Single', 0);
+-- insert into mydb.single_stay values('2020-12-25', '2020-12-28', 335.75, '23', 2, 1, 'Single', 1);
+-- insert into mydb.single_stay values('2021-01-25', '2021-01-28', 405.0, '10', 1, 1, 'Double', 2);
 
-insert into mydb.occupies values('10', 1, 1, '2020-11-25', '2020-11-28',0, 'Single');
-insert into mydb.occupies values('23', 2, 1, '2020-12-25', '2020-12-28',1, 'Single');
-insert into mydb.occupies values('10', 1, 1, '2021-01-25', '2021-01-28',2, 'Double');
+-- insert into mydb.occupies values('10', 1, 1, '2020-11-25', '2020-11-28',0, 'Single');
+-- insert into mydb.occupies values('23', 2, 1, '2020-12-25', '2020-12-28',1, 'Single');
+-- insert into mydb.occupies values('10', 1, 1, '2021-01-25', '2021-01-28',2, 'Double');
 
 
 
-insert into mydb.reserves values('Single', 0, 2, '2020-11-25', '2020-11-28', 1);
-insert into mydb.reserves values('Single', 1, 2, '2020-12-25', '2020-12-28', 1);
-insert into mydb.reserves values('Double', 2, 2, '2021-01-25', '2021-01-28', 1);
+-- insert into mydb.reserves values('Single', 0, 2, '2020-11-25', '2020-11-28', 1);
+-- insert into mydb.reserves values('Single', 1, 2, '2020-12-25', '2020-12-28', 1);
+-- insert into mydb.reserves values('Double', 2, 2, '2021-01-25', '2021-01-28', 1);
 
-insert into mydb.single_stay values('2020-11-25', '2020-11-28', 185.0, '11', 1, 2, 'Single', 0);
-insert into mydb.single_stay values('2020-12-25', '2020-12-28', 395.0, '22', 2, 2, 'Single', 1);
-insert into mydb.single_stay values('2021-01-25', '2021-01-28', 450.0, '12', 1, 2, 'Double', 2);
+-- insert into mydb.single_stay values('2020-11-25', '2020-11-28', 185.0, '11', 1, 2, 'Single', 0);
+-- insert into mydb.single_stay values('2020-12-25', '2020-12-28', 395.0, '22', 2, 2, 'Single', 1);
+-- insert into mydb.single_stay values('2021-01-25', '2021-01-28', 450.0, '12', 1, 2, 'Double', 2);
 
-insert into mydb.occupies values('11', 1, 2, '2020-11-25', '2020-11-28',0, 'Single');
-insert into mydb.occupies values('22', 2, 2, '2020-12-25', '2020-12-28',1, 'Single');
-insert into mydb.occupies values('12', 1, 2, '2021-01-25', '2021-01-28',2, 'Double');
+-- insert into mydb.occupies values('11', 1, 2, '2020-11-25', '2020-11-28',0, 'Single');
+-- insert into mydb.occupies values('22', 2, 2, '2020-12-25', '2020-12-28',1, 'Single');
+-- insert into mydb.occupies values('12', 1, 2, '2021-01-25', '2021-01-28',2, 'Double');
 
 
 insert into mydb.advertisement values('Register and get a chance to win a trip to Spain!', 0);
