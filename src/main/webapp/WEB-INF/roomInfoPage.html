@@ -130,6 +130,13 @@ table th {
 
 
                 for (let i = 0; i < rooms.guestFullNames.length; i++) {
+                    let occupied = 'No'
+                    let cleaned = 'No'
+                    if (rooms.occupieds[i] == 1)
+                        occupied = 'Yes'
+                    if(rooms.cleaneds[i] == 1)
+                        cleaned = 'Yes'
+
                     row = "<tr> <td>" +
                         rooms.roomNumbers[i] + "</td> <td>" +
                         rooms.roomFloors[i] + "</td> <td>" +
@@ -140,8 +147,8 @@ table th {
                         rooms.guestMobilePhoneNumbers[i] + "</td> <td>" +
                         rooms.checkInDates[i] + "</td> <td>" +
                         rooms.checkOutDates[i] + "</td> <td>" +
-                        rooms.occupieds[i] + "</td> <td>" +
-                        rooms.cleaneds[i] + "</td> <td>" +
+                        occupied + "</td> <td>" +
+                        cleaned + "</td> <td>" +
                         "<button class='cleans'> Clean/Dirty" + "</button>" + "</td>";
                     
                     if(rooms.occupieds[i] === 1) {
@@ -167,12 +174,12 @@ table th {
                         fetch(url, {
                             method: 'POST',
                         }).then(() => {
-                            let val = '0'
+                            let val = 'No'
                             if (rooms.cleaneds[r+page*count] == 1) {
-                                val = '0'
+                                val = 'No'
                                 rooms.cleaneds[r+page*count] = 0
                             } else {
-                                val = '1'
+                                val = 'Yes'
                                 rooms.cleaneds[r+page*count] = 1
                             }
                             table.cell(r+page*count, 10).data(val).draw(false);
@@ -180,7 +187,7 @@ table th {
 
                     })
                                                            
-                    $('.add-features').on('click', function () {
+                    $('#book-table').on('click','.add-features',  function () {
 	                    console.log('clicked')
 	                    let r = $(this).closest('tr').index()
 	                    let id = parseInt(this.id.substring(1));
