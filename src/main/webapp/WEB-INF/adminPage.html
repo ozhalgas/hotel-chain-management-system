@@ -43,19 +43,31 @@
 			$('#review-table').css('display', 'none')
 		}
 		)
+		
+		$('#logout').on('click', function() {
+			window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
+		}
+		)
+		
+		$('#database').on('click', function() {
+			window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
+		}
+		)
 	} )
 </script>
 </head>
 <body>
-<h2>
+<!-- <h2>
 <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
-</h2>
-<h3>Welcome, administrator!</h3><br>
-<form action="http://localhost:8080/HotelChainManagementSystem/">
+</h2> -->
+<h2>
+Welcome, administrator!
+</h2><br>
+<!-- <form action="http://localhost:8080/HotelChainManagementSystem/">
 	<input type="submit" value="Logout">
-</form><br>
+</form><br> -->
 
-<table id="review-table" align="right" border="1" style="width: 40%; display: none;">
+<!-- <table id="review-table" align="right" border="1" style="width: 40%; display: none;">
 	<thead>
 		<tr>
 		<th>Name</th>  
@@ -72,10 +84,12 @@
 		  <td>Manager</td>
 		</tr>
 	</tbody>
-</table>
+</table> -->
 
 <button id="regnewempl">Register New Employee</button>
-<button id="booking">Booking Management</button>
-<button id="review">Review Schedules</button>
+<button id="database">Show Employees' Data</button>
+<!-- <button id="booking">Booking Management</button>
+<button id="review">Review Schedules</button> -->
+<button class="cancelbtn" id="logout">Logout</button>
 </body>
 </html>
