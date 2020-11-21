@@ -8,10 +8,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.sql.RowSet;
 
+import com.bmmzz.service.EmployeeScheduleService;
+import com.bmmzz.userDAO.struct.CleaningListItem;
+import com.bmmzz.userDAO.struct.CleaningScheduleInfo;
 import com.bmmzz.userDAO.struct.HotelBookings;
 import com.bmmzz.userDAO.struct.HotelChoosingInfo;
 import com.bmmzz.userDAO.struct.HotelFeaturesInfo;
@@ -271,6 +275,74 @@ public class HotelDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return json;
+	}
+	
+	// Example: time = 18:42 => time = 19:00 (Time step 30 min)
+	public static String adjustTimeByStep(String time) {
+		String str_HH = time.split(":")[0];
+		String str_mm = time.split(":")[1];
+		
+		Integer HH = Integer.parseInt(str_HH);
+		Integer mm = Integer.parseInt(str_mm);
+		
+		if(mm == 0) {
+			return time;
+		}
+		
+		if(mm <= 30) {
+			mm = 30;
+			str_mm = "30";
+		} else {
+			mm = 0;
+			str_mm = "00";
+			HH++;
+			
+			if(HH/10 == 0) {
+				str_HH = "0" + HH.toString();
+			}
+			
+			if(HH == 24) {
+				HH = 0;
+				str_HH = "00";
+			}
+		}
+		
+		return str_HH + ":" + str_mm;
+	}
+	
+	// Initial insert of unclean rooms into cleaning list
+	public static LinkedList<CleaningListItem> initialCleaningListInsert() {
+		LinkedList<CleaningListItem> cleaningList = new LinkedList<CleaningListItem>();
+		
+		String now = adjustTimeByStep( LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) );
+		
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("Select * FROM mydb.room WHERE Cleaned = 0;");
+			while(resultSet.next()) {
+				cleaningList.add(new CleaningListItem(now, resultSet.getString(1), resultSet.getInt(1), resultSet.getString(6), resultSet.getInt(7)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return cleaningList;
+	}
+	
+	public static String getCleaningSchedule(String auth) {
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		
+		Gson gson = new Gson();
+		CleaningScheduleInfo cleaningSchedule = new CleaningScheduleInfo();
+		String json = "";
+		
+		for(int i = 0; i < EmployeeScheduleService.cleaningList.size(); i++) {
+			if(EmployeeScheduleService.cleaningList.get(i).getHotelID() == hotelID)
+				cleaningSchedule.addCleaningListItem(EmployeeScheduleService.cleaningList.get(i));
+		}
+		
+		json = gson.toJson(cleaningSchedule, CleaningScheduleInfo.class);
 		
 		return json;
 	}

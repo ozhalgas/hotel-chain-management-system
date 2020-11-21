@@ -66,7 +66,7 @@ public class CheckInService {
 						   @PathParam("roomType") String roomType) {
 		if(!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "admin"))
 			return null;
-		RoomDAO.changeCleanState(auth, roomNumber, floor, roomType);
+		EmployeeScheduleService.cleaningList = RoomDAO.changeCleanState(auth, roomNumber, floor, roomType, EmployeeScheduleService.cleaningList);
 		return Response.ok().build();
 	}
 	

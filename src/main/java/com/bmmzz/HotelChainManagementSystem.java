@@ -1,6 +1,7 @@
 package com.bmmzz;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.ws.rs.ApplicationPath;
@@ -18,6 +19,8 @@ import com.bmmzz.service.RegistrationService;
 import com.bmmzz.service.RoomBookingService;
 import com.bmmzz.service.SeasonAdsService;
 import com.bmmzz.service.SeasonService;
+import com.bmmzz.userDAO.HotelDAO;
+import com.bmmzz.userDAO.struct.CleaningListItem;
 
 @ApplicationPath("/services")
 public class HotelChainManagementSystem extends Application {
