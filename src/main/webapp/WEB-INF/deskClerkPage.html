@@ -2,13 +2,10 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Insert title here</title>
+    <title>Desk-clerk</title>
     <style>
-      th {
-        width: 200px;
-      }
-      td {
-        width: 60%;
+      .cleaning {
+          width: 50%;
       }
     </style>
     <script
@@ -16,13 +13,62 @@
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="../css/popUp.css">
-    <link rel="stylesheet" href="../css/styles.css">
+      <link rel="stylesheet" href="../css/popUp.css">
+      <link rel="stylesheet" href="../css/styles.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+      <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 	<script type="text/javascript">
 	
 	var link = window.location.href.toString();
 	const params = new URLSearchParams(window.location.search);
 	var auth = "?auth=" + params.get('auth');
+	var tablerev;
+
+
+
+    function showSchedule() {
+        if(document.getElementById("cleaning").style.display === 'none') {
+            $('#cleaning').attr("style", "display:block");
+            tablerev = $('#cleaning').DataTable();
+        }
+        else {
+            $('#cleaning').attr("style", "display:none");
+            tablerev.destroy();
+        }
+
+        $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/schedule/cleaning" + auth, function(r) {
+
+                r.startTimes.forEach(function (element, i, array) {
+                    let occupy
+                    let room1
+                    let room2
+
+                    if (!r.slotOccupied[i])
+                        occupy = 'Yes'
+                    else
+                        occupy = 'No'
+
+                    if (r.roomNumbers[i][0] == undefined)
+                        room1 = 'none'
+                    else
+                        room1 = r.roomNumbers[i][0]
+
+                    if (r.roomNumbers[i][1] == undefined)
+                        room2 = 'none'
+                    else
+                        room2 = r.roomNumbers[i][1]
+
+                    $('#cleaning-body').append(  "<tr>" +
+                        "<td>" + r.startTimes[i] + "</td>" +
+                        "<td>" + r.endTimes[i] + "</td>" +
+                        "<td>" + room1 + ',' + room2 + "</td>" +
+                        "<td>" + occupy + "</td>" + "</tr>");
+
+                });
+        });
+    }
+
+
 
 
     function gotoBook() {
@@ -94,11 +140,13 @@
       
       $(document).ready(function () {
     	loadAds();
-    	
         getProfileName();
         gotoBook();
         cancel();
-        $("#breakAfterTable").html("<br>".repeat(20));		
+        $("#breakAfterTable").html("<br>".repeat(20));
+        $('#cleaning-schedule').on('click', function () {
+              showSchedule();
+          });
 	  });
 
     </script>
@@ -107,6 +155,7 @@
     <h2 id="welcome">Welcome, manager!</h2>
     <h3>Profile Information:</h3>
 
+    <div class="profile-info">
     <table id="info" align="left" border="1">
    	  <tr>
         <th>Employee ID</th>
@@ -165,34 +214,41 @@
         <td id="hotel-name">null</td>
       </tr>
   </table>
-  
-  <table id="review-table" border="1" style="width: 40%; display: none;">
-		<thead>
-			<tr>
-			<th>Name</th>  
-			<th>Email</th>
-			<th>Working days</th>
-			<th>Position</th>
-		  </tr>
-		</thead>
-		<tbody>
-			<tr>
-			  <td>Paul Vanger</td>
-			  <td>PaulVanger@gmail.com</td>
-			  <td>M-F: 9am - 5pm</td>
-			  <td>Manager</td>
-			</tr>
-		</tbody>
+    </div>
+
      
 	<div id="breakAfterTable"></div>
 
     <button id="booking-manage" style="display: inline">
       Booking Management
-    </button>
+    </button>&nbsp;
+
+      <button id="cleaning-schedule" style="display: inline">
+          Cleaning Schedule
+      </button>&nbsp;
     
     <button id="cancel" class="cancelbtn">
       Logout
     </button> <br><br><br>
+
+      <div class="cleaning">
+          <table class="cell-border" id="cleaning" style="display: none; width: 100%" >
+              <thead>
+              <tr>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+                  <th>Room numbers</th>
+                  <th>The slot available</th>
+              </tr>
+              </thead>
+              <tbody id=cleaning-body>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+              </tbody>
+          </table>
+      </div>
     
 	<div id="popup1" class="overlay">
 		<div class="popup">
