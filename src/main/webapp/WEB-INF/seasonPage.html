@@ -302,12 +302,18 @@
             	season.end = data.end;
             	
             	for (let i = 0; i < season.seasonName.length; i++) {
-					var row = "<tr> <td>" +
-             			season.seasonName[i] + "</td> <td>" +
-             			season.start[i] + "</td> <td>" +
-             			season.end[i] + "</td> <td>" +
-             			"<button class='details' id=d" + i.toString() + "> Details </button>" + "</td> <td>" +
-             			"<button class='cancel cancelbtn' id=" + i.toString() + "> Cancel </button>" + "</td> </tr>";
+            		var row = "<tr> <td>" +
+ 					season.seasonName[i] + "</td> <td>" +
+ 					season.start[i] + "</td> <td>" +
+ 					season.end[i] + "</td> <td>" +
+ 					"<button class='details' id=d" + i.toString() + "> Details </button>" + "</td> <td>";
+        	
+					if(season.seasonName[i].toLowerCase() === 'regular') {
+						row += "Not available </td> </tr>";
+					} else {
+						row += "<button class='cancel cancelbtn' id=" + 
+								i.toString() + "> Cancel </button> </td> </tr>";
+					}
             		$('#table-body').append(row);
             	}
 
