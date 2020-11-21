@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.sql.RowSet;
-
 import com.bmmzz.service.EmployeeScheduleService;
 import com.bmmzz.userDAO.struct.CleaningListItem;
 import com.bmmzz.userDAO.struct.CleaningScheduleInfo;
@@ -301,6 +299,8 @@ public class HotelDAO {
 			
 			if(HH/10 == 0) {
 				str_HH = "0" + HH.toString();
+			} else {
+				str_HH = HH.toString();
 			}
 			
 			if(HH == 24) {
