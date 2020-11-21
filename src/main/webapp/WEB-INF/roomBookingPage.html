@@ -104,7 +104,7 @@ table th {
 	        	var list = r["availableRoomsInfo"];
 	        	
 	        	$("#info").empty();
-	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m²)</th><th>Initial Price($)</th><th>Number of Available Rooms</th></tr>');
+	        	$("#info").append('<tr><th>Room Type Name</th><th>Occupancy</th><th>Size(m²)</th><th>Initial Price($)</th><th>Number of Available Rooms</th><th>Features</th></tr>');
 	        	$("#choosingRooms").empty();
 	        	typeNames.length = 0;
 	        	numAvailRooms.length = 0;
@@ -115,7 +115,8 @@ table th {
 	        		row.append("<td>" + list[i]["occupancy"] + "</td>");
 	        		row.append("<td>" + list[i]["size"] + "</td>");
 	        		row.append("<td>" + list[i]["initialPrice"] + "</td>");
-	        		row.append("<td>" + list[i]["numberOfAvailableRooms"] + "</td>");	
+	        		row.append("<td>" + list[i]["numberOfAvailableRooms"] + "</td>");
+					row.append("<td>" + list[i]["features"] + "</td>")
 	        		$("#info").append(row);
 	        		
 	        		$("#choosingRooms").append("<label for="+i.toString()+">"+list[i]["typeName"]+"</label>&emsp;");
