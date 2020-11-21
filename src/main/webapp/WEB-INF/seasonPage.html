@@ -88,8 +88,26 @@
         			console.log(localStorage['idx']);
         			
                 	seasonName = $("#season-name").val();
-                	startDate = $("#start-date").val();
-                	endDate = $("#end-date").val();
+                	
+                	var split = $("#start-date").val().split('-');
+        			
+                	year = split[0];
+                	month = split[1];
+                	day = split[2];
+                	
+                	startDate = year + ':' + month + ':' + day;
+                	
+/*                 	startDate = $("#start-date").val(); */
+                	
+                	split = $("#end-date").val().split('-');
+        			
+                	year = split[0];
+                	month = split[1];
+                	day = split[2];
+                	
+                	endDate = year + ':' + month + ':' + day;
+/*                 	
+                	endDate = $("#end-date").val(); */
                 	
                 	localStorage['seasonName'] = seasonName;
         			localStorage['startDate'] = startDate;
