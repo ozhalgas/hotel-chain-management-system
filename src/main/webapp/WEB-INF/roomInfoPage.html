@@ -21,7 +21,14 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management' + auth;
     	}
         
-        function add_feature(id) {
+        function add_feature_prep(id) {
+        	document.getElementById("info-feature-div").style.display = "block";
+        	localStorage["id"] = id.toString();
+        }
+        
+        function add_feature() {
+        	id = parseInt(localStorage["id"]);
+        	
         	guestID = rooms.guestIDs[id];
         	roomNumber = rooms.roomNumbers[id];
         	featureName = $("#feature-name-feature").val();
@@ -42,7 +49,13 @@
     		})
         }
         
+        function hide() {
+        	document.getElementById("info-feature-div").style.display = "none";
+        }
+        
         $(document).ready(function () {
+        	hide();
+        	
             $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
 
                 rooms.roomNumbers = data.roomNumbers;
@@ -112,13 +125,13 @@
                         })
 
                     })
-                    
+                                                           
                     $('.add-features').on('click', function () {
 	                    console.log('clicked')
 	                    let r = $(this).closest('tr').index()
 	                    let id = parseInt(this.id.substring(1));
 	                    
-	                    add_feature(id);
+	                    add_feature_prep(id);
                 	})
 
                 });
@@ -128,6 +141,17 @@
             														data.region + ", " +
             														"Hotel " + '"' +
             														data.name + '"';
+            });
+                        
+            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/hotel-features" + auth, function (data) {
+            	var features = data.features;
+            	console.log(features);
+            	for(let i = 0; i < features.length; i++) {
+            		console.log(features[i])
+            		document.getElementById("feature-name-feature").innerHTML += '<option>' +
+            																	features[i] +
+            																	'</option>';
+            	}
             });
             
         })
@@ -166,16 +190,21 @@
 
 <div id='info-feature-div'>
 <div id='info-div'>
-	<p id="info-text">Fill out the necessary information:</p>
+	<p id="info-text">Choose an available option:</p>
 </div>
 
 <form>
          <div id='feature-name-div'>
-         Feature Name:<br> <input type="text" name="feature-name" id="feature-name-feature">
-         <br></div>
+         Feature Name:
+         <br> <select id="feature-name-feature">
+  			
+		</select>
+		<br></div>
 </form>
+<button id="add-f" onclick=add_feature();>Add this feature</button>
 </div>
 
+<br><br><br><br>
 <button class="cancelbtn" id="cancel" onclick=cancel();>Cancel</button>
 
 </body>
