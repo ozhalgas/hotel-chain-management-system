@@ -52,9 +52,13 @@
         
 		function get_new_date() {
 			
-        	year = $("#year").val()
-        	month = $("#month").val()
-        	day = $("#day").val()
+			console.log($("#codate").val());
+			
+			var split = $("#codate").val().split('-');
+			
+        	year = split[0];
+        	month = split[1];
+        	day = split[2];
         	
         	date = year + ':' + month + ':' + day;
 			
@@ -286,12 +290,17 @@
 <h3 id="check-out-title">Update the following values if you want to update Check-Out Date</h3><br>
 
 <form>
+  <label for="codate">New Checkout Date:</label><br>
+  <input type="date" id="codate" name="codate">
+</form>
+
+<!-- <form>
          Year:<br> <input type="text" name="year" id="year">
          <br>
          Month:<br> <input type="text" name="month" id="month">
          <br>
          Day:<br> <input type="text" name="day" id="day">
-</form>
+</form> -->
 
 <button id="edit-below" onclick=edit();>Edit</button>
 </div>
