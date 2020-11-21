@@ -68,6 +68,16 @@ public class BookManagementService {
 	}
 	
 	@GET
+	@Path("/hotel-info")
+	public Response destinationInfo2( @DefaultValue("") @QueryParam("auth") String auth) {
+		if(!UserDAO.checkRoleAndAuth(auth, "guest", "desk-clerk", "admin"))
+			return null;
+		int hotelID = EmployeeDAO.getHotelID(auth);
+		String json = HotelDAO.getHotelInfo(hotelID);
+		return Response.ok(json).build();
+	}
+	
+	@GET
 	@Path("/bookings")
 	public Response getPastBookings( @DefaultValue("") @QueryParam("auth") String auth) {
 		if(UserDAO.getRole(auth).equals("guest")) {

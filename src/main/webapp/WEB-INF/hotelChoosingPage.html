@@ -269,6 +269,23 @@ table th {
 		         }
 			}
 		};
+		
+		$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-info" + auth, function (data) {
+        	
+			if(data.country === undefined) {
+        		document.getElementById("HotelName").innerHTML = "";
+        	} else {
+        		document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+        														data.region + ", " +
+        														data.address + "<br>" +
+        														"Phone Numbers: " +
+        														data.phoneNumbers.toString() + "<br>" +
+        														"Hotel " + '"' +
+        														data.name + '"';
+        	}										
+        	
+        });
+		
 	});
 	
 </script>
@@ -278,7 +295,9 @@ table th {
 Choose the booking period.
 </h2>
 
-<div id=hotelChoosing></div>
+<h3 id="HotelName"></h3>
+
+<!-- <div id=hotelChoosing></div> -->
 
 <label for="startDate">Start Date:</label>
 <input type="text" id="startDate" name="startDate" placeholder="Start Date">&emsp;

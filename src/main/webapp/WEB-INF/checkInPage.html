@@ -279,15 +279,20 @@ table th {
                 
                 
         	});
-            
-            $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-choosing-info" + auth, function (data) {
+        	
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-info" + auth, function (data) {
             	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
             														data.region + ", " +
+            														data.address + "<br>" +
+            														"Phone Numbers: " +
+            														data.phoneNumbers.toString() + "<br>" +
             														"Hotel " + '"' +
             														data.name + '"';
+            														
             	hotelID = data.hotelID;
             	$('#selectedNumberOfRooms').html("Please select " + selectedNumberOfRooms + " room(s) to check-in.");
             });
+         
         })
         
     </script>

@@ -147,12 +147,26 @@
         $('#cleaning-schedule').on('click', function () {
               showSchedule();
           });
+        
+        $.getJSON("http://localhost:8080/HotelChainManagementSystem/services/book-management/hotel-info" + auth, function (data) {
+        	document.getElementById("HotelName").innerHTML = 	data.country + ", " +
+        														data.region + ", " +
+        														data.address + "<br>" +
+        														"Phone Numbers: " +
+        														data.phoneNumbers.toString() + "<br>" +
+        														"Hotel " + '"' +
+        														data.name + '"';
+        });
+        
 	  });
 
     </script>
   </head>
   <body>
     <h2 id="welcome">Welcome, manager!</h2>
+    
+    <h3 id="HotelName"></h3>
+    
     <h3>Profile Information:</h3>
 
     <div class="profile-info">
