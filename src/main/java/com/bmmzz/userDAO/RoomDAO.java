@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,10 +12,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
+import com.bmmzz.service.EmployeeScheduleService;
 import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
 import com.bmmzz.userDAO.struct.GuestInfo;
 import com.bmmzz.userDAO.struct.BillInfo;
 import com.bmmzz.userDAO.struct.CleaningListItem;
+import com.bmmzz.userDAO.struct.CleaningScheduleInfo;
 import com.google.gson.Gson;
 
 public class RoomDAO {
@@ -348,7 +351,19 @@ public class RoomDAO {
 		}
 	}
 	
-	public static LinkedList<CleaningListItem> changeCleanState(String auth, String roomNumber, int floor, String roomType, LinkedList<CleaningListItem> cleaningList) {
+	private static void ensureNoOutDatedItems() {
+		for(int i = 0; i < EmployeeScheduleService.cleaningList.size(); i++) {
+			if( EmployeeScheduleService.cleaningList.get(i).outdated() ) {
+				EmployeeScheduleService.cleaningList.clear();
+				EmployeeScheduleService.cleaningList = HotelDAO.initialCleaningListInsert();
+				break;
+			}
+		}
+	}
+	
+	public static LinkedList<CleaningListItem> changeCleanState(String auth, String roomNumber, int floor, String roomType, LinkedList<CleaningListItem> cleaningList) {	
+		ensureNoOutDatedItems();
+		
 		int hotelID = EmployeeDAO.getHotelID(auth);
 		UserDAO.executeUpdate("UPDATE mydb.room SET Cleaned=IF(Cleaned = 0, 1, 0) WHERE HotelID = " + hotelID + " AND RoomNumber = '" + roomNumber + "' AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "';");
 	
@@ -365,7 +380,20 @@ public class RoomDAO {
 							item.getFloor() == floor &&
 							item.getRoomType().equals(roomType) &&
 							item.getHotelID() == hotelID) {
-						cleaningList.remove(i);
+						
+						CleaningScheduleInfo cleaningSchedule = new CleaningScheduleInfo();
+						for(int j = 0; j < cleaningList.size(); j++) {
+							if(cleaningList.get(j).getHotelID() == hotelID)
+								cleaningSchedule.addCleaningListItem(EmployeeScheduleService.cleaningList.get(j));
+						}
+						
+						int timeIndexFromSchedule = cleaningSchedule.getSlotIndexOfRoom(roomNumber, floor, roomType);
+						String now = HotelDAO.adjustTimeByStep( LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) );
+						int timeIndexOfNow = cleaningSchedule.startTimeToIndex(now);
+						
+						// remove only if the cleaning is scheduled for the future
+						if(timeIndexOfNow < timeIndexFromSchedule)
+							cleaningList.remove(i);
 					}
 				}
 			} else {
