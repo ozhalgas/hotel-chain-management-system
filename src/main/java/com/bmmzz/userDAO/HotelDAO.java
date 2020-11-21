@@ -259,10 +259,34 @@ public class HotelDAO {
 				String[] endTime = resultSet.getString(4).split(":");
 				String[] now = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")).split(":");
 				
+				/*
+				 * System.out.println(startTime[0]); System.out.println(startTime[1]);
+				 * System.out.println(endTime[0]); System.out.println(endTime[1]);
+				 */
+				
 				boolean insideTimePeriod = false;
-				if(Integer.parseInt(startTime[0]) <= Integer.parseInt(now[0]) && Integer.parseInt(endTime[0]) >= Integer.parseInt(now[0])) {
+				if(Integer.parseInt(startTime[0]) < Integer.parseInt(now[0]) 
+						&& Integer.parseInt(endTime[0]) > Integer.parseInt(now[0])) {
 					insideTimePeriod = true;
-				} else if(Integer.parseInt(startTime[1]) <= Integer.parseInt(now[1]) && Integer.parseInt(endTime[1]) >= Integer.parseInt(now[1])) {
+				} else if(Integer.parseInt(startTime[0]) < Integer.parseInt(now[0]) 
+						&& Integer.parseInt(endTime[0]) == 0) {
+					insideTimePeriod = true;
+				} else if(Integer.parseInt(startTime[0]) < Integer.parseInt(now[0]) 
+						&& Integer.parseInt(endTime[0]) == Integer.parseInt(now[0]) 
+						&& Integer.parseInt(endTime[1]) >= Integer.parseInt(now[1])) {
+					insideTimePeriod = true;
+				} else if(Integer.parseInt(startTime[0]) == Integer.parseInt(now[0]) 
+						&& Integer.parseInt(startTime[1]) <= Integer.parseInt(now[1])
+						&& Integer.parseInt(endTime[0]) > Integer.parseInt(now[0])) {
+					insideTimePeriod = true;
+				} else if(Integer.parseInt(startTime[0]) == Integer.parseInt(now[0]) 
+						&& Integer.parseInt(startTime[1]) <= Integer.parseInt(now[1])
+						&& Integer.parseInt(endTime[0]) == 0) {
+					insideTimePeriod = true;
+				} else if(Integer.parseInt(startTime[0]) == Integer.parseInt(now[0]) 
+						&& Integer.parseInt(startTime[1]) <= Integer.parseInt(now[1])
+						&& Integer.parseInt(endTime[0]) == Integer.parseInt(now[0]) 
+						&& Integer.parseInt(endTime[1]) > Integer.parseInt(now[1])) {
 					insideTimePeriod = true;
 				}
 				
