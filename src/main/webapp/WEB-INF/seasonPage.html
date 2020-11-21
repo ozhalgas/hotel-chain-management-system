@@ -390,8 +390,8 @@
 
 <div id="update">
 <h3 id="update-title">Create a new season</h3>
-<h4>Please list room types and corresponding prices using ':' as a delimiter.</h4>
-<h4>Similarly, for the dates.</h4>
+<!-- <h4>Please list room types and corresponding prices using ':' as a delimiter.</h4>
+<h4>Similarly, for the dates.</h4> -->
 
 <div id='info-div'>
 	<p id="info-text"></p>
@@ -402,11 +402,19 @@
 		 Season Name:<br> <input type="text" name="season-name" id="season-name">
          <br></div>
          <div id='start-date-div'>
+  		<label for="start-date">Start Date:</label><br>
+  		<input type="date" id="start-date" name="start-date">
+		<br></div>
+         <!-- <div id='start-date-div'>
          Start Date:<br> <input type="text" name="start-date" id="start-date">
          <br></div>
          <div id='end-date-div'>
          End Date:<br> <input type="text" name="end-date" id="end-date">
-         <br></div>
+         <br></div> -->
+         <div id='end-date-div'>
+  		<label for="end-date">End Date:</label><br>
+  		<input type="date" id="end-date" name="end-date">
+		<br></div>
          <div id='room-type-div'>
          Room Type:<br> <input type="text" name="room-type" id="room-type">
          <br></div>
