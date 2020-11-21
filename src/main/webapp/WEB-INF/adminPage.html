@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin Page</title>
-<!-- <style>
-</style> -->
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
-<!-- <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script> -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="../css/styles.css">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+    ></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
 
 	var link = window.location.href.toString();
 	const params = new URLSearchParams(window.location.search);
 	var auth = "?auth=" + params.get('auth');
+	var emp = {};
+	var table;
 
 	function getRegisterURL() {
 		$('#regnewempl').on('click', function() {
@@ -31,26 +35,62 @@
 			auth
 		})
 	}
+	
+	function showSchedule() {
+		if(document.getElementById("review-table-div").style.display === 'none') {
+			document.getElementById("review-table-div").style.display = 'block';
+		}
+	}
 
 	$(document).ready(function () {
 		getRegisterURL();
 		gotoBook();
 		
-		$('#review').on('click', function() {
-			if($('#review-table').css('display') == 'none') 
-				$('#review-table').css('display', 'block');
-			else 
-			$('#review-table').css('display', 'none')
-		}
-		)
+		document.getElementById("review-table-div").style.display = 'none';
 		
+		$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/schedule/admin" + auth, function(r) {
+			console.log("http://localhost:8080/HotelChainManagementSystem/services/schedule/admin" + auth);
+			    emp.employeeIDs = r.empIDs;
+			    emp.fullNames = r.empFullNames;
+			    emp.emailAdress = r.empEmailAddresses;
+			    emp.mobilePhoneNumbers = r.empMobPhoneNumbers;
+			    emp.hotelIDs = r.hotelIDs;
+			    emp.positions = r.empPositions;
+			    emp.endDates = r.endDates;
+			    emp.startDates = r.startDates;
+			    emp.hotelNames = r.hotelNames;
+			    emp.logins = r.empLogins;
+			    emp.passwords = r.empPasswords;
+			    
+
+				for(let i = 0; i < emp.employeeIDs.length; i++) {
+		    		$('#review-table-body').append(  "<tr>" + 
+										          "<td>" + emp.employeeIDs[i] + "</td>" + 
+										          "<td>" + emp.fullNames[i] + "</td>" + 
+										          "<td>" + emp.emailAdress[i] + "</td>" + 
+										          "<td>" + emp.mobilePhoneNumbers[i] + "</td>" + 
+										          "<td>" + emp.hotelIDs[i] + "</td>" +
+										          "<td>" + emp.hotelNames[i] + "</td>" + 
+										          "<td>" + emp.positions[i][0].toUpperCase() + emp.positions[i].slice(1) + "</td>" + 
+										          "<td>" + emp.startDates[i] + "</td>" + 
+										          "<td>" + emp.endDates[i] + "</td>" + 
+										          "<td>" + emp.logins[i] + "</td>" +
+										          "<td>" + emp.passwords[i] + "</td>" + 
+										          "<td>" + "<button class='cancelbtn fire' id=" + i.toString() + " onclick=fire(" + i.toString() + ")> Fire </button>" + "</td>" + 
+										        "</tr>");
+		    	}
+				
+				table = $('#review-table').DataTable();
+				
+		});
+
 		$('#logout').on('click', function() {
 			window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
 		}
 		)
 		
-		$('#database').on('click', function() {
-			window.location.href = "http://localhost:8080/HotelChainManagementSystem/";
+		$('#review').on('click', function() {
+			showSchedule();
 		}
 		)
 	} )
@@ -86,8 +126,31 @@ Welcome, administrator!
 	</tbody>
 </table> -->
 
+<div class="review-table" id="review-table-div">
+      <table class="cell-border" id="review-table" >
+        <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Mobile Phone Numbers</th>
+          <th>Hotel ID</th>
+          <th>Hotel Name</th>
+          <th>Position</th>
+          <th>Employee started to work</th>
+          <th>Employee finished to work</th>
+          <th>Login</th>
+          <th>Password</th>
+          <th>Fire</th>
+        </tr>
+        </thead>
+        <tbody id=review-table-body>
+        </tbody>
+      </table>
+    </div>
+
 <button id="regnewempl">Register New Employee</button>
-<button id="database">Show Employees' Data</button>
+<button id="review">Show Employees' Data</button>
 <!-- <button id="booking">Booking Management</button>
 <button id="review">Review Schedules</button> -->
 <button class="cancelbtn" id="logout">Logout</button>

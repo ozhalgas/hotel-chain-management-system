@@ -79,6 +79,7 @@ public class EmployeeScheduleService {
 		return Response.ok().build();
 	}
 	
+	@GET
 	@Path("/admin")
 	public Response getEmployees(@DefaultValue("") @QueryParam("auth") String auth) {
 		if (!UserDAO.checkRoleAndAuth(auth, "admin"))
