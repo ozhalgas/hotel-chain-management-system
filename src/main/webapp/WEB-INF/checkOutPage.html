@@ -183,7 +183,19 @@
                 				"<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
                              	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
                              	"Not Available" + "</td> </tr>");
-                	} else if(diff <= 0 && checkInDate.getTime() <= now.getTime()) {
+                	} else if(diff + 86400000 > 0 && checkInDate.getTime() <= now.getTime() && occupied.occupieds[i] > 0
+                			&& checkOutDate.getDay() === now.getDay() ) {
+               		 $('#table-body').append(row +
+             				"<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                          	"<button class='check-out' id=" + i.toString() + "> Check-Out </button>" + "</td> <td>" +
+                          	"Not Available" + "</td> </tr>");
+             		} else if(diff + 86400000 <= 0 && checkInDate.getTime() <= now.getTime()) {
+                		$('#table-body').append(row +
+                				"Not Available" + "</td> <td>" +
+                             	"Checked-Out" + "</td> <td>" +
+                             	"<button class='final-bill' id=" + i.toString() + "> Show Final Bill </button>" + "</td> </tr>");
+                	} else if(diff + 86400000 > 0 && checkInDate.getTime() <= now.getTime() && occupied.occupieds[i] === 0
+                			&& checkOutDate.getDay() === now.getDay() ) {
                 		$('#table-body').append(row +
                 				"Not Available" + "</td> <td>" +
                              	"Checked-Out" + "</td> <td>" +

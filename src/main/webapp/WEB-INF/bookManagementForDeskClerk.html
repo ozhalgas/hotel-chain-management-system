@@ -37,18 +37,44 @@
     		window.location='http://localhost:8080/HotelChainManagementSystem/services/book-management/rooms' + auth;
     	} 
         
-        function toEnsureCheckinPossibility(x) {
+        function toEnsureCheckinPossibility(x) {            	
         	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/checkin/rooms" + auth, function (data) {
         		var roomTypes = data.roomTypeNames;
         		var guestIDs = data.guestIDs
         		var checkInDates = data.CIDs;
         		var checkOutDates = data.CODs;
+        		var occupieds = data.occupieds;
         		
+        		console.log(checkInDates);
+        		        		       		
         		for(let i = 0; i < guestIDs.length; i++) {
+        			if(checkInDates[i] == null || checkOutDates[i] == null) {
+        				continue;
+        			}
+        			
+        			const cidate = new Date(parseInt(checkInDates[i].substr(0, 4)),
+                			parseInt(checkInDates[i].substr(5, 2) - 1),
+                			parseInt(checkInDates[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const codate = new Date(parseInt(checkOutDates[i].substr(0, 4)),
+                			parseInt(checkOutDates[i].substr(5, 2) - 1),
+                			parseInt(checkOutDates[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const now = new Date();
+            		
+            		console.log(cidate);
+            		console.log(codate);
+            		console.log(now);
+            		
         			if(roomTypes[i] == bookings.roomTypes[x] &&
-        			   guestIDs[i] == bookings.guestIDs[x] &&
-        			   checkInDates[i] == bookings.checkInDates[x] &&
-        			   checkOutDates[i] == bookings.checkOutDates[x]) {
+        			   	guestIDs[i] == bookings.guestIDs[x] &&
+        			   	checkInDates[i] == bookings.checkInDates[x] &&
+        			   	checkOutDates[i] == bookings.checkOutDates[x] &&
+        				occupieds[i] === 1 &&
+        				cidate.getTime() <= now.getTime()
+        			){
         				 $('#c' + x.toString()).after("<p>Checked-in</p>");
         				 $('#c' + x.toString()).remove();
         				 $('#e' + x.toString()).after("<p>Not available</p>");
@@ -57,6 +83,17 @@
         				 $('#' + x.toString()).remove();
         				 return;
         			}
+        			
+        			if(roomTypes[i] == bookings.roomTypes[x] &&
+            			guestIDs[i] == bookings.guestIDs[x] &&
+            			checkInDates[i] == bookings.checkInDates[x] &&
+            		   	checkOutDates[i] == bookings.checkOutDates[x] &&
+            			cidate.getTime() > now.getTime()
+            		){
+           				 $('#c' + x.toString()).after("<p>Not available</p>");
+           				 $('#c' + x.toString()).remove();
+           				 return;
+            		}
         		}
         	});
         }
