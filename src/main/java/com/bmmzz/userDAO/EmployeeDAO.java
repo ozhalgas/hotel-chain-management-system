@@ -178,6 +178,15 @@ public class EmployeeDAO {
 		return json;
 	}
 	
+	public static void deleteEmployee(int employeeID) {
+		try {
+			UserDAO.executeUpdate("Delete from mydb.day_of_the_week Where employeeid='" + employeeID + "'");
+			UserDAO.executeUpdate("Delete from mydb.schedule Where employeeid='" + employeeID + "'");
+			UserDAO.executeUpdate("Delete from mydb.employee Where employeeid='" + employeeID + "'");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
 
 

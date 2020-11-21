@@ -3,6 +3,7 @@ package com.bmmzz.service;
 import java.util.LinkedList;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -66,5 +67,15 @@ public class EmployeeScheduleService {
 			return null;
 		String json = HotelDAO.getCleaningSchedule(auth);
 		return Response.ok(json).build();
+	}
+	
+	@GET
+	@Path("/delete/{employeeID}")
+	public Response deleteEmployee(@DefaultValue("") @QueryParam("auth") String auth,
+			@PathParam("employeeID") int employeeID) {
+		if (!UserDAO.checkRoleAndAuth(auth, "admin"))
+			return null;
+		EmployeeDAO.deleteEmployee(employeeID);
+		return Response.ok().build();
 	}
 }

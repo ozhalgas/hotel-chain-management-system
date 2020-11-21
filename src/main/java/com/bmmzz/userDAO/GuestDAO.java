@@ -112,9 +112,6 @@ public class GuestDAO {
 					+ " and mydb.reserves.CheckInDate= BINARY '" + startDate + "'"
 					+ " and mydb.reserves.CheckOutDate= BINARY '" + endDate + "'"
 					+ " and mydb.reserves.RoomTypeName= BINARY '" + typeName + "'";
-			
-			System.out.println(sql);
-
 			UserDAO.executeUpdate(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -133,9 +130,6 @@ public class GuestDAO {
 					+ " and mydb.reserves.CheckInDate= BINARY '" + startDate + "'"
 					+ " and mydb.reserves.CheckOutDate= BINARY '" + endDate + "'"
 					+ " and mydb.reserves.RoomTypeName= BINARY '" + typeName + "'";
-			
-			System.out.println(sql);
-
 			UserDAO.executeUpdate(sql);
 		} catch (Exception e) {
 			e.printStackTrace();

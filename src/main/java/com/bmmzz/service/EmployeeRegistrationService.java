@@ -45,14 +45,14 @@ public class EmployeeRegistrationService {
 	}
 	
 	@GET
-	@Path("hotels")
+	@Path("/hotels")
 	public Response getAllHotels() {
 		String json = HotelDAO.getAllHotels();
 		return Response.ok(json).build();
 	}
 	
 	@POST
-	@Path("user-data")
+	@Path("/user-data")
 	public String employeeRegistration(@FormParam("employeeInJson") String employeeInJson) {
 		Gson gson = new Gson();
 		EmployeeRegistrationInfo employee = gson.fromJson(employeeInJson, EmployeeRegistrationInfo.class);
@@ -65,4 +65,5 @@ public class EmployeeRegistrationService {
 		EmployeeDAO.addEmployee(employee);
 		return "UserWasCreated";
 	}
+	
 }
