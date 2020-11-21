@@ -78,4 +78,12 @@ public class EmployeeScheduleService {
 		EmployeeDAO.deleteEmployee(employeeID);
 		return Response.ok().build();
 	}
+	
+	@Path("/admin")
+	public Response getEmployees(@DefaultValue("") @QueryParam("auth") String auth) {
+		if (!UserDAO.checkRoleAndAuth(auth, "admin"))
+			return null;
+		String json = EmployeeDAO.getEmployees();
+		return Response.ok(json).build();
+	}
 }

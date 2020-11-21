@@ -9,6 +9,7 @@ import java.util.Date;
 import com.bmmzz.userDAO.struct.EmployeeInfo;
 import com.bmmzz.userDAO.struct.EmployeeRegistrationInfo;
 import com.bmmzz.userDAO.struct.EmployeeSchedulesInfo;
+import com.bmmzz.userDAO.struct.EmployeesForAdmin;
 import com.bmmzz.userDAO.struct.HotelRoomsInfo;
 import com.google.gson.Gson;
 
@@ -172,6 +173,36 @@ public class EmployeeDAO {
 				es.addES(rES.getInt(1), rES.getString(2), rES.getString(11), rES.getString(13), rES.getInt(17), rES.getString(18), rES.getString(20), rES.getString(21), rES.getString(23), rES.getString(24), dailySal, weeklySal, wDays);
 			}
 			json = gson.toJson(es, EmployeeSchedulesInfo.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+
+	public static String getEmployees() {
+		Gson gson = new Gson();
+		EmployeesForAdmin efa = new EmployeesForAdmin();
+		String json = "";
+		ResultSet rs = UserDAO.executeQuery("Select * from mydb.employee E, mydb.schedule S, mydb.hotel H " +
+											"Where E.EmployeeID=S.EmployeeID and S.HotelID=H.HotelID Order by H.HotelID;");
+		try {
+			while(rs.next()) {
+				/*String todayStr = java.time.LocalDate.now().toString();
+				Date todayDate = new Date();
+				Date endDate = new Date();
+				try {
+					todayDate = new SimpleDateFormat("yyyy-mm-dd").parse(todayStr);
+					if(!rs.getString(22).equals("null")) {
+						endDate = new SimpleDateFormat("yyyy-mm-dd").parse(rs.getString(22));
+					}
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}*/
+				//if(rs.getString(22).equals("null") || todayDate.before(endDate)) {
+				efa.addEmpFA(rs.getInt(17), rs.getString(26), rs.getInt(1), rs.getString(2), rs.getString(18), rs.getString(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(21), rs.getString(22));
+				//}
+			}
+			json = gson.toJson(efa, EmployeesForAdmin.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
