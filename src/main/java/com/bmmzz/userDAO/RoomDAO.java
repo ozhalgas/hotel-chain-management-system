@@ -4,12 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+
 import com.bmmzz.userDAO.struct.AvailableRoomsInfo;
 import com.bmmzz.userDAO.struct.GuestInfo;
 import com.bmmzz.userDAO.struct.BillInfo;
+import com.bmmzz.userDAO.struct.CleaningListItem;
 import com.google.gson.Gson;
 
 public class RoomDAO {
@@ -343,8 +348,36 @@ public class RoomDAO {
 		}
 	}
 	
-	public static void changeCleanState(String auth, String roomNumber, int floor, String roomType) {
+	public static LinkedList<CleaningListItem> changeCleanState(String auth, String roomNumber, int floor, String roomType, LinkedList<CleaningListItem> cleaningList) {
 		int hotelID = EmployeeDAO.getHotelID(auth);
 		UserDAO.executeUpdate("UPDATE mydb.room SET Cleaned=IF(Cleaned = 0, 1, 0) WHERE HotelID = " + hotelID + " AND RoomNumber = '" + roomNumber + "' AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "';");
+	
+		// updating cleaning list accordingly
+		try {
+			ResultSet resultSet = UserDAO.executeQuery("SELECT Cleaned FROM mydb.room WHERE RoomNumber = " + roomNumber + " AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "' AND HotelID = " + hotelID + ";");
+			resultSet.next();
+			
+			if(resultSet.getInt(1) == 1) {
+				for(int i = 0; i < cleaningList.size(); i++) {
+					CleaningListItem item = cleaningList.get(i);
+					
+					if(item.getRoomNumber().equals(roomNumber) &&
+							item.getFloor() == floor &&
+							item.getRoomType().equals(roomType) &&
+							item.getHotelID() == hotelID) {
+						cleaningList.remove(i);
+					}
+				}
+			} else {
+				String now = HotelDAO.adjustTimeByStep( LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) );
+				
+				cleaningList.add(new CleaningListItem(now, roomNumber, floor, roomType, hotelID));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return cleaningList;
 	}
 }

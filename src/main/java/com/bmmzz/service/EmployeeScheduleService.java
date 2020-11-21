@@ -1,5 +1,7 @@
 package com.bmmzz.service;
 
+import java.util.LinkedList;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -14,13 +16,16 @@ import com.bmmzz.userDAO.EmployeeDAO;
 import com.bmmzz.userDAO.HotelDAO;
 import com.bmmzz.userDAO.RoomDAO;
 import com.bmmzz.userDAO.UserDAO;
+import com.bmmzz.userDAO.struct.CleaningListItem;
 
 @Path("/schedule")
 public class EmployeeScheduleService {
 	@Context ServletContext servletContext;
+	public static LinkedList<CleaningListItem> cleaningList = HotelDAO.initialCleaningListInsert();
 	
 	public EmployeeScheduleService() {
 		UserDAO.connectToUserDAO();
+		cleaningList = HotelDAO.initialCleaningListInsert();
 	}
 	
 	@GET
@@ -52,5 +57,14 @@ public class EmployeeScheduleService {
 			return null;
 		EmployeeDAO.editEmployeePayRate(auth, employeeID, payRate);
 		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("/cleaning")
+	public Response editPayRate(@DefaultValue("") @QueryParam("auth") String auth) {
+		if (!UserDAO.checkRoleAndAuth(auth, "desk-clerk", "manager", "admin"))
+			return null;
+		String json = HotelDAO.getCleaningSchedule(auth);
+		return Response.ok(json).build();
 	}
 }
