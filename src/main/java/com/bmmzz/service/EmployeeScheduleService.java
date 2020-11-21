@@ -69,7 +69,7 @@ public class EmployeeScheduleService {
 		return Response.ok(json).build();
 	}
 	
-	@GET
+	@DELETE
 	@Path("/delete/{employeeID}")
 	public Response deleteEmployee(@DefaultValue("") @QueryParam("auth") String auth,
 			@PathParam("employeeID") int employeeID) {

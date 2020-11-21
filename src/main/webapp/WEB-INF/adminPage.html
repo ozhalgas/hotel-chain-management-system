@@ -36,6 +36,22 @@
 		})
 	}
 	
+	function fire(id) {
+    	
+    	let url = 'http://localhost:8080/HotelChainManagementSystem/services/schedule/delete/' +
+    	emp.employeeIDs[id] +
+    	auth;
+	
+    	console.log(url)
+		
+		fetch(url, {
+           	method: 'DELETE',
+        }).then(() => {
+        	window.location.href = "http://localhost:8080/HotelChainManagementSystem/services/profile"+auth;
+        })
+        
+	}
+	
 	function showSchedule() {
 		if(document.getElementById("review-table-div").style.display === 'none') {
 			document.getElementById("review-table-div").style.display = 'block';
@@ -82,6 +98,13 @@
 				
 				table = $('#review-table').DataTable();
 				
+				$('.fire').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id);
+                    
+                    fire(id);
+                })
 		});
 
 		$('#logout').on('click', function() {
