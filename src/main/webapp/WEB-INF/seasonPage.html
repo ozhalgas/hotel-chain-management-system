@@ -25,6 +25,13 @@
         	});
         }
         
+        function show_room_type(i) {
+        	$.getJSON("http://localhost:8080/HotelChainManagementSystem/services/season/" + season.seasonName[0] + auth, function(data) {
+            	document.getElementById("room-type").innerHTML = data.roomType[7 * i];
+            	localStorage['roomTypes'] += ':' + data.roomType[7 * i];
+        	});
+        }
+        
         function show_season_details() {
         	$('#info-div').attr("style", "display:block");
         	
@@ -116,18 +123,21 @@
         			console.log(seasonName);
         			console.log(startDate);
         			console.log(endDate);
+        			
+        			show_room_type(localStorage['idx']);
         			        			
                 	localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
                 	
                 	show_season_details();
+                	
                 	document.getElementById("info-text").innerHTML = "Fill out the prices for room type #" + 
 																		localStorage['idx'];
         		} else if(parseInt(localStorage['idx']) < n) {
                 	
+        			show_room_type(localStorage['idx']);
+        			
         			console.log('here 2');
         			console.log(localStorage['idx']);
-        			
-                	roomType = $("#room-type").val();
                 	
                 	price1 = $("#price-1").val();
                 	price2 = $("#price-2").val();
@@ -145,7 +155,7 @@
                 		console.log('here 2-1');
                 		console.log(localStorage['idx']);
                 		
-                		localStorage['roomTypes'] += roomType;
+                		//localStorage['roomTypes'] += roomType;
                 		localStorage['prices'] += 	price1 + ':' +
                 									price2 + ':' +
                 									price3 + ':' +
@@ -161,7 +171,7 @@
                 		
                 		console.log(localStorage['idx']);
                 		
-                		localStorage['roomTypes'] += ':' + roomType;
+                		//localStorage['roomTypes'] += ':' + roomType;
                 		localStorage['prices'] += 'X' + price1 + ':' +
 														price2 + ':' +
 														price3 + ':' +
@@ -171,14 +181,13 @@
 														price7;
                 		
             			console.log(localStorage['idx']);
+            			console.log(localStorage['roomTypes']);
                 	}
         		} else {
         			console.log('here 2');
         			console.log(localStorage['idx']);
         			
         			show_season_details();
-        			
-                	roomType = $("#room-type").val();
                 	
                 	price1 = $("#price-1").val();
                 	price2 = $("#price-2").val();
@@ -191,7 +200,7 @@
         			console.log('here 2-2');
             		console.log(localStorage['idx']);
             		
-            		localStorage['roomTypes'] += ':' + roomType;
+            		//localStorage['roomTypes'] += ':' + roomType;
             		localStorage['prices'] += 'X' + price1 + ':' +
 													price2 + ':' +
 													price3 + ':' +
@@ -204,7 +213,7 @@
         			
         			localStorage['idx'] = (parseInt(localStorage['idx']) + 1).toString();
         			
-        			roomTypes = localStorage['roomTypes'];
+        			roomTypes = localStorage['roomTypes'].substr(1);
         			prices = localStorage['prices'];
         			seasonName = localStorage['seasonName'];
         			startDate = localStorage['startDate'];
@@ -219,6 +228,7 @@
                     auth;
         		
                 	console.log(url)
+         
                 	
                 	localStorage['idx'] = 0;
                 	
@@ -360,6 +370,7 @@
             	document.getElementById("HotelName").innerHTML =	"Hotel " + '"' +
             														data.hotelName[0] + '"';
             });
+
         })
         
     </script>
@@ -433,9 +444,15 @@
   		<label for="end-date">End Date:</label><br>
   		<input type="date" id="end-date" name="end-date">
 		<br></div>
-         <div id='room-type-div'>
+         <!-- <div id='room-type-div'>
          Room Type:<br> <input type="text" name="room-type" id="room-type">
-         <br></div>
+         <br></div> -->
+         <div id='room-type-div'>
+         Room Type:
+         <br> <div id="room-type">
+  			
+		</div>
+		<br></div>
          <div id='price-1-div'>
          Price on Monday:<br> <input type="text" name="price-1" id="price-1">
          <br></div>
