@@ -282,6 +282,8 @@ table th {
 			if(data.country === undefined) {
         		document.getElementById("HotelName").innerHTML = "";
         	} else {
+        		document.getElementById("hotelChoosing").style.display = "none";
+        		
         		document.getElementById("HotelName").innerHTML = 	data.country + ", " +
         														data.region + ", " +
         														data.address + "<br>" +
