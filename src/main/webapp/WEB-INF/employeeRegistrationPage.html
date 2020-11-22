@@ -2,13 +2,20 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Manager Registration</title>
+<title>Employee Registration</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../css/styles.css">
 <script>
 
 
 var hotels, hotelIDs;
+function cancel() {
+	$('#cancel').on("click", function() {
+		queryParam = window.location.href.substring(85);
+		window.location = "http://localhost:8080/HotelChainManagementSystem/services/profile?auth=" + queryParam;
+	});
+}
+
 function registration() {
 	var hotelName = document.querySelector("select").value;
 	var index = hotels.indexOf(hotelName);
@@ -140,16 +147,18 @@ $(document).ready(function() {
 		}
 	};
 	
+	cancel();
+	
 	getHotels();
 })
 
 </script>
 </head>
 <body>
-<h2>
+<!-- <h2>
 <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
-</h2>
-<h3>Please, fill in the following forms to register</h3>
+</h2> -->
+<h2>Please, fill in the following forms to register</h2>
 	Position: &nbsp;
 		<input type="radio" id="Manager" name="position" value="manager" checked>
 		<label for="position">Manager</label>&nbsp;
@@ -457,5 +466,6 @@ $(document).ready(function() {
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
 	<h4 id="warning" style="color:red;"></h4><br>
 	<button id="Register" type="button">Register</button>
+	<button class="cancelbtn" id="cancel">Cancel</button>
 </body>
 </html>

@@ -91,6 +91,12 @@ function registration() {
 	}
 }
 
+function cancel() {
+	$('#cancel-reg').on("click", function() {
+		window.location = 'http://localhost:8080/HotelChainManagementSystem/services/profile?auth=' + queryParam;
+	});
+}
+
 function getHotels() {
 	queryParam = window.location.href.substring(85);
 	$.ajax({
@@ -130,6 +136,8 @@ $(document).ready(function() {
 	$('#Register').on("click", function() {
 		registration();
 	});
+	
+	cancel();
 
 	onkeypress = function (event) {
 		if (event.keyCode == 13) {
@@ -143,10 +151,10 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<h2>
+<!-- <h2>
 <a href="http://localhost:8080/HotelChainManagementSystem/">Hotel Chain Management System</a>
-</h2>
-<h3>Please, fill in the following forms to register</h3>
+</h2> -->
+<h2>Please, fill in the following forms to register</h2>
 	Username: <input type="text" id="username" name="username"><br><br>
 	First Name: <input type="text" id="firstname" name="firstname"><br><br>
 	Last Name: <input type="text" id="lastname" name="lastname"><br><br>
@@ -449,5 +457,6 @@ $(document).ready(function() {
 	Confirm password: <input type="password" id="password2" name="password2"><br><br>
 	<h4 id="warning" style="color:red;"></h4><br>
 	<button id="Register" type="button">Register</button>
+	<button class="cancelbtn" id="cancel-reg">Cancel</button>
 </body>
 </html>
