@@ -25,9 +25,7 @@ public class BookManagementService {
 	
 	@Context ServletContext servletContext;
 	
-	public BookManagementService() {
-		UserDAO.connectToUserDAO();
-	}
+	public BookManagementService() {}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})

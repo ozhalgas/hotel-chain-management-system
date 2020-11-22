@@ -20,9 +20,7 @@ public class AuthorizationService {
 	@Context ServletContext servletContext;
 	@Context UriInfo uri;
 	
-	public AuthorizationService() {
-		UserDAO.connectToUserDAO();
-	}
+	public AuthorizationService() {}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})

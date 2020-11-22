@@ -25,9 +25,7 @@ public class CheckInService {
 
 	@Context ServletContext servletContext;
 	
-	public CheckInService() {
-		UserDAO.connectToUserDAO();
-	}
+	public CheckInService() {}
 	
 	@GET
     @Produces({MediaType.TEXT_HTML})

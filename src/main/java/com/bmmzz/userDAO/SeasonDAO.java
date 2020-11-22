@@ -1,5 +1,7 @@
 package com.bmmzz.userDAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,16 +20,30 @@ public class SeasonDAO {
 		String json = "";
 		SeasonInfo seasons = new SeasonInfo();
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.time_period, mydb.hotel h, mydb.operates_during Where h.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and " +
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select * From mydb.time_period, mydb.hotel h, mydb.operates_during Where h.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and " +
 					"mydb.operates_during.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and " + 
 					"mydb.operates_during.seasonname=mydb.time_period.seasonname" + " group by mydb.time_period.SeasonName");
+			resultSet = ps.executeQuery(); 
+		
 			while(resultSet.next()) {
 				seasons.add(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), EmployeeDAO.getHotelID(auth), resultSet.getString(6));
 			}
 			json = gson.toJson(seasons, SeasonInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return json;
 	}
@@ -37,34 +53,72 @@ public class SeasonDAO {
 		String json = "";
 		SeasonPriceInfo seasonPrice = new SeasonPriceInfo();
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.initial_price Where hotelid='" + EmployeeDAO.getHotelID(auth) + "' and seasonname='" + seasonName + "'");
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select * From mydb.initial_price Where hotelid='" + EmployeeDAO.getHotelID(auth) + "' and seasonname='" + seasonName + "'");
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				seasonPrice.add(resultSet.getString(3), resultSet.getString(4), resultSet.getString(1), resultSet.getInt(5));
 			}
 			json = gson.toJson(seasonPrice, SeasonPriceInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return json;
 	}
 	
 	public static void deleteSeason(String auth, String seasonName, String start, String end) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet result = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			UserDAO.executeUpdate("Delete from mydb.operates_during Where seasonname='" + seasonName + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
 			UserDAO.executeUpdate("Delete from mydb.initial_price Where seasonname='" + seasonName + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
-			ResultSet result = UserDAO.executeQuery("Select * From mydb.operates_during Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
+			ps = connection.prepareStatement("Select * From mydb.operates_during Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
+			result = ps.executeQuery();
 			if (!result.next()) {
 				UserDAO.executeUpdate("Delete from mydb.time_period Where seasonname='" + seasonName + "' and startdate='" + start + "' and enddate='" + end + "'");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try { result.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 	}
 	
 	public static void createSeason(String seasonName, String startDate, String endDate, String roomTypes, String prices, List<String> days, int hotelID) {
-		ResultSet rs1 = UserDAO.executeQuery("Select count(*) From mydb.time_period T Where T.SeasonName='" + seasonName + "' and T.StartDate='" + startDate + "' and T.EndDate = '" + endDate + "';");
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs1 = null;
+		
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select count(*) From mydb.time_period T Where T.SeasonName='" + seasonName + "' and T.StartDate='" + startDate + "' and T.EndDate = '" + endDate + "';");
+			rs1 = ps.executeQuery(); 
+			
 			rs1.next();
 			if(rs1.getInt(1) == 0) {
 				for(String day : days) {
@@ -88,6 +142,10 @@ public class SeasonDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { rs1.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 	}
 	
@@ -95,14 +153,25 @@ public class SeasonDAO {
 		Gson gson = new Gson();
 		String json = "";
 		SeasonAdsInfo seasonAds = new SeasonAdsInfo();
+		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			if (UserDAO.getRole(auth).equals("manager")) {
-				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and h.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+				ps = connection.prepareStatement("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid='" + EmployeeDAO.getHotelID(auth) + "' and h.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+				resultSet = ps.executeQuery(); 
 				while(resultSet.next()) {
 					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
 				}
 			} else if (UserDAO.getRole(auth).equals("guest") || UserDAO.getRole(auth).equals("desk-clerk") || UserDAO.getRole(auth).equals("admin")) {
-				ResultSet resultSet =  UserDAO.executeQuery("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
+				ps = connection.prepareStatement("Select * From mydb.advertisement a, mydb.hotel h Where a.hotelid=h.hotelid");
+				resultSet = ps.executeQuery(); 
 				while(resultSet.next()) {
 					seasonAds.add(resultSet.getInt(2), resultSet.getString(4), resultSet.getString(1));
 				}
@@ -110,6 +179,10 @@ public class SeasonDAO {
 			json = gson.toJson(seasonAds, SeasonAdsInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return json;
 	}
@@ -119,8 +192,19 @@ public class SeasonDAO {
 	}
 	
 	public static void updateAd(int hotelID, String adTxt) {
-		ResultSet rs = UserDAO.executeQuery("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "';");
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select count(*) From mydb.advertisement Where HotelID='" + hotelID + "';");
+			rs = ps.executeQuery(); 
+			
 			rs.next();
 			if(rs.getInt(1) == 1) {
 				UserDAO.executeUpdate("UPDATE mydb.advertisement SET Text='" + adTxt + "' WHERE HotelID='" + hotelID + "';");
@@ -129,6 +213,10 @@ public class SeasonDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 	}
 }

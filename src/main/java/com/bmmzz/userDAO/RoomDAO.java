@@ -1,5 +1,7 @@
 package com.bmmzz.userDAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -22,10 +24,20 @@ import com.google.gson.Gson;
 
 public class RoomDAO {
 	public static void reserveRoomType(String roomTypeName, int hotelID, int guestID, String checkInDate, String checkOutDate, int numberOfRooms) {
-		ResultSet resultSet = UserDAO.executeQuery("SELECT NumberOfRooms FROM mydb.reserves WHERE "
-				+ "RoomTypeName = BINARY '" + roomTypeName + "' AND HotelID = " + hotelID + " AND GuestID = " + guestID + " "
-				+ "AND CheckInDate = '" + checkInDate + "' AND CheckOutDate = '" + checkOutDate + "';");
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT NumberOfRooms FROM mydb.reserves WHERE "
+					+ "RoomTypeName = BINARY '" + roomTypeName + "' AND HotelID = " + hotelID + " AND GuestID = " + guestID + " "
+					+ "AND CheckInDate = '" + checkInDate + "' AND CheckOutDate = '" + checkOutDate + "';");
+			resultSet = ps.executeQuery(); 
+			
 			if(resultSet.next()) {
 				numberOfRooms += resultSet.getInt(1);
 				UserDAO.executeUpdate("UPDATE mydb.reserves SET NumberOfRooms=" + numberOfRooms + " WHERE "
@@ -35,6 +47,10 @@ public class RoomDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		UserDAO.executeUpdate("INSERT INTO mydb.reserves VALUES "
@@ -46,13 +62,22 @@ public class RoomDAO {
 		Gson gson = new Gson();
 		String json = "";
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet resultSet = null, resultSetOfFeatures = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			Date startDate = new SimpleDateFormat("yyyy:MM:dd").parse(startDateStr);
 			Date endDate = new SimpleDateFormat("yyyy:MM:dd").parse(endDateStr);
 			
 			AvailableRoomsInfo availableRoomsInfo = new AvailableRoomsInfo();
 			
-			ResultSet resultSet = UserDAO.executeQuery("Select TypeName, Size, Capacity FROM mydb.room_type WHERE HotelID = " + hotelID + ";");
+			ps = connection.prepareStatement("Select TypeName, Size, Capacity FROM mydb.room_type WHERE HotelID = " + hotelID + ";");
+			resultSet = ps.executeQuery(); 
 			while(resultSet.next()) {
 				int availableRoomNum = getNumberOfAvailableRooms( hotelID, startDate, endDate, resultSet.getString(1) );
 				if(availableRoomNum <= 0) {continue;}
@@ -60,7 +85,9 @@ public class RoomDAO {
 				double initialPrice = getInitialPrice(hotelID, startDate, endDate, resultSet.getString(1) );
 				
 				ArrayList<String> features = new ArrayList<String>();
-				ResultSet resultSetOfFeatures = UserDAO.executeQuery("SELECT FeatureName FROM mydb.feature WHERE RoomTypeName = '" + resultSet.getString(1) + "' AND HotelID = " + hotelID + ";");
+				ps2 = connection.prepareStatement("SELECT FeatureName FROM mydb.feature WHERE RoomTypeName = '" + resultSet.getString(1) + "' AND HotelID = " + hotelID + ";");
+				resultSetOfFeatures = ps2.executeQuery(); 
+				
 				while(resultSetOfFeatures.next()) {
 					features.add(resultSetOfFeatures.getString(1));
 				}
@@ -71,6 +98,12 @@ public class RoomDAO {
 			json = gson.toJson(availableRoomsInfo, AvailableRoomsInfo.class);
 		} catch (ParseException | SQLException e1) {
 			e1.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { resultSetOfFeatures.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -78,7 +111,16 @@ public class RoomDAO {
 	
 	private static double getInitialPrice(int hotelID, Date startDate, Date endDate, String typeName) {
 		Double totalPrice = 0.0;
+		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet resultSet = null, resultSet2 = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			Date date = new Date(startDate.getTime());
 			
 			// Acquiring price for each day separately and summing them
@@ -86,8 +128,9 @@ public class RoomDAO {
 				String seasonName = "";
 				char dayOfTheWeek = getDayOfTheWeek(date);
 				
-				ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.time_period WHERE "
+				ps = connection.prepareStatement("SELECT * FROM mydb.time_period WHERE "
 						+ "DayOfTheWeek= '" + dayOfTheWeek + "' and SeasonName <> 'regular';");
+				resultSet = ps.executeQuery(); 
 				
 				// Finding the corresponding season of the specific day (startDay)
 				while(resultSet.next()) {
@@ -100,17 +143,24 @@ public class RoomDAO {
 				}
 				if(seasonName.equals("")) seasonName = "regular";
 				
-				resultSet = UserDAO.executeQuery("SELECT Amount FROM mydb.initial_price WHERE "
+				ps2 = connection.prepareStatement("SELECT Amount FROM mydb.initial_price WHERE "
 						+ "RoomTypeName = BINARY '" + typeName + "' AND HotelID = " + hotelID + " AND "
 						+ "DayOfTheWeek = BINARY '" + dayOfTheWeek + "' AND SeasonName = BINARY '" + seasonName +"';");
+				resultSet2 = ps2.executeQuery(); 
 				
-				resultSet.next();
-				totalPrice += resultSet.getDouble(1);
+				resultSet2.next();
+				totalPrice += resultSet2.getDouble(1);
 				date = new Date(date.getTime() + 86400000);
 				
 			}
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { resultSet2.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return totalPrice;
 	}
@@ -140,10 +190,19 @@ public class RoomDAO {
 	}
 	
 	private static int getNumberOfAvailableRooms(int hotelID, Date startDate, Date endDate, String typeName) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet resultSet = null, resultSet2 = null;
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			// Getting the number of rooms in a given room type at given hotel.
-			ResultSet resultSet = UserDAO.executeQuery("SELECT NumberOfRooms "
+			ps = connection.prepareStatement("SELECT NumberOfRooms "
 					+ "FROM  mydb.room_type WHERE TypeName = BINARY '" + typeName + "' AND HotelID = "+ hotelID + ";");
+			resultSet = ps.executeQuery(); 
 			resultSet.next();
 			int maxNumOfRooms = resultSet.getInt(1);
 			
@@ -155,12 +214,13 @@ public class RoomDAO {
 			}
 			
 			// Counting number of available rooms for each day in the given time interval.
-			resultSet = UserDAO.executeQuery("SELECT CheckInDate, CheckOutDate, NumberOfRooms "
-				+ "FROM mydb.reserves WHERE RoomTypeName = BINARY '" + typeName + "' AND HotelID = " + hotelID + ";");
-			while(resultSet.next()) {		
-				Date reservedStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(resultSet.getString(1));
-				Date reservedEndDate = new SimpleDateFormat("yyyy-MM-dd").parse( resultSet.getString(2));
-				int numOfReservedRooms = resultSet.getInt(3);
+			ps2 = connection.prepareStatement("SELECT CheckInDate, CheckOutDate, NumberOfRooms "
+					+ "FROM mydb.reserves WHERE RoomTypeName = BINARY '" + typeName + "' AND HotelID = " + hotelID + ";");
+			resultSet2 = ps2.executeQuery();
+			while(resultSet2.next()) {		
+				Date reservedStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(resultSet2.getString(1));
+				Date reservedEndDate = new SimpleDateFormat("yyyy-MM-dd").parse( resultSet2.getString(2));
+				int numOfReservedRooms = resultSet2.getInt(3);
 				
 				if(startDate.after(reservedEndDate) || endDate.before(reservedStartDate)) {continue;}
 				
@@ -182,6 +242,12 @@ public class RoomDAO {
 			return min;
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { resultSet2.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return 0;
 	}
@@ -219,17 +285,30 @@ public class RoomDAO {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null, ps3 = null;
+		ResultSet resultFeatures = null, resultDiscount = null, result = null;
+		
 		try {
-			ResultSet resultFeatures = UserDAO.executeQuery("SELECT w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
 					+ checkInDate + "' and w.roomnumber='" + roomNumber + "' and w.floor='" + floor + "' and w.guestid='" + guestID + "' and w.featurename=f.featurename and f.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+			resultFeatures = ps.executeQuery(); 
+			
 			while(resultFeatures.next()) {
 				finalBill = finalBill + (resultFeatures.getInt(1) * resultFeatures.getDouble(2));
 			}
-			ResultSet resultDiscount = UserDAO.executeQuery("SELECT discount FROM mydb.guest_belongs_category b, mydb.category c Where b.CategoryName=c.TypeName and c.HotelID='" 
+			ps2 = connection.prepareStatement("SELECT discount FROM mydb.guest_belongs_category b, mydb.category c Where b.CategoryName=c.TypeName and c.HotelID='" 
 					+ EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "'");
+			resultDiscount = ps2.executeQuery();
 			resultDiscount.next();
 			finalBill = finalBill * (1 - resultDiscount.getDouble(1));
-			ResultSet result = UserDAO.executeQuery("Select numberofrooms, checkoutdate From mydb.reserves Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+			ps3 = connection.prepareStatement("Select numberofrooms, checkoutdate From mydb.reserves Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+			result = ps3.executeQuery(); 
 			result.next();
 			if ( !checkOutDate.equals(result.getString(2)) ) {
 				if (result.getInt(1) > 1) {
@@ -245,6 +324,14 @@ public class RoomDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultFeatures.close(); } catch (Exception e) {}
+			try { resultDiscount.close(); } catch (Exception e) {}
+			try { result.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { ps3.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		UserDAO.executeUpdate("Update mydb.single_stay " + 
 			"Set checkoutdate = '"  + checkOutDate + "', finalbill = '" + finalBill + "' " + 
@@ -262,36 +349,63 @@ public class RoomDAO {
 		Gson gson = new Gson();
 		BillInfo bill = new BillInfo();
 		String json = "";
+		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet result = null, resultFeatures = null;
+		
 		try {
-			ResultSet result = UserDAO.executeQuery("Select * From mydb.single_stay, mydb.hotel, mydb.guest, mydb.guest_belongs_category, mydb.category Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + 
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select * From mydb.single_stay, mydb.hotel, mydb.guest, mydb.guest_belongs_category, mydb.category Where mydb.hotel.hotelid='" + EmployeeDAO.getHotelID(auth) + 
 					"' and mydb.single_stay.checkindate='" + checkInDate + "' and mydb.single_stay.roomnumber='" + roomNumber + "' and mydb.single_stay.roomfloor='" + floor + 
 					"' and mydb.single_stay.guestid='" + guestID + "' and mydb.guest.guestID='" + guestID + "' and mydb.guest_belongs_category.guestid='" + guestID + 
 					"' and mydb.guest_belongs_category.categoryname=mydb.category.typename and mydb.category.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+			result = ps.executeQuery(); 
 			if (result.next()) {
 				bill.add(result.getString(1), result.getString(2), result.getDouble(3), result.getString(4), result.getInt(5), 
 						result.getInt(6), result.getString(15), result.getString(16), result.getString(17), result.getDouble(26) * 100, result.getString(23),
 						result.getInt(9), result.getString(10), result.getString(11), result.getString(12), result.getString(13));
 			}
-			ResultSet resultFeatures = UserDAO.executeQuery("SELECT w.featurename, w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
+			
+			ps2 = connection.prepareStatement("SELECT w.featurename, w.numberofusage, f.cost FROM mydb.single_stay_with_feature w, mydb.additional_feature f Where w.checkindate='" 
 					+ checkInDate + "' and w.roomnumber='" + roomNumber + "' and w.floor='" + floor + "' and w.guestid='" + guestID + "' and w.featurename=f.featurename and f.hotelid='" + EmployeeDAO.getHotelID(auth) + "'");
+			resultFeatures = ps2.executeQuery();
 			while(resultFeatures.next()) {
 				bill.addFeatures(resultFeatures.getString(1), resultFeatures.getInt(2), resultFeatures.getDouble(3));
 			}
 			json = gson.toJson(bill, BillInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { result.close(); } catch (Exception e) {}
+			try { resultFeatures.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return json;
 	}
 	
 	public static boolean checkOutEdit(String auth, int guestID, String roomType, String roomNumber, int floor, String checkInDate, String oldCheckOutDate, String newCheckOutDate) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
 			Date outDate = new SimpleDateFormat("yyyy-MM-dd").parse(newCheckOutDate);
 			Date inDate = new SimpleDateFormat("yyyy-MM-dd").parse(oldCheckOutDate);
 			inDate = new Date(inDate.getTime() + 86400000);
 			if (getNumberOfAvailableRooms(EmployeeDAO.getHotelID(auth), inDate, outDate, roomType) > 0) {
-				ResultSet resultSet = UserDAO.executeQuery("Select NumberOfRooms from mydb.reserves " + 
+				db = new Database();
+				connection = db.getConnection();
+				
+				ps = connection.prepareStatement("Select NumberOfRooms from mydb.reserves " + 
 						"Where roomtypename='" + roomType + "' and hotelid='" + EmployeeDAO.getHotelID(auth) + "' and guestid='" + guestID + "' and checkindate='" + checkInDate + "'");
+				resultSet = ps.executeQuery(); 
 				resultSet.next();
 				
 				if(resultSet.getInt(1) > 1) {
@@ -315,13 +429,27 @@ public class RoomDAO {
 			}
 		} catch (ParseException | SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return false;
 	}
 
 	public static void addFeature(int hotelID, int guestID, String featureName, String roomNumber) {
-		ResultSet rs = UserDAO.executeQuery("SELECT * FROM mydb.single_stay WHERE GuestID='" + guestID + "' and RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet rs = null, check = null;
+		
+		
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.single_stay WHERE GuestID='" + guestID + "' and RoomNumber='" + roomNumber + "' and HotelID='" + hotelID + "';");
+			rs = ps.executeQuery(); 
 			while(rs.next()) {
 				String todayStr = java.time.LocalDate.now().toString();
 				Date todayDate = new Date();
@@ -333,9 +461,11 @@ public class RoomDAO {
 					e.printStackTrace();
 				}
 				if(todayDate.before(tempCheckOutDate) || todayDate.equals(tempCheckOutDate)) {
-					ResultSet check = UserDAO.executeQuery("SELECT * FROM mydb.single_stay_with_feature "+
-							   							   "WHERE FeatureName='"+featureName+"' and CheckInDate='"+rs.getString(1)+"' "+
-							   							   "and RoomNumber='"+roomNumber+"' and Floor='"+rs.getInt(5)+"' and GuestID='"+guestID+"';");
+					ps2 = connection.prepareStatement("SELECT * FROM mydb.single_stay_with_feature "+
+							   "WHERE FeatureName='"+featureName+"' and CheckInDate='"+rs.getString(1)+"' "+
+							   "and RoomNumber='"+roomNumber+"' and Floor='"+rs.getInt(5)+"' and GuestID='"+guestID+"';");
+					check = ps2.executeQuery(); 
+					
 					if(check.next()) {
 						int newNum = check.getInt(6) + 1;
 						UserDAO.executeUpdate("UPDATE mydb.single_stay_with_feature SET NumberOfUsage='"+newNum+"' "+
@@ -348,6 +478,12 @@ public class RoomDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { rs.close(); } catch (Exception e) {}
+			try { check.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 	}
 	
@@ -367,9 +503,18 @@ public class RoomDAO {
 		int hotelID = EmployeeDAO.getHotelID(auth);
 		UserDAO.executeUpdate("UPDATE mydb.room SET Cleaned=IF(Cleaned = 0, 1, 0) WHERE HotelID = " + hotelID + " AND RoomNumber = '" + roomNumber + "' AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "';");
 	
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		// updating cleaning list accordingly
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("SELECT Cleaned FROM mydb.room WHERE RoomNumber = " + roomNumber + " AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "' AND HotelID = " + hotelID + ";");
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT Cleaned FROM mydb.room WHERE RoomNumber = " + roomNumber + " AND Floor = " + floor + " AND RoomTypeName = '" + roomType + "' AND HotelID = " + hotelID + ";");
+			resultSet = ps.executeQuery(); 
 			resultSet.next();
 			
 			if(resultSet.getInt(1) == 1) {
@@ -404,6 +549,10 @@ public class RoomDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return cleaningList;

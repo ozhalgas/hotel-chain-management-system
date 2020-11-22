@@ -22,9 +22,7 @@ public class RegistrationService {
 	
 	@Context ServletContext servletContext;
 	
-	public RegistrationService() {
-		UserDAO.connectToUserDAO();
-	}
+	public RegistrationService() {}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})

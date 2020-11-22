@@ -26,9 +26,7 @@ public class SeasonService {
 
 	@Context ServletContext servletContext;
 	
-	public SeasonService() {
-		UserDAO.connectToUserDAO();
-	}
+	public SeasonService() {}
 	
 	@GET
     @Produces({MediaType.TEXT_HTML})

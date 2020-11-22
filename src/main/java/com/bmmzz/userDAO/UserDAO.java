@@ -1,71 +1,81 @@
 package com.bmmzz.userDAO;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.regex.Pattern;
 
 public class UserDAO {
-	private static Connection connection = null;
-	private static String url = "jdbc:mysql://localhost:3306/?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
-	
-	private static String username = "admin";
-	private static String password = "admin";
 	
 	private UserDAO() {	}
 	
-	public static void connectToUserDAO() {
-		try {
-				Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
-				connection = DriverManager.getConnection(url, username, password);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	protected static void executeUpdate(String query) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		
 		try {
-			connection.prepareStatement(query).executeUpdate();
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement(query);
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 	}
 	
 	protected static int executeQueryINT(String query) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = connection.prepareStatement(query).executeQuery();
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement(query);
+			resultSet = ps.executeQuery();
+			
 			resultSet.next();
 			int result = resultSet.getInt(1);
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return -1;
 	}
 	
-	protected static ResultSet executeQuery(String query) {
-		try {
-			ResultSet resultSet = connection.prepareStatement(query).executeQuery();
-			return resultSet;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public static boolean userExists(String login, String table) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = connection.prepareStatement("select Login from mydb." + table + " where Login= binary '" + login + "'").executeQuery(); 
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("select Login from mydb." + table + " where Login= binary '" + login + "'");
+			resultSet = ps.executeQuery(); 
 			boolean userExist = resultSet.next();
 			return userExist;
 		} catch (SQLException e) {
 			e.printStackTrace();	
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return false;
 	}
@@ -91,14 +101,28 @@ public class UserDAO {
 	}
 	
 	public static int getGuestID(String auth) {
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		String username = getDecodedAuth(auth)[0];
 		
-		ResultSet resultSet = executeQuery("SELECT GuestID FROM mydb.guest WHERE Login= BINARY '" + username + "';");
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT GuestID FROM mydb.guest WHERE Login= BINARY '" + username + "';");
+			resultSet = ps.executeQuery();
+			
 			resultSet.next();
 			return resultSet.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		return -1;
 	}
@@ -124,30 +148,58 @@ public class UserDAO {
 			return "guest";
 		}
 		
+		
+		
 		if(userExists(login, "employee")) {
-			ResultSet resultSet = executeQuery("SELECT EmployeeID FROM mydb.employee WHERE Login= BINARY '" + login + "'");
-			int employeeID = 0;
-			try {
-				resultSet.next();
-				employeeID = resultSet.getInt(1);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			Database db = null;
+			Connection connection = null;
+			PreparedStatement ps = null;
+			ResultSet resultSet = null;
+			PreparedStatement ps2 = null;
+			ResultSet resultSet2 = null;
 			
-			resultSet = executeQuery("SELECT Position FROM mydb.schedule WHERE EmployeeID= BINARY " + employeeID);
-			String position = "";
 			try {
-				resultSet.next();
-				position = resultSet.getString(1);
+				db = new Database();
+				connection = db.getConnection();
+
+				ps = connection.prepareStatement("SELECT EmployeeID FROM mydb.employee WHERE Login= BINARY '" + login + "'");
+				resultSet = ps.executeQuery();
+
+				int employeeID = 0;
+				try {
+					resultSet.next();
+					employeeID = resultSet.getInt(1);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				ps2 = connection.prepareStatement("SELECT Position FROM mydb.schedule WHERE EmployeeID= BINARY " + employeeID);
+				resultSet2 = ps2.executeQuery();
+
+				String position = "";
+				try {
+					resultSet2.next();
+					position = resultSet2.getString(1);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				if(position.equalsIgnoreCase("Manager") || position.equalsIgnoreCase("Desk-clerk"))
+					return position.toLowerCase();
+				else
+					return null;
 			} catch (SQLException e) {
-				e.printStackTrace();
+				e.printStackTrace();	
+			} finally {
+				try { resultSet.close(); } catch (Exception e) {}
+				try { resultSet2.close(); } catch (Exception e) {}
+				try { ps.close(); } catch (Exception e) {}
+				try { ps2.close(); } catch (Exception e) {}
+				try { connection.close(); } catch (Exception e) {}
 			}
-			
-			if(position.equalsIgnoreCase("Manager") || position.equalsIgnoreCase("Desk-clerk"))
-				return position.toLowerCase();
-			else
-				return null;
 		}
+		
+		
 		return null;
 	}
 	

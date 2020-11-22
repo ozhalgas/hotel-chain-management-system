@@ -25,9 +25,7 @@ public class EmployeeRegistrationService {
 	
 	@Context ServletContext servletContext;
 	
-	public EmployeeRegistrationService() {
-		UserDAO.connectToUserDAO();
-	}
+	public EmployeeRegistrationService() {}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})

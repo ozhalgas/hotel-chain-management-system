@@ -22,9 +22,7 @@ public class CheckOutService {
 
 	@Context ServletContext servletContext;
 	
-	public CheckOutService() {
-		UserDAO.connectToUserDAO();
-	}
+	public CheckOutService() {}
 	
 	@GET
     @Produces({MediaType.TEXT_HTML})

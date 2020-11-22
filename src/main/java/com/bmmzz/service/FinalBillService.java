@@ -20,9 +20,7 @@ public class FinalBillService {
 
 	@Context ServletContext servletContext;
 	
-	public FinalBillService() {
-		UserDAO.connectToUserDAO();
-	}
+	public FinalBillService() {}
 	
 	@GET
     @Produces({MediaType.TEXT_HTML})

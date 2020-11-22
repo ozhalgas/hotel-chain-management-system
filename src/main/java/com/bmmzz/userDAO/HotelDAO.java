@@ -1,5 +1,7 @@
 package com.bmmzz.userDAO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -32,8 +34,18 @@ public class HotelDAO {
 		String json = "";
 		Hotels hotels = new Hotels();
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("SELECT HotelID, Name FROM mydb.hotel;" );
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT HotelID, Name FROM mydb.hotel;" );
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				hotels.addHotel(resultSet.getInt(1), resultSet.getString(2));
 			}
@@ -41,6 +53,10 @@ public class HotelDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}  finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -52,15 +68,27 @@ public class HotelDAO {
 		HotelChoosingInfo hotelChoosingInfo = new HotelChoosingInfo();
 		
 		String role = UserDAO.getRole(auth);
+		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet;
-			if(role.equals("desk-clerk"))
-				resultSet = UserDAO.executeQuery("SELECT HotelID, Name, Country, Region FROM mydb.hotel "
+			db = new Database();
+			connection = db.getConnection();
+			
+			if(role.equals("desk-clerk")) {
+				ps = connection.prepareStatement("SELECT HotelID, Name, Country, Region FROM mydb.hotel "
 						+ "JOIN mydb.schedule S USING(HotelID) "
 						+ "JOIN mydb.employee E USING(EmployeeID) "
 						+ "WHERE E.Login = '" + UserDAO.getDecodedAuth(auth)[0] + "'");
-			else
-				resultSet =  UserDAO.executeQuery("SELECT HotelID, Name, Country, Region FROM mydb.hotel;" );
+				resultSet = ps.executeQuery();
+			} else {
+				ps = connection.prepareStatement("SELECT HotelID, Name, Country, Region FROM mydb.hotel;");
+				resultSet = ps.executeQuery();
+			}
+			
 			while(resultSet.next()) {
 				hotelChoosingInfo.addHotel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 			}
@@ -68,6 +96,10 @@ public class HotelDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -78,18 +110,37 @@ public class HotelDAO {
 		String json = "";
 		HotelInfo hotelInfo = new HotelInfo();
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null, ps2 = null;
+		ResultSet resultSet = null, resultSet2 = null;
+		
 		try {
-			ResultSet resultSet =  UserDAO.executeQuery("SELECT * FROM mydb.hotel WHERE HotelID = " + hotelID + ";" );
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.hotel WHERE HotelID = " + hotelID + ";" );
+			resultSet = ps.executeQuery();
+			
 			while(resultSet.next()) {
 				hotelInfo.set(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
 			}
-			ResultSet resultSet2 =  UserDAO.executeQuery("SELECT phonenumber FROM mydb.phone_number WHERE HotelID = " + hotelID + ";" );
+			
+			ps2 = connection.prepareStatement("SELECT phonenumber FROM mydb.phone_number WHERE HotelID = " + hotelID + ";" );
+			resultSet2 = ps2.executeQuery();
+			
 			while(resultSet2.next()) {
 				hotelInfo.addPhone(resultSet2.getString(1));
 			}
 			json = gson.toJson(hotelInfo, HotelInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { resultSet2.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { ps2.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -102,8 +153,18 @@ public class HotelDAO {
 		
 		String username = UserDAO.getDecodedAuth(auth)[0];
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.reserves, mydb.employee, mydb.schedule, mydb.guest, mydb.hotel WHERE mydb.Employee.Login= BINARY '" + username + "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.reserves.HotelID and mydb.hotel.HotelID = mydb.reserves.HotelID and mydb.reserves.GuestID=mydb.guest.GuestID;" );
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.reserves, mydb.employee, mydb.schedule, mydb.guest, mydb.hotel WHERE mydb.Employee.Login= BINARY '" + username + "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.reserves.HotelID and mydb.hotel.HotelID = mydb.reserves.HotelID and mydb.reserves.GuestID=mydb.guest.GuestID;");
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				hotelBookings.addBooking( resultSet.getInt(3), resultSet.getInt(40), resultSet.getString(41), resultSet.getString(32), resultSet.getString(37), resultSet.getString(1), 
 						resultSet.getString(4), resultSet.getString(5), resultSet.getInt(6));
@@ -111,6 +172,10 @@ public class HotelDAO {
 			json = gson.toJson(hotelBookings, HotelBookings.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -124,8 +189,18 @@ public class HotelDAO {
 		
 		String username = UserDAO.getDecodedAuth(auth)[0];
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.occupies" );
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.occupies" );
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				hotelOccupied.addOccupied( resultSet.getInt(3), 1, "Exclusive", "test test", 
 						"12111", "1 bed Double", resultSet.getString(4), resultSet.getString(5), resultSet.getString(1), resultSet.getInt(2));
@@ -133,6 +208,10 @@ public class HotelDAO {
 			json = gson.toJson(hotelOccupied, HotelOccupied.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -183,10 +262,20 @@ public class HotelDAO {
 			e1.printStackTrace();
 		}
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resSS = null, resultSet = null;
+		
 		int hID = EmployeeDAO.getHotelID(auth);
 		try {
+			db = new Database();
+			connection = db.getConnection();
+			
 			//select single stays only in hotel, where clerk works
-			ResultSet resSS = UserDAO.executeQuery("SELECT * FROM mydb.single_stay, mydb.guest where mydb.single_stay.HotelID='" + hID + "' and mydb.single_stay.GuestID=mydb.guest.GuestID;");
+			ps = connection.prepareStatement("SELECT * FROM mydb.single_stay, mydb.guest where mydb.single_stay.HotelID='" + hID + "' and mydb.single_stay.GuestID=mydb.guest.GuestID;");
+			resSS = ps.executeQuery(); 
+			
 			while(resSS.next()) {
 				Date tempCheckOutDate = new Date();
 				try {
@@ -207,12 +296,21 @@ public class HotelDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resSS.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		try {	
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.employee, mydb.schedule, mydb.room, mydb.hotel, mydb.room_type " +
-													   "WHERE mydb.Employee.Login= BINARY '" + username+ "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.room.HotelID and mydb.schedule.HotelID = mydb.hotel.HotelID " +
-													   "and mydb.room.RoomTypeName=mydb.room_type.TypeName and mydb.room_type.HotelID=mydb.hotel.HotelID order by mydb.room.RoomNumber;");
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.employee, mydb.schedule, mydb.room, mydb.hotel, mydb.room_type " +
+					   "WHERE mydb.Employee.Login= BINARY '" + username+ "' and mydb.employee.EmployeeID = mydb.schedule.EmployeeID and mydb.schedule.HotelID = mydb.room.HotelID and mydb.schedule.HotelID = mydb.hotel.HotelID " +
+					   "and mydb.room.RoomTypeName=mydb.room_type.TypeName and mydb.room_type.HotelID=mydb.hotel.HotelID order by mydb.room.RoomNumber;");
+			resultSet = ps.executeQuery(); 
+			
 			int ind = 0;
 			while(resultSet.next()) {
 				boolean exists = false;
@@ -240,6 +338,10 @@ public class HotelDAO {
 			json = gson.toJson(hotelRooms, HotelRoomsInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -252,8 +354,18 @@ public class HotelDAO {
 		HotelFeaturesInfo hotelFeaturesInfo = new HotelFeaturesInfo();
 		String json = "";
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("SELECT * FROM mydb.additional_feature WHERE HotelID = " + hotelID + ";");
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("SELECT * FROM mydb.additional_feature WHERE HotelID = " + hotelID + ";");
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				String[] startTime = resultSet.getString(3).split(":");
 				String[] endTime = resultSet.getString(4).split(":");
@@ -296,6 +408,10 @@ public class HotelDAO {
 			json = gson.toJson(hotelFeaturesInfo, HotelFeaturesInfo.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return json;
@@ -342,13 +458,27 @@ public class HotelDAO {
 		
 		String now = adjustTimeByStep( LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) );
 		
+		Database db = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		
 		try {
-			ResultSet resultSet = UserDAO.executeQuery("Select * FROM mydb.room WHERE Cleaned = 0;");
+			db = new Database();
+			connection = db.getConnection();
+			
+			ps = connection.prepareStatement("Select * FROM mydb.room WHERE Cleaned = 0;");
+			resultSet = ps.executeQuery(); 
+			
 			while(resultSet.next()) {
 				cleaningList.add(new CleaningListItem(now, resultSet.getString(1), resultSet.getInt(1), resultSet.getString(6), resultSet.getInt(7)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try { resultSet.close(); } catch (Exception e) {}
+			try { ps.close(); } catch (Exception e) {}
+			try { connection.close(); } catch (Exception e) {}
 		}
 		
 		return cleaningList;

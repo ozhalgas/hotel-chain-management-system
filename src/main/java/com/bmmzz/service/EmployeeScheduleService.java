@@ -25,7 +25,6 @@ public class EmployeeScheduleService {
 	public static LinkedList<CleaningListItem> cleaningList = HotelDAO.initialCleaningListInsert();
 	
 	public EmployeeScheduleService() {
-		UserDAO.connectToUserDAO();
 		cleaningList = HotelDAO.initialCleaningListInsert();
 	}
 	

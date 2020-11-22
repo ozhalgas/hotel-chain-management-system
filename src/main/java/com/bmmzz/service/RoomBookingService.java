@@ -25,9 +25,7 @@ public class RoomBookingService {
 	
 	@Context ServletContext servletContext;
 	
-	public RoomBookingService() {
-		UserDAO.connectToUserDAO();
-	}
+	public RoomBookingService() {}
 	
 	@GET
 	@Produces({MediaType.TEXT_HTML})
