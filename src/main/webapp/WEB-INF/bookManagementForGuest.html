@@ -33,18 +33,64 @@
                 bookings.hotelNames = data.hotelNames
                 bookings.hotelCountries = data.hotelCountries
                 bookings.hotelRegions = data.hotelRegions
-
+                       		
                 for (let i = 0; i < bookings.roomType.length; i++) {
-                    $('#table-body').append("<tr> <td>" +
-                    	bookings.hotelNames[i] + "</td> <td>" + 
-                    	bookings.hotelCountries[i] + "</td> <td>" +
-                    	bookings.hotelRegions[i] + "</td> <td>" +
-                    	bookings.roomType[i] + "</td> <td>" + 
-                    	bookings.checkIn[i] + "</td> <td>" +
-                        bookings.checkOut[i] + "</td> <td>" + 
-                        bookings.numberOfRooms[i] + 
-                        "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
-                        "> Delete </button> </td> </tr>");
+ 
+                    const cidate = new Date(parseInt(bookings.checkIn[i].substr(0, 4)),
+                			parseInt(bookings.checkIn[i].substr(5, 2) - 1),
+                			parseInt(bookings.checkIn[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const codate = new Date(parseInt(bookings.checkOut[i].substr(0, 4)),
+                			parseInt(bookings.checkOut[i].substr(5, 2) - 1),
+                			parseInt(bookings.checkOut[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const now = new Date();
+                	
+                	if(cidate.getTime() + 86400000 <= now.getTime() && codate.getTime() + 86400000 > now.getTime()) {
+                		$('#table-body').append("<tr> <td>" +
+                            	bookings.hotelNames[i] + "</td> <td>" + 
+                            	bookings.hotelCountries[i] + "</td> <td>" +
+                            	bookings.hotelRegions[i] + "</td> <td>" +
+                            	bookings.roomType[i] + "</td> <td>" + 
+                            	bookings.checkIn[i] + "</td> <td>" +
+                                bookings.checkOut[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" +
+                                /* "Not available" + "</td> <td>" +
+                                "<button class='edit' id=o" + i.toString() + "> Edit check-out</button>" + "</td> <td>" + */
+                                "<button class='delete cancelbtn' id=" + i.toString() +
+                                "> Delete </button> </td> </tr>");
+                	} else if(cidate.getTime() + 86400000 <= now.getTime() && codate.getTime() + 86400000 <= now.getTime()) {
+                		$('#table-body').append("<tr> <td>" +
+                            	bookings.hotelNames[i] + "</td> <td>" + 
+                            	bookings.hotelCountries[i] + "</td> <td>" +
+                            	bookings.hotelRegions[i] + "</td> <td>" +
+                            	bookings.roomType[i] + "</td> <td>" + 
+                            	bookings.checkIn[i] + "</td> <td>" +
+                                bookings.checkOut[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" +
+                                /* "Not available" + "</td> <td>" +
+                                "Not available" + "</td> <td>" + */
+                                "<button class='delete cancelbtn' id=" + i.toString() +
+                                "> Delete </button> </td> </tr>");
+                	} else if(cidate.getTime() + 86400000 > now.getTime() && codate.getTime() + 86400000 > now.getTime()) {
+                		$('#table-body').append("<tr> <td>" +
+                            	bookings.hotelNames[i] + "</td> <td>" + 
+                            	bookings.hotelCountries[i] + "</td> <td>" +
+                            	bookings.hotelRegions[i] + "</td> <td>" +
+                            	bookings.roomType[i] + "</td> <td>" + 
+                            	bookings.checkIn[i] + "</td> <td>" +
+                                bookings.checkOut[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" +
+                                /* "<button class='edit-ci' id=i" + i.toString() + "> Edit check-in </button>" + "</td> <td>" +
+                                "<button class='edit-co' id=o" + i.toString() + "> Edit check-out</button>" + "</td> <td>" + */
+                                "<button class='delete cancelbtn' id=" + i.toString() +
+                                "> Delete </button> </td> </tr>");
+                	} else {
+                		continue;
+                	}
+                    
                 }
 
                 table = $('#book-table').DataTable();
@@ -65,6 +111,19 @@
                     })
 
                 })
+                
+                /* $('.edit-ci').on('click', function () {
+                    console.log('clicked')
+                    let r = $(this).closest('tr').index()
+                    let id = parseInt(this.id.substring(1));
+                    let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
+                    	bookings.roomType[id] + '-' +
+                        bookings.hotelID[id].toString() + '-' +
+                        bookings.guestID[id].toString() + '-' +
+                        bookings.checkInDates[id].substring(0, 4) + ":" + bookings.checkInDates[id].substring(5, 7) + ':' + bookings.checkInDates[id].substring(8, 10) + '-' +
+                        bookings.checkOutDates[id].substring(0, 4) + ":" + bookings.checkOutDates[id].substring(5, 7) + ':' + bookings.checkOutDates[id].substring(8, 10) + '-' + bookings.numberOfRooms[id].toString() + auth;
+                    window.location.href = url;
+                }) */
             })
         })
 
@@ -82,9 +141,11 @@
         	<th>Hotel Country</th>
         	<th>Hotel Region</th>
             <th>Room Type</th>
-            <th>Check In</th>
-            <th>Check Out</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
             <th>Number of Rooms</th>
+            <!-- <th>Edit Check-In</th>
+            <th>Edit Check-Out</th> -->
             <th>Delete</th>
         </tr>
         </thead>
