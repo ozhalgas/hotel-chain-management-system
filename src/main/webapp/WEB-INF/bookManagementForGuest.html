@@ -30,11 +30,20 @@
                 bookings.checkOut = data.checkOutDates;
                 bookings.numberOfRooms = data.numberOfRooms;
                 bookings.hotelID = data.hotelIDs
+                bookings.hotelNames = data.hotelNames
+                bookings.hotelCountries = data.hotelCountries
+                bookings.hotelRegions = data.hotelRegions
 
                 for (let i = 0; i < bookings.roomType.length; i++) {
                     $('#table-body').append("<tr> <td>" +
-                        bookings.roomType[i] + "</td> <td>" + bookings.checkIn[i] + "</td> <td>" +
-                        bookings.checkOut[i] + "</td> <td>" + bookings.numberOfRooms[i] + "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
+                    	bookings.hotelNames[i] + "</td> <td>" + 
+                    	bookings.hotelCountries[i] + "</td> <td>" +
+                    	bookings.hotelRegions[i] + "</td> <td>" +
+                    	bookings.roomType[i] + "</td> <td>" + 
+                    	bookings.checkIn[i] + "</td> <td>" +
+                        bookings.checkOut[i] + "</td> <td>" + 
+                        bookings.numberOfRooms[i] + 
+                        "</td> <td><button class='delete cancelbtn' id=" + i.toString() +
                         "> Delete </button> </td> </tr>");
                 }
 
@@ -69,6 +78,9 @@
     <table class="cell-border" id="book-table" style="width: 100%">
         <thead>
         <tr>
+        	<th>Hotel Name</th>
+        	<th>Hotel Country</th>
+        	<th>Hotel Region</th>
             <th>Room Type</th>
             <th>Check In</th>
             <th>Check Out</th>
