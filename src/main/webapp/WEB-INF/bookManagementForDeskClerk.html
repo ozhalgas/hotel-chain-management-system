@@ -64,9 +64,9 @@
             		
             		const now = new Date();
             		
-            		console.log(cidate);
+            		/* console.log(cidate);
             		console.log(codate);
-            		console.log(now);
+            		console.log(now); */
             		
         			if(roomTypes[i] == bookings.roomTypes[x] &&
         			   	guestIDs[i] == bookings.guestIDs[x] &&
@@ -84,7 +84,7 @@
         				 return;
         			}
         			
-        			if(roomTypes[i] == bookings.roomTypes[x] &&
+        			/* if(roomTypes[i] == bookings.roomTypes[x] &&
             			guestIDs[i] == bookings.guestIDs[x] &&
             			checkInDates[i] == bookings.checkInDates[x] &&
             		   	checkOutDates[i] == bookings.checkOutDates[x] &&
@@ -94,6 +94,17 @@
            				 $('#c' + x.toString()).remove();
            				 return;
             		}
+        			
+        			if(roomTypes[i] == bookings.roomTypes[x] &&
+                			guestIDs[i] == bookings.guestIDs[x] &&
+                			checkInDates[i] == bookings.checkInDates[x] &&
+                		   	checkOutDates[i] == bookings.checkOutDates[x] &&
+                			codate.getTime() < now.getTime()
+                	){
+               				 $('#c' + x.toString()).after("<p>Not available</p>");
+               				 $('#c' + x.toString()).remove();
+               				 return;
+                	} */
         		}
         	});
         }
@@ -109,21 +120,64 @@
                 bookings.numberOfRooms = data.numberOfRooms; 
                 bookings.hotelIDs = data.hotelIDs;
                 bookings.hotelNames = data.hotelNames;
-
+                
                 for (let i = 0; i < bookings.guestFullNames.length; i++) {
-                    $('#table-body').append("<tr> <td>" +
-                    	bookings.guestIDs[i] + "</td> <td>" +
-                    	bookings.guestFullNames[i] + "</td> <td>" +
-                    	bookings.guestMobilePhoneNumbers[i] + "</td> <td>" +
-                        bookings.roomTypes[i] + "</td> <td>" +
-                        bookings.checkInDates[i] + "</td> <td>" +
-                        bookings.checkOutDates[i] + "</td> <td>" + 
-                        bookings.numberOfRooms[i] + "</td> <td>" + 
-                        "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
-                        "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
-                        "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
+                	
+                	const cidate = new Date(parseInt(bookings.checkInDates[i].substr(0, 4)),
+                			parseInt(bookings.checkInDates[i].substr(5, 2) - 1),
+                			parseInt(bookings.checkInDates[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const codate = new Date(parseInt(bookings.checkOutDates[i].substr(0, 4)),
+                			parseInt(bookings.checkOutDates[i].substr(5, 2) - 1),
+                			parseInt(bookings.checkOutDates[i].substr(8, 2)),
+                			0, 0, 0, 0);
+            		
+            		const now = new Date();
+            		
+            		console.log(cidate);
+            		console.log(codate);
+            		console.log(now);
+            		
+            		if(cidate.getTime() > now.getTime()) {
+            			$('#table-body').append("<tr> <td>" +
+                            	bookings.guestIDs[i] + "</td> <td>" +
+                            	bookings.guestFullNames[i] + "</td> <td>" +
+                            	bookings.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                                bookings.roomTypes[i] + "</td> <td>" +
+                                bookings.checkInDates[i] + "</td> <td>" +
+                                bookings.checkOutDates[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" + 
+                                "Not available" + "</td> <td>" +
+                                "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                                "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
+            		} else if(cidate.getTime() + 86400000 <= now.getTime()) {
+            			$('#table-body').append("<tr> <td>" +
+                            	bookings.guestIDs[i] + "</td> <td>" +
+                            	bookings.guestFullNames[i] + "</td> <td>" +
+                            	bookings.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                                bookings.roomTypes[i] + "</td> <td>" +
+                                bookings.checkInDates[i] + "</td> <td>" +
+                                bookings.checkOutDates[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" + 
+                                "<div id=c" + i.toString() + ">Missed, try to edit</div>" + "</td> <td>" +
+                                "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                                "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
+            		} else {
+            			$('#table-body').append("<tr> <td>" +
+                            	bookings.guestIDs[i] + "</td> <td>" +
+                            	bookings.guestFullNames[i] + "</td> <td>" +
+                            	bookings.guestMobilePhoneNumbers[i] + "</td> <td>" +
+                                bookings.roomTypes[i] + "</td> <td>" +
+                                bookings.checkInDates[i] + "</td> <td>" +
+                                bookings.checkOutDates[i] + "</td> <td>" + 
+                                bookings.numberOfRooms[i] + "</td> <td>" + 
+                                "<button class='check-in' id=c" + i.toString() + "> Check-In </button>" + "</td> <td>" +
+                                "<button class='edit' id=e" + i.toString() + "> Edit </button>" + "</td> <td>" +
+                                "<button class='delete cancelbtn' id=" + i.toString() + "> Delete </button> </td></tr>");
+            		}
                     
-                    toEnsureCheckinPossibility(i);
+                   toEnsureCheckinPossibility(i);
                 }
 
                 table = $('#book-table').DataTable();
