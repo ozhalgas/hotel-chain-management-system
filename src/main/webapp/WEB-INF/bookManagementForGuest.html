@@ -94,11 +94,9 @@
                 }
 
                 table = $('#book-table').DataTable();
-                $('#book-table').on('click', '.delete', function () {
+                $('.delete').on('click', function () {
+                    console.log('clicked')
                     let r = $(this).closest('tr').index()
-                    let page = table.page.info().page
-                    let count = table.page.info().length
-                    console.log(r, page, count)
                     let id = parseInt(this.id);
                     let url = 'http://localhost:8080/HotelChainManagementSystem/services/book-management/' +
                         bookings.hotelID[id].toString() + '-' +
@@ -109,10 +107,7 @@
                     fetch(url, {
                         method: 'DELETE',
                     }).then(() => {
-                        table
-                            .row( $(this).parents('tr') )
-                            .remove()
-                            .draw(false);
+                        table.row(r).remove().draw();
                     })
 
                 })
