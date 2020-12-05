@@ -16,11 +16,11 @@ Insert into mydb.category values ('Gold', 0.3, 1);
 Insert into mydb.category values ('Silver', 0.2, 1);
 Insert into mydb.category values ('Bronze', 0.1, 1);
 
-Insert into mydb.room_type values ('Single', 26.0, 1, 2, 2, 0);
-Insert into mydb.room_type values ('Double', 32.0, 2, 2, 2, 0);
+Insert into mydb.room_type values ('Single', 26.0, 2, 2, 2, 0);
+Insert into mydb.room_type values ('Double', 32.0, 4, 2, 2, 0);
 
-Insert into mydb.room_type values ('Single', 28.0, 1, 2, 2, 1);
-Insert into mydb.room_type values ('Double', 34.0, 2, 2, 2, 1);
+Insert into mydb.room_type values ('Single', 28.0, 2, 2, 2, 1);
+Insert into mydb.room_type values ('Double', 34.0, 4, 2, 2, 1);
 
 Insert into mydb.room values ('310', 1, 1, 0, 0, 'Single', 0);
 Insert into mydb.room values ('311', 1, 1, 0, 0, 'Single', 0);
