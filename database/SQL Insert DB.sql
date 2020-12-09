@@ -153,9 +153,11 @@ insert into mydb.additional_feature values('Film', 10.0, '00:00:00.0', '23:59:59
 
 Insert into mydb.guest values(0, 'Mona Rizvi', 'ID', '7777777', 'USA', '893212', '+15417543010', 'Mona', 'pass');
 Insert into mydb.guest values(1, 'Jon Smith', 'ID', '1111111', 'USA', '411241', '+12131242151', 'Jon', 'pass');
+Insert into mydb.guest values(2, 'Olivia Johansson', 'ID', '1PEACE1', 'SWE', '112358', '+23571113171', 'Olivia', 'pass');
 
 Insert into mydb.guest_belongs_category values('Gold', 0);
 Insert into mydb.guest_belongs_category values ('None', 1);
+Insert into mydb.guest_belongs_category values ('Bronze', 2);
 
 -- reservation of Jon Smith for question 2
 Insert into mydb.reserves values('Double', 1, 1, '2020-12-06', '2020-12-07', 1);
@@ -164,3 +166,7 @@ Insert into mydb.reserves values('Double', 1, 1, '2020-12-06', '2020-12-07', 1);
 Insert into mydb.reserves values('Single', 0, 1, '2020-10-15', '2020-10-15', 1);
 Insert into mydb.single_stay values('2020-10-15', '2020-10-15', 60.0, '311', 1, 1, 'Single', 0);
 Insert into mydb.occupies values('311', 1, 1, '2020-10-15', '2020-10-15', 0, 'Single');
+
+-- single_stays of Olivia Johansson for question 5
+Insert into mydb.single_stay values('2020-3-15', '2020-4-15', 400.0, '311', 1, 2, 'Single', 0);
+Insert into mydb.single_stay values('2020-7-15', '2020-9-15', 800.0, '311', 1, 2, 'Single', 0);
